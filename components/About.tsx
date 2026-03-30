@@ -1,12 +1,16 @@
 import styles from './About.module.css'
 
 const SKILLS = [
-  { name: 'Python',          pct: 85, label: 'Stark' },
-  { name: 'Java / Spring Boot', pct: 70, label: 'Gut' },
-  { name: 'React / Vue.js',  pct: 65, label: 'Gut' },
-  { name: 'Blender Scripting', pct: 60, label: 'Gut' },
-  { name: 'ESP32 / Raspberry Pi', pct: 70, label: 'Gut' },
-  { name: '3D-Druck (FDM)',  pct: 80, label: 'Stark' },
+  { name: 'Python',              pct: 85, label: 'Stark' },
+  { name: 'Java',                pct: 75, label: 'Gut' },
+  { name: 'JavaScript',          pct: 75, label: 'Gut' },
+  { name: 'SQL / MySQL',         pct: 80, label: 'Gut' },
+  { name: 'REST API Design',     pct: 70, label: 'Gut' },
+  { name: 'React / Vue.js',      pct: 80, label: 'Gut' },
+  { name: 'Git & Docker Basics', pct: 62, label: 'Solide' },
+  { name: 'Linux / Bash',        pct: 85, label: 'Stark' },
+  { name: 'Blender 3D Modeling', pct: 35, label: 'Learning' },
+  { name: 'ESP32 / Raspberry Pi for fun', pct: 58, label: 'Solide' },
 ]
 
 export default function About() {
@@ -27,9 +31,9 @@ export default function About() {
               schnell von einer Idee zu einem funktionierenden Prototyp komme.
             </p>
             <p>
-              Neben dem Coden drucke ich Teile auf meiner Creality K1C,
-              automatisiere Workflows mit Blender-Skripten und tüftle an
-              Hardware mit ESP32 und Raspberry Pi.
+              Ich arbeite am liebsten an Softwareprojekten rund um Backend,
+              APIs, Datenbanken und moderne Web-Apps. In meiner Freizeit
+              baue ich zusätzlich kleine Hardware- und 3D-Projekte.
             </p>
           </div>
         </div>
