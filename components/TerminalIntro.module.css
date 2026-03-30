@@ -1,0 +1,78 @@
+.wrap {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 3rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  color: #c8c8b8;
+  line-height: 1.7;
+  overflow: hidden;
+  transition: opacity 0.9s ease;
+}
+
+.fadeOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.output {
+  flex: 1;
+  overflow: hidden;
+}
+
+.skip {
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: #4a4a40;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  z-index: 20;
+  user-select: none;
+}
+.skip:hover { color: #d4a843; }
+
+/* Line classes */
+.line { margin: 0; white-space: pre; }
+.dim   { color: #3a3a32; }
+.green { color: #5dba7e; }
+.amber { color: #d4a843; }
+.white { color: #f0ebe0; }
+.red   { color: #e05c5c; }
+.blue  { color: #6aabdf; }
+.muted { color: #555548; }
+
+/* Prompt spans */
+.cu { color: #5dba7e; }
+.ca { color: #333330; }
+.ch { color: #6aabdf; }
+.cp { color: #d4a843; }
+.cs { color: #c8c8b8; }
+
+@media (max-width: 900px) {
+  .wrap { padding: 1.5rem; font-size: 11px; }
+}
