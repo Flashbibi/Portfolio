@@ -74,7 +74,7 @@ export const projects: Project[] = [
     id: 'turret',
     num: '004',
     title: 'Pan-Tilt',
-    titleLine2: 'Airsoft Turret',
+    titleLine2: 'Turret',
     description:
       'Automatisches Geschütz (v8) mit DS3218MG-Servos, ePETG-CF-Gehäuse und Blender 3D Modeling für die 3D-Assembly.',
     tags: ['Blender', 'ESP32', '3D-Druck'],
@@ -206,7 +206,7 @@ export const fileContents: Record<string, Array<[string, string]>> = {
     ['Windows .exe, Systemtray, Backup-System.', 'white'],
   ],
   'README.md (turret)': [
-    ['# Pan-Tilt Airsoft Turret', 'amber'],
+    ['# Pan-Tilt Turret', 'amber'],
     ['', ''],
     ['hardware: DS3218MG Servos, ESP32, ePETG-CF', 'white'],
     ['software: Blender 3D Modeling, MicroPython', 'white'],
