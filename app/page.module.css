@@ -1,0 +1,29 @@
+.portfolio {
+  opacity: 0;
+  transition: opacity 0.9s ease 0.1s;
+  min-height: 100vh;
+}
+
+.portfolio.visible {
+  opacity: 1;
+}
+
+.footer {
+  padding: 2rem 4rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 900px) {
+  .footer {
+    padding: 2rem 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}

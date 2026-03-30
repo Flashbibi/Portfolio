@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ── Theme variables ─────────────────────────────────────── */
+:root[data-theme='dark'] {
+  --bg:       #0b0b09;
+  --bg2:      #111110;
+  --bg3:      #1a1a17;
+  --text:     #f0ebe0;
+  --text2:    #9a9488;
+  --text3:    #5a5650;
+  --accent:   #d4a843;
+  --accent2:  #a07c28;
+  --border:   rgba(240, 235, 224, 0.08);
+  --border2:  rgba(240, 235, 224, 0.15);
+  --tag-bg:   rgba(212, 168, 67, 0.1);
+  --tag-text: #d4a843;
+}
+
+:root[data-theme='light'] {
+  --bg:       #f7f3ec;
+  --bg2:      #efe9df;
+  --bg3:      #e5ddd0;
+  --text:     #1a1710;
+  --text2:    #6b6458;
+  --text3:    #a09880;
+  --accent:   #b8831a;
+  --accent2:  #8a5e0e;
+  --border:   rgba(26, 23, 16, 0.1);
+  --border2:  rgba(26, 23, 16, 0.2);
+  --tag-bg:   rgba(184, 131, 26, 0.12);
+  --tag-text: #8a5e0e;
+}
+
+/* Terminal always dark */
+:root {
+  --term-bg:      #060604;
+  --term-bg2:     #0e0e0b;
+  --term-border:  #222218;
+  --term-border2: #1a1a12;
+  --term-text:    #c8c8b8;
+  --term-text2:   #555548;
+  --term-text3:   #333330;
+  --term-green:   #5dba7e;
+  --term-amber:   #d4a843;
+  --term-blue:    #6aabdf;
+  --term-red:     #e05c5c;
+  --term-dim:     #3a3a32;
+  --term-muted:   #4a4a40;
+  --term-white:   #f0ebe0;
+  --term-cursor:  #d4a843;
+}
+
+:root[data-theme='light'] {
+  --term-bg:      #111108;
+  --term-bg2:     #191910;
+  --term-border:  #2e2e1e;
+  --term-border2: #252518;
+  --term-text:    #ccc8a8;
+  --term-text2:   #666650;
+  --term-text3:   #444430;
+  --term-dim:     #444434;
+  --term-muted:   #565640;
+}
+
+/* ── Reset & base ────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  transition: background 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text3);
+}
+
+/* ── Glitch animation ────────────────────────────────────── */
+@keyframes glitch-top {
+  0%,  89% { clip-path: inset(0 0 100% 0); transform: none; }
+  90%       { clip-path: inset(0 0 60% 0);  transform: translate(-4px, -2px); }
+  92%       { clip-path: inset(30% 0 50% 0); transform: translate(4px, 0); }
+  94%       { clip-path: inset(10% 0 75% 0); transform: translate(-2px, 1px); }
+  96%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+}
+@keyframes glitch-bot {
+  0%,  89% { clip-path: inset(100% 0 0 0); transform: none; }
+  90%       { clip-path: inset(70% 0 0 0);  transform: translate(4px, 2px); }
+  92%       { clip-path: inset(55% 0 20% 0); transform: translate(-4px, 0); }
+  94%       { clip-path: inset(80% 0 10% 0); transform: translate(2px, -1px); }
+  96%, 100% { clip-path: inset(100% 0 0 0); transform: none; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes blink-block {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}

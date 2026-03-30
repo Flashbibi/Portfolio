@@ -1,0 +1,34 @@
+'use client'
+
+import styles from './Nav.module.css'
+import { useTheme } from '@/context/ThemeContext'
+
+interface NavProps {
+  onTerminalOpen: () => void
+}
+
+export default function Nav({ onTerminalOpen }: NavProps) {
+  const { theme, toggle } = useTheme()
+
+  return (
+    <nav className={styles.nav}>
+      <a href="#hero" className={styles.logo}>linus</a>
+      <div className={styles.links}>
+        <a href="#about">über mich</a>
+        <a href="#projects">projekte</a>
+        <a href="#contact">kontakt</a>
+        <button className={styles.termBtn} onClick={onTerminalOpen} title="Terminal öffnen" aria-label="Terminal öffnen">
+          <span aria-hidden="true">❯_</span>
+          <span className={styles.termLabel}>terminal</span>
+        </button>
+        <button
+          className={styles.themeToggle}
+          onClick={toggle}
+          aria-label={theme === 'dark' ? 'Helles Theme aktivieren' : 'Dunkles Theme aktivieren'}
+        >
+          {theme === 'dark' ? '[ light ]' : '[ dark ]'}
+        </button>
+      </div>
+    </nav>
+  )
+}

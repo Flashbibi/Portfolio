@@ -1,0 +1,91 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 4rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s;
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.links a:hover {
+  color: var(--accent);
+}
+
+.termBtn {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.termBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.termLabel {
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+.themeToggle {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.9rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.themeToggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+  .termLabel {
+    display: none;
+  }
+}
