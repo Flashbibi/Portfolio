@@ -42,8 +42,8 @@ export const projects: Project[] = [
     description:
       'Flask + Vue.js Tool zur Verwaltung von Minecraft-Servern. Standalone Windows-Exe via PyInstaller, Systemtray-Icon, Backup-Management.',
     tags: ['Flask', 'Vue.js', 'PyInstaller'],
-    status: 'done',
-    statusLabel: 'Fertig',
+    status: 'wip',
+    statusLabel: 'In Arbeit',
     category: 'software',
     origin: 'home',
     details: [
@@ -77,14 +77,14 @@ export const projects: Project[] = [
     titleLine2: 'Airsoft Turret',
     description:
       'Automatisches Geschütz (v8) mit DS3218MG-Servos, ePETG-CF-Gehäuse und prozeduralem Blender-Python-Skript für 3D-Assembly.',
-    tags: ['Blender Python', 'ESP32', '3D-Druck'],
+    tags: ['Blender', 'ESP32', '3D-Druck'],
     status: 'wip',
     statusLabel: 'In Arbeit',
     category: 'hardware',
     origin: 'home',
     details: [
       'Version 8: neu gestaltete Servo-Halterung für höhere Präzision',
-      '3D-Modell vollständig prozedural generiert per Blender-Python',
+      '3D-Modell per Blender',
       'ePETG-CF Gehäuse für Steifigkeit und Gewicht-Optimierung',
     ],
   },
@@ -196,7 +196,7 @@ export const fileContents: Record<string, Array<[string, string]>> = {
     ['# Fabricator — Minecraft Server Manager', 'amber'],
     ['', ''],
     ['stack:   Flask, Vue.js, PyInstaller', 'white'],
-    ['status:  ✓ Fertig', 'green'],
+    ['status:  ⧖ In Arbeit', 'amber'],
     ['', ''],
     ['GUI-Tool zur Verwaltung von Minecraft-Servern.', 'white'],
     ['Windows .exe, Systemtray, Backup-System.', 'white'],

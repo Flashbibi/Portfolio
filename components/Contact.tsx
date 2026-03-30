@@ -8,7 +8,7 @@ interface ContactLink {
 }
 
 const LINKS: ContactLink[] = [
-  { label: 'linus.sommermeyer@lernender.ethz.ch', icon: '✉', href: 'mailto:linus.sommermeyer@lernender.ethz.ch', rel: undefined },
+  { label: 'linus.sommermeyer@lernende.ethz.ch', icon: '✉', href: 'mailto:linus.sommermeyer@lernende.ethz.ch', rel: undefined },
   { label: 'GitHub',            icon: '↗', href: 'https://github.com/Flashbibi', rel: 'noopener noreferrer' },
   { label: 'LinkedIn',          icon: '↗', href: 'https://www.linkedin.com/in/linus-sommermeyer-a776142a2/', rel: 'noopener noreferrer' },
   { label: 'CV herunterladen',  icon: '↓', href: '#', rel: undefined },
