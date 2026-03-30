@@ -11,6 +11,8 @@ export interface Project {
   status: ProjectStatus
   statusLabel: string
   category: ProjectCategory
+  origin: 'eth' | 'home'
+  details: string[]
 }
 
 export const projects: Project[] = [
@@ -25,6 +27,12 @@ export const projects: Project[] = [
     status: 'done',
     statusLabel: 'Fertig',
     category: 'software',
+    origin: 'eth',
+    details: [
+      'Real Gletscherdaten von GLAMOS Initiative (ETH, Universität Zürich)',
+      'Interaktive Echtzeit-Analysen und Trends seit 1952',
+      'CSV-Import für beliebige Massenbilanz-Datasets',
+    ],
   },
   {
     id: 'fabricator',
@@ -37,6 +45,12 @@ export const projects: Project[] = [
     status: 'done',
     statusLabel: 'Fertig',
     category: 'software',
+    origin: 'home',
+    details: [
+      'Verwaltung von Minecraft-Servern auf Windows',
+      'Backup- und Restore-Funktionen mit One-Click-Interface',
+      'Systemtray-Integration für Background-Betrieb',
+    ],
   },
   {
     id: 'gletscher-player',
@@ -49,6 +63,12 @@ export const projects: Project[] = [
     status: 'done',
     statusLabel: 'Fertig',
     category: 'software',
+    origin: 'home',
+    details: [
+      'Maßgeschneidert für die Gletscher-Ausstellung in Zürich',
+      'Nahtlose Übergänge zwischen Videos via mpv IPC-Socket',
+      'Auf Raspberry Pi getestet und optimiert',
+    ],
   },
   {
     id: 'turret',
@@ -61,6 +81,12 @@ export const projects: Project[] = [
     status: 'wip',
     statusLabel: 'In Arbeit',
     category: 'hardware',
+    origin: 'home',
+    details: [
+      'Version 8: neu gestaltete Servo-Halterung für höhere Präzision',
+      '3D-Modell vollständig prozedural generiert per Blender-Python',
+      'ePETG-CF Gehäuse für Steifigkeit und Gewicht-Optimierung',
+    ],
   },
   {
     id: 'next',
@@ -72,6 +98,8 @@ export const projects: Project[] = [
     status: 'planned',
     statusLabel: 'Geplant',
     category: 'hardware',
+    origin: 'home',
+    details: [],
   },
 ]
 
@@ -120,7 +148,7 @@ export const fileContents: Record<string, Array<[string, string]>> = {
     ['', ''],
     ['name:      Linus', 'white'],
     ['location:  Zürich, Schweiz', 'white'],
-    ['role:      Informatikstudent / Maker', 'white'],
+    ['role:      Informatiker Applikationsentwickler / Lehrling ETH Zürich', 'white'],
     ['', ''],
     ['bio: |', 'muted'],
     ['  Ich baue Dinge — aus Code, Filament und Neugier.', 'white'],
@@ -137,8 +165,9 @@ export const fileContents: Record<string, Array<[string, string]>> = {
   'contact.md': [
     ['# contact.md', 'amber'],
     ['', ''],
-    ['email:   linus@example.com', 'white'],
-    ['github:  github.com/linus', 'blue'],
+    ['email:   linus.sommermeyer@lernende.ethz.ch', 'white'],
+    ['github:  github.com/Flashbibi', 'blue'],
+    ['linkedin: linkedin.com/in/linus-sommermeyer-a776142a2', 'blue'],
     ['ort:     Zürich, Schweiz', 'muted'],
     ['', ''],
     ['verfügbar für:', 'muted'],

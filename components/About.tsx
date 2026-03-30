@@ -22,14 +22,14 @@ export default function About() {
           </h2>
           <div className={styles.body}>
             <p>
-              Ich bin Linus — Informatikstudent an einer Schweizer Berufsschule
-              mit einem Hang zu allem, was man selbst bauen kann. Von Software
-              über 3D-gedruckte Hardware bis zu eingebetteten Systemen.
+              Ich bin Linus, Informatiker Fachrichtung Applikationsentwicklung
+              in Ausbildung an der ETH Zürich. Ich mag Projekte, bei denen ich
+              schnell von einer Idee zu einem funktionierenden Prototyp komme.
             </p>
             <p>
-              Wenn ich nicht gerade code, drucke ich Teile auf meiner Creality
-              K1C, schreibe Python-Skripte für Blender oder bastle an
-              Elektronikprojekten mit ESP32 und Raspberry Pi.
+              Neben dem Coden drucke ich Teile auf meiner Creality K1C,
+              automatisiere Workflows mit Blender-Skripten und tüftle an
+              Hardware mit ESP32 und Raspberry Pi.
             </p>
           </div>
         </div>
