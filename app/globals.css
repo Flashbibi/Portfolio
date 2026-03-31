@@ -2,33 +2,35 @@
 
 /* ── Theme variables ─────────────────────────────────────── */
 :root[data-theme='dark'] {
-  --bg:       #0c0d12;
-  --bg2:      #13151e;
-  --bg3:      #1c1f2c;
-  --text:     #eeeae0;
-  --text2:    #8a8fa0;
-  --text3:    #505568;
-  --accent:   #6aabdf;
-  --accent2:  #4a80b0;
-  --border:   rgba(180, 190, 220, 0.08);
-  --border2:  rgba(180, 190, 220, 0.15);
-  --tag-bg:   rgba(106, 171, 223, 0.12);
-  --tag-text: #6aabdf;
+  --bg:              #0c0d12;
+  --bg2:             #13151e;
+  --bg3:             #1c1f2c;
+  --text:            #eeeae0;
+  --text2:           #8a8fa0;
+  --text3:           #505568;
+  --accent:          #6aabdf;
+  --accent2:         #4a80b0;
+  --border:          rgba(180, 190, 220, 0.08);
+  --border2:         rgba(180, 190, 220, 0.15);
+  --tag-bg:          rgba(106, 171, 223, 0.12);
+  --tag-text:        #6aabdf;
+  --spotlight-color: rgba(106, 171, 223, 0.07);
 }
 
 :root[data-theme='light'] {
-  --bg:       #f7f3ec;
-  --bg2:      #efe9df;
-  --bg3:      #e5ddd0;
-  --text:     #1a1710;
-  --text2:    #6b6458;
-  --text3:    #a09880;
-  --accent:   #b8831a;
-  --accent2:  #8a5e0e;
-  --border:   rgba(26, 23, 16, 0.1);
-  --border2:  rgba(26, 23, 16, 0.2);
-  --tag-bg:   rgba(184, 131, 26, 0.12);
-  --tag-text: #8a5e0e;
+  --bg:              #f7f3ec;
+  --bg2:             #efe9df;
+  --bg3:             #e5ddd0;
+  --text:            #1a1710;
+  --text2:           #6b6458;
+  --text3:           #a09880;
+  --accent:          #b8831a;
+  --accent2:         #8a5e0e;
+  --border:          rgba(26, 23, 16, 0.1);
+  --border2:         rgba(26, 23, 16, 0.2);
+  --tag-bg:          rgba(184, 131, 26, 0.12);
+  --tag-text:        #8a5e0e;
+  --spotlight-color: rgba(184, 131, 26, 0.06);
 }
 
 /* Terminal always dark */

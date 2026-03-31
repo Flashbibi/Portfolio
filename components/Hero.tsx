@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './Hero.module.css'
 
 const LINES = [
@@ -11,6 +11,26 @@ const LINES = [
 
 export default function Hero() {
   const [text, setText] = useState('')
+  const [mouse, setMouse] = useState({ x: -9999, y: -9999 })
+  const heroRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    function onMouseMove(e: MouseEvent) {
+      const rect = heroRef.current?.getBoundingClientRect()
+      if (!rect) return
+      setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+    }
+    function onMouseLeave() {
+      setMouse({ x: -9999, y: -9999 })
+    }
+    const el = heroRef.current
+    el?.addEventListener('mousemove', onMouseMove)
+    el?.addEventListener('mouseleave', onMouseLeave)
+    return () => {
+      el?.removeEventListener('mousemove', onMouseMove)
+      el?.removeEventListener('mouseleave', onMouseLeave)
+    }
+  }, [])
 
   useEffect(() => {
     let li = 0, ci = 0, deleting = false
@@ -33,8 +53,12 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="hero" className={styles.hero}>
+    <section id="hero" className={styles.hero} ref={heroRef}>
       <div className={styles.gridLines} />
+      <div
+        className={styles.spotlight}
+        style={{ background: `radial-gradient(700px circle at ${mouse.x}px ${mouse.y}px, var(--spotlight-color), transparent 70%)` }}
+      />
       <span className={styles.cornerText}>Portfolio — {new Date().getFullYear()}</span>
       <p className={styles.index}>01 — Willkommen</p>
       <h1 className={styles.name} data-text="Linus">Linus</h1>

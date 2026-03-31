@@ -8,10 +8,18 @@
   overflow: hidden;
 }
 
+.spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .gridLines {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
 }
 .gridLines::before {
   content: '';
@@ -47,9 +55,13 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .name {
+  position: relative;
+  z-index: 2;
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(5rem, 13vw, 11rem);
   font-weight: 300;
@@ -93,6 +105,8 @@
 }
 
 .sub {
+  position: relative;
+  z-index: 2;
   font-size: 13px;
   color: var(--text2);
   max-width: 480px;
@@ -119,6 +133,8 @@
 }
 
 .scroll {
+  position: relative;
+  z-index: 2;
   font-size: 11px;
   color: var(--text3);
   letter-spacing: 0.15em;

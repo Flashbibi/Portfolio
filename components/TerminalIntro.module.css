@@ -46,7 +46,7 @@
   border: none;
   font-family: 'Space Mono', monospace;
   font-size: 11px;
-  color: #4a4a40;
+  color: #777768;
   cursor: pointer;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -73,6 +73,27 @@
 .cp { color: #d4a843; }
 .cs { color: #c8c8b8; }
 
+/* Dialog box */
+.dialog       { margin: 0.5rem 0; }
+.dialogBorder { margin: 0; white-space: pre; color: #3a3a32; }
+.dialogLine   { margin: 0; white-space: pre; color: #3a3a32; }
+.dialogHint   { margin: 0; white-space: pre; color: #3a3a32; font-style: italic; }
+.dialogTitle  { color: #d4a843; }
+
+.dialogBtn {
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  color: #c8c8b8;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0;
+  transition: color 0.15s;
+}
+.dialogBtn:hover { color: #d4a843; }
+
 @media (max-width: 900px) {
   .wrap { padding: 1.5rem; font-size: 11px; }
+  .dialogBtn { font-size: 11px; }
 }
