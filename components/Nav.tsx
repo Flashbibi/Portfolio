@@ -11,6 +11,7 @@ interface NavProps {
 export default function Nav({ onTerminalOpen }: NavProps) {
   const { theme, toggle } = useTheme()
   const [progress, setProgress] = useState(0)
+  const [active, setActive] = useState('')
 
   useEffect(() => {
     function onScroll() {
@@ -22,14 +23,30 @@ export default function Nav({ onTerminalOpen }: NavProps) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    const sections = ['about', 'projects', 'contact']
+    function update() {
+      const scrollY = window.scrollY + window.innerHeight * 0.4
+      let current = ''
+      for (const id of sections) {
+        const el = document.getElementById(id)
+        if (el && el.offsetTop <= scrollY) current = id
+      }
+      setActive(current)
+    }
+    window.addEventListener('scroll', update, { passive: true })
+    update()
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+
   return (
     <nav className={styles.nav}>
       <div className={styles.progressBar} style={{ transform: `scaleX(${progress})` }} />
       <a href="#hero" className={styles.logo}>linus</a>
       <div className={styles.links}>
-        <a href="#about">über mich</a>
-        <a href="#projects">projekte</a>
-        <a href="#contact">kontakt</a>
+        <a href="#about"    className={active === 'about'    ? styles.active : ''}>über mich</a>
+        <a href="#projects" className={active === 'projects' ? styles.active : ''}>projekte</a>
+        <a href="#contact"  className={active === 'contact'  ? styles.active : ''}>kontakt</a>
         <button className={styles.termBtn} onClick={onTerminalOpen} title="Terminal öffnen" aria-label="Terminal öffnen">
           <span aria-hidden="true">❯_</span>
           <span className={styles.termLabel}>terminal</span>
