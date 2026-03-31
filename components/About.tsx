@@ -30,7 +30,7 @@ export default function About() {
   }, [])
 
   return (
-    <section id="about" className={styles.section}>
+    <section id="about" className={styles.section} data-reveal>
       <p className={styles.label}>02 — Über mich</p>
       <div className={styles.grid}>
         <div>

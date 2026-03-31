@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 420px;
+  height: 420px; /* overridden by inline style when resizing */
   background: var(--term-bg);
   border-top: 1px solid var(--term-border);
   z-index: 1000;
@@ -21,6 +21,32 @@
 
 .drawer.open {
   transform: translateY(0);
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.handle::after {
+  content: '';
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--term-border2);
+  transition: background 0.2s;
+}
+
+.handle:hover::after {
+  background: var(--term-amber);
 }
 
 .scanlines {

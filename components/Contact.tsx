@@ -16,7 +16,7 @@ const LINKS: ContactLink[] = [
 
 export default function Contact() {
   return (
-    <section id="contact" className={styles.section}>
+    <section id="contact" className={styles.section} data-reveal>
       <p className={styles.label}>04 — Kontakt</p>
       <div className={styles.wrap}>
         <div>

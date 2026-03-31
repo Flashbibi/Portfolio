@@ -33,6 +33,29 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   const inputRef  = useRef<HTMLInputElement>(null)
   const [path, setPath]       = useState('~')
   const [booted, setBooted]   = useState(false)
+  const [height, setHeight]   = useState(420)
+
+  function onHandleMouseDown(e: React.MouseEvent) {
+    e.preventDefault()
+    const startY      = e.clientY
+    const startHeight = height
+
+    function onMouseMove(ev: MouseEvent) {
+      const delta     = startY - ev.clientY
+      const newHeight = Math.max(180, Math.min(window.innerHeight * 0.9, startHeight + delta))
+      setHeight(newHeight)
+    }
+
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+      document.body.style.userSelect = ''
+    }
+
+    document.body.style.userSelect = 'none'
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
+  }
 
   // Command history
   const historyRef    = useRef<string[]>([])
@@ -337,8 +360,10 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   return (
     <div
       className={`${styles.drawer} ${open ? styles.open : ''}`}
+      style={{ height }}
       onClick={() => inputRef.current?.focus()}
     >
+      <div className={styles.handle} onMouseDown={onHandleMouseDown} onClick={e => e.stopPropagation()} />
       <div className={styles.scanlines} />
       <div className={styles.header}>
         <span className={styles.title}>❯_ terminal — linus-portfolio</span>

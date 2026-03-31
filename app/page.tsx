@@ -22,6 +22,19 @@ export default function Home() {
     }
   }, [])
 
+useEffect(() => {
+    if (!introDone) return
+    const els = document.querySelectorAll('[data-reveal]')
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); observer.unobserve(e.target) }
+      }),
+      { threshold: 0.1 }
+    )
+    els.forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [introDone])
+
   function handleIntroDone() {
     sessionStorage.setItem(INTRO_SEEN_KEY, '1')
     setIntroDone(true)

@@ -176,6 +176,7 @@ export default function TerminalIntro({ onDone }: Props) {
       try {
         localStorage.setItem('theme', choice)
         document.documentElement.setAttribute('data-theme', choice)
+        window.dispatchEvent(new Event('portfolio:theme-change'))
       } catch { /* ignore */ }
 
       await delay(400); if (skippedRef.current) return

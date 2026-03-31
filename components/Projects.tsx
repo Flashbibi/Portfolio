@@ -7,6 +7,19 @@ import styles from './Projects.module.css'
 
 type Filter = 'all' | 'eth' | 'home' | ProjectCategory
 
+function onTiltMove(e: React.MouseEvent<HTMLElement>) {
+  const rect = e.currentTarget.getBoundingClientRect()
+  const x = (e.clientX - rect.left) / rect.width - 0.5
+  const y = (e.clientY - rect.top) / rect.height - 0.5
+  e.currentTarget.style.transform = `perspective(800px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) scale(1.01)`
+  e.currentTarget.style.transition = 'transform 0.08s ease'
+}
+
+function onTiltLeave(e: React.MouseEvent<HTMLElement>) {
+  e.currentTarget.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)'
+  e.currentTarget.style.transition = 'transform 0.5s ease'
+}
+
 export default function Projects() {
   const [filter, setFilter] = useState<Filter>('all')
 
@@ -18,7 +31,7 @@ export default function Projects() {
   })
 
   return (
-    <section id="projects" className={styles.section}>
+    <section id="projects" className={styles.section} data-reveal>
       <div className={styles.header}>
         <h2 className={styles.heading}>Projekte</h2>
         <div className={styles.filters}>
@@ -39,6 +52,8 @@ export default function Projects() {
           const card = (
             <article
               className={`${styles.card} ${p.status === 'planned' ? styles.placeholder : ''}`}
+              onMouseMove={p.status !== 'planned' ? onTiltMove : undefined}
+              onMouseLeave={p.status !== 'planned' ? onTiltLeave : undefined}
             >
               <div className={styles.numLine}>
                 <p className={styles.num}>— {p.num}</p>

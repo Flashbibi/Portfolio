@@ -20,12 +20,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('theme')
-      if (saved === 'dark' || saved === 'light') {
-        setTheme(saved)
-      }
-    } catch {
-      // Ignore localStorage read errors.
+      if (saved === 'dark' || saved === 'light') setTheme(saved)
+    } catch { /* ignore */ }
+
+    function onThemeChange() {
+      try {
+        const saved = localStorage.getItem('theme')
+        if (saved === 'dark' || saved === 'light') setTheme(saved)
+      } catch { /* ignore */ }
     }
+    window.addEventListener('portfolio:theme-change', onThemeChange)
+    return () => window.removeEventListener('portfolio:theme-change', onThemeChange)
   }, [])
 
   useEffect(() => {
