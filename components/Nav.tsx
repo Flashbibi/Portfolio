@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import styles from './Nav.module.css'
 import { useTheme } from '@/context/ThemeContext'
 
@@ -9,9 +10,21 @@ interface NavProps {
 
 export default function Nav({ onTerminalOpen }: NavProps) {
   const { theme, toggle } = useTheme()
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    function onScroll() {
+      const scrolled = window.scrollY
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      setProgress(total > 0 ? scrolled / total : 0)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <nav className={styles.nav}>
+      <div className={styles.progressBar} style={{ transform: `scaleX(${progress})` }} />
       <a href="#hero" className={styles.logo}>linus</a>
       <div className={styles.links}>
         <a href="#about">über mich</a>
