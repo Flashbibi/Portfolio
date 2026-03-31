@@ -92,6 +92,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       case 'ls':     cmdLs(arg); break
       case 'cd':     cmdCd(arg, setPath); break
       case 'cat':    cmdCat(arg); break
+      case 'dog':    cmdDog(arg); break
       case 'pwd':    dprint(path === '~' ? '/home/visitor' : '/home/visitor/' + path.replace('~/', '')); break
       case 'whoami': dprint('visitor — curious developer', 'green'); break
       case 'clear':  if (outRef.current) outRef.current.innerHTML = ''; break
@@ -223,6 +224,21 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     setP(target)
   }
 
+  function dprintVideo(src: string) {
+    const wrapper = document.createElement('div')
+    wrapper.className = styles.line
+    const video = document.createElement('video')
+    video.src = src
+    video.controls = true
+    video.autoplay = true
+    video.muted = true
+    video.style.cssText = 'max-width:320px;display:block;margin-top:0.5rem;border:1px solid #333;'
+    video.addEventListener('canplay', () => { video.muted = false })
+    wrapper.appendChild(video)
+    outRef.current?.appendChild(wrapper)
+    if (outRef.current) outRef.current.scrollTop = outRef.current.scrollHeight
+  }
+
   function cmdCat(arg: string) {
     if (!arg) { dprint('cat: fehlender Dateiname', 'red'); return }
     const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
@@ -240,10 +256,42 @@ export default function TerminalDrawer({ open, onClose }: Props) {
 
     const content = fileContents[key] ?? fileContents[arg]
     if (content) {
-      content.forEach(([t, c]) => dprint(t, c))
+      content.forEach(([t, c]) => {
+        if (t.startsWith('__VIDEO__:')) {
+          dprintVideo(t.slice('__VIDEO__:'.length))
+        } else {
+          dprint(t, c)
+        }
+      })
     } else {
       dprint('(keine Vorschau)', 'dim')
     }
+  }
+
+  function cmdDog(arg: string) {
+    if (!arg) { dprint('dog: fehlender Dateiname', 'red'); return }
+    const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
+    const node = getNode(target)
+    if (!node)               { dprint(`dog: ${arg}: No such file or directory`, 'red'); return }
+    if (node.type === 'dir') { dprint(`dog: ${arg}: Is a directory`, 'red'); return }
+    if (!path.includes('private') || arg !== 'secrets.md') {
+      dprint('dog: unrecognized format  (falscher Ordner?)', 'red'); return
+    }
+    dprint('# ultra_secrets.md', 'amber')
+    dprint('')
+    dprint('du hast wirklich gesucht. respekt.', 'white')
+    dprint('')
+    dprint('  🐶  ultra geheime aufzeichnung #001', 'green')
+    dprint('')
+    const wrapper = document.createElement('div')
+    wrapper.className = styles.line
+    const img = document.createElement('img')
+    img.src = '/Ultra%20Secret.jpg'
+    img.alt = 'ultra secret'
+    img.style.cssText = 'max-width:320px;display:block;margin-top:0.5rem;border:1px solid #333;'
+    wrapper.appendChild(img)
+    outRef.current?.appendChild(wrapper)
+    if (outRef.current) outRef.current.scrollTop = outRef.current.scrollHeight
   }
 
   function cmdTree() {

@@ -159,7 +159,8 @@ export default function TerminalIntro({ onDone }: Props) {
         `<span style="color:#f0ebe0;display:inline-block;min-width:180px">contact.md</span>` +
         `<span style="color:#6aabdf;display:inline-block;min-width:180px">projects/</span>` +
         `<span style="color:#5dba7e;display:inline-block;min-width:180px">decision.sh*</span>` +
-        `<span style="color:#5dba7e">portfolio.sh*</span>`
+        `<span style="color:#5dba7e;display:inline-block;min-width:180px">portfolio.sh*</span>` +
+        `<span style="color:#6aabdf">private/</span>`
       )
       print('')
       await delay(900); if (skippedRef.current) return

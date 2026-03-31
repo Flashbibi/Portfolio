@@ -105,7 +105,7 @@ export const projects: Project[] = [
 
 // ── Terminal filesystem ──────────────────────────────────────────────────────
 export type FsNode =
-  | { type: 'dir'; children: Record<string, FsNode> }
+  | { type: 'dir'; children: Record<string, FsNode>; dim?: boolean }
   | { type: 'file'; exec?: boolean }
 
 export const filesystem: FsNode = {
@@ -117,6 +117,12 @@ export const filesystem: FsNode = {
         'about.md':     { type: 'file' },
         'contact.md':   { type: 'file' },
         'portfolio.sh': { type: 'file', exec: true },
+        private: {
+          type: 'dir',
+          children: {
+            'secrets.md': { type: 'file' },
+          },
+        },
         projects: {
           type: 'dir',
           children: {
@@ -214,6 +220,24 @@ export const fileContents: Record<string, Array<[string, string]>> = {
     ['', ''],
     ['Automatisches Pan-Tilt-Geschütz mit', 'white'],
     ['prozedural generiertem 3D-Modell via Blender.', 'white'],
+  ],
+  'secrets.md': [
+    ['# secrets.md', 'amber'],
+    ['', ''],
+    ['du hast es gefunden. gut gemacht.', 'white'],
+    ['', ''],
+    ['nur wenige kommen hierher.', 'muted'],
+    ['', ''],
+    ['━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'dim'],
+    ['', ''],
+    ['  🐱  geheime aufzeichnung #001', 'green'],
+    ['', ''],
+    ['__VIDEO__:/secret.mp4', ''],
+    ['', ''],
+    ['━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'dim'],
+    ['', ''],
+    ['  // nicht alles miaut.', 'dim'],
+    ['', ''],
   ],
   'v8_notes.md': [
     ['# v8 Design Notes', 'amber'],
