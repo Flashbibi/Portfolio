@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import styles from './About.module.css'
 
 const SKILLS = [
@@ -14,6 +15,20 @@ const SKILLS = [
 ]
 
 export default function About() {
+  const skillsRef = useRef<HTMLUListElement>(null)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = skillsRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); observer.disconnect() } },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section id="about" className={styles.section}>
       <p className={styles.label}>02 — Über mich</p>
@@ -38,12 +53,12 @@ export default function About() {
           </div>
         </div>
         <div>
-          <ul className={styles.skills}>
+          <ul className={styles.skills} ref={skillsRef}>
             {SKILLS.map(s => (
               <li key={s.name} className={styles.skillRow}>
                 <span className={styles.skillName}>{s.name}</span>
                 <div className={styles.bar}>
-                  <div className={styles.fill} style={{ width: `${s.pct}%` }} />
+                  <div className={styles.fill} style={{ width: inView ? `${s.pct}%` : '0%' }} />
                 </div>
                 <span className={styles.skillLevel}>{s.label}</span>
               </li>

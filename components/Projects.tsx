@@ -35,8 +35,8 @@ export default function Projects() {
       </div>
 
       <div className={styles.grid}>
-        {visible.map(p => (
-          <Link key={p.id} href={`/projects/${p.id}`} className={styles.cardLink}>
+        {visible.map(p => {
+          const card = (
             <article
               className={`${styles.card} ${p.status === 'planned' ? styles.placeholder : ''}`}
             >
@@ -64,8 +64,17 @@ export default function Projects() {
               </div>
               <span className={styles.arrow} aria-hidden="true">↗</span>
             </article>
-          </Link>
-        ))}
+          )
+
+          if (p.status === 'planned') {
+            return <div key={p.id} className={styles.cardLink}>{card}</div>
+          }
+          return (
+            <Link key={p.id} href={`/projects/${p.id}`} className={styles.cardLink}>
+              {card}
+            </Link>
+          )
+        })}
       </div>
     </section>
   )

@@ -13,21 +13,14 @@ import styles from './page.module.css'
 const INTRO_SEEN_KEY = 'portfolio:intro-seen'
 
 export default function Home() {
-  const [introDone,   setIntroDone]   = useState(() => {
-    if (typeof window === 'undefined') return false
-    return sessionStorage.getItem(INTRO_SEEN_KEY) === '1'
-  })
+  const [introDone,   setIntroDone]   = useState(false)
   const [drawerOpen,  setDrawerOpen]  = useState(false)
 
   useEffect(() => {
-    if (introDone) {
-      sessionStorage.setItem(INTRO_SEEN_KEY, '1')
-      return
-    }
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === '1') {
       setIntroDone(true)
     }
-  }, [introDone])
+  }, [])
 
   function handleIntroDone() {
     sessionStorage.setItem(INTRO_SEEN_KEY, '1')

@@ -86,24 +86,9 @@
   font-family: 'Space Mono', monospace;
   font-size: 12.5px;
   color: var(--term-white);
-  caret-color: transparent;
+  caret-color: var(--term-cursor);
   flex: 1;
   min-width: 0;
-}
-
-.cursor {
-  display: inline-block;
-  width: 7px;
-  height: 13px;
-  background: var(--term-cursor);
-  vertical-align: middle;
-  animation: blink-block 1s step-end infinite;
-  flex-shrink: 0;
-}
-
-@keyframes blink-block {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
 }
 
 /* Line colours */

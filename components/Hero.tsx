@@ -35,7 +35,7 @@ export default function Hero() {
   return (
     <section id="hero" className={styles.hero}>
       <div className={styles.gridLines} />
-      <span className={styles.cornerText}>Portfolio — 2025</span>
+      <span className={styles.cornerText}>Portfolio — {new Date().getFullYear()}</span>
       <p className={styles.index}>01 — Willkommen</p>
       <h1 className={styles.name} data-text="Linus">Linus</h1>
       <p className={styles.sub}>

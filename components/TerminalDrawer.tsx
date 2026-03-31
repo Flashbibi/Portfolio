@@ -9,6 +9,14 @@ interface Props {
   onClose: () => void
 }
 
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
 function getNode(path: string): FsNode | null {
   if (path === '~') return filesystem
   const parts = path.replace(/^~\/?/, '').split('/').filter(Boolean)
@@ -25,6 +33,10 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   const inputRef  = useRef<HTMLInputElement>(null)
   const [path, setPath]       = useState('~')
   const [booted, setBooted]   = useState(false)
+
+  // Command history
+  const historyRef    = useRef<string[]>([])
+  const historyIdxRef = useRef(-1)
 
   useEffect(() => {
     if (open) {
@@ -59,15 +71,20 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       `<span class="${styles.cu}">visitor</span>` +
       `<span class="${styles.ca}">@</span>` +
       `<span class="${styles.ch}">linus-portfolio</span>` +
-      `<span class="${styles.cp}">${path}</span>` +
+      `<span class="${styles.cp}">${escapeHtml(path)}</span>` +
       `<span class="${styles.cs}"> $ </span>` +
-      `<span style="color:#f0ebe0">${cmd}</span>`
+      `<span style="color:#f0ebe0">${escapeHtml(cmd)}</span>`
     )
   }
 
   function handleCmd(raw: string) {
     const cmd = raw.trim()
     if (!cmd) return
+
+    // Push to history, reset index
+    historyRef.current = [cmd, ...historyRef.current.slice(0, 49)]
+    historyIdxRef.current = -1
+
     echoCmd(cmd)
     const [verb, arg = ''] = cmd.split(/\s+/)
 
@@ -83,6 +100,91 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       default:       dprint(`bash: ${verb}: command not found  (tippe 'help')`, 'red')
     }
     dprint('')
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    const input = inputRef.current
+    if (!input) return
+
+    if (e.key === 'Enter') {
+      const val = input.value
+      input.value = ''
+      handleCmd(val)
+      return
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      const history = historyRef.current
+      const nextIdx = Math.min(historyIdxRef.current + 1, history.length - 1)
+      historyIdxRef.current = nextIdx
+      input.value = history[nextIdx] ?? ''
+      // Move cursor to end
+      setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0)
+      return
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const nextIdx = historyIdxRef.current - 1
+      historyIdxRef.current = nextIdx
+      input.value = nextIdx < 0 ? '' : (historyRef.current[nextIdx] ?? '')
+      setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0)
+      return
+    }
+
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      handleTabComplete(input)
+      return
+    }
+  }
+
+  function handleTabComplete(input: HTMLInputElement) {
+    const val = input.value
+    const parts = val.split(/\s+/)
+    const partial = parts[parts.length - 1]
+
+    // Resolve the directory to search in
+    let searchDir = path
+    let prefix = ''
+    const slashIdx = partial.lastIndexOf('/')
+    if (slashIdx >= 0) {
+      const dirPart = partial.slice(0, slashIdx)
+      prefix = partial.slice(0, slashIdx + 1)
+      searchDir = dirPart.startsWith('~')
+        ? dirPart
+        : (path === '~' ? '~/' + dirPart : path + '/' + dirPart)
+    }
+
+    const node = getNode(searchDir)
+    if (!node || node.type !== 'dir') return
+
+    const fragment = partial.slice(slashIdx + 1)
+    const matches = Object.keys(node.children).filter(k =>
+      k.toLowerCase().startsWith(fragment.toLowerCase())
+    )
+
+    if (matches.length === 0) return
+
+    if (matches.length === 1) {
+      const match = matches[0]
+      const isDir = node.children[match].type === 'dir'
+      const completed = prefix + match + (isDir ? '/' : '')
+      parts[parts.length - 1] = completed
+      input.value = parts.join(' ')
+    } else {
+      // Show possible completions
+      dprint('')
+      dprintHTML(
+        '  ' + matches.map(m => {
+          const isDir = node.children[m].type === 'dir'
+          const color = isDir ? '#6aabdf' : '#f0ebe0'
+          return `<span style="color:${color};display:inline-block;min-width:160px">${m}${isDir ? '/' : ''}</span>`
+        }).join('')
+      )
+      dprint('')
+    }
   }
 
   function cmdLs(arg: string) {
@@ -179,6 +281,9 @@ export default function TerminalDrawer({ open, onClose }: Props) {
         `<span style="color:#555548">${d}</span>`
       )
     )
+    dprint('')
+    dprint('  ↑ / ↓   Befehlsverlauf durchsuchen', 'muted')
+    dprint('  Tab     Dateinamen vervollständigen', 'muted')
   }
 
   return (
@@ -209,15 +314,8 @@ export default function TerminalDrawer({ open, onClose }: Props) {
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck={false}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              const val = (e.target as HTMLInputElement).value
-              ;(e.target as HTMLInputElement).value = ''
-              handleCmd(val)
-            }
-          }}
+          onKeyDown={handleKeyDown}
         />
-        <span className={styles.cursor} />
       </div>
     </div>
   )
