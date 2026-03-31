@@ -2,18 +2,18 @@
 
 /* ── Theme variables ─────────────────────────────────────── */
 :root[data-theme='dark'] {
-  --bg:       #0b0b09;
-  --bg2:      #111110;
-  --bg3:      #1a1a17;
-  --text:     #f0ebe0;
-  --text2:    #9a9488;
-  --text3:    #5a5650;
-  --accent:   #d4a843;
-  --accent2:  #a07c28;
-  --border:   rgba(240, 235, 224, 0.08);
-  --border2:  rgba(240, 235, 224, 0.15);
-  --tag-bg:   rgba(212, 168, 67, 0.1);
-  --tag-text: #d4a843;
+  --bg:       #0c0d12;
+  --bg2:      #13151e;
+  --bg3:      #1c1f2c;
+  --text:     #eeeae0;
+  --text2:    #8a8fa0;
+  --text3:    #505568;
+  --accent:   #6aabdf;
+  --accent2:  #4a80b0;
+  --border:   rgba(180, 190, 220, 0.08);
+  --border2:  rgba(180, 190, 220, 0.15);
+  --tag-bg:   rgba(106, 171, 223, 0.12);
+  --tag-text: #6aabdf;
 }
 
 :root[data-theme='light'] {
