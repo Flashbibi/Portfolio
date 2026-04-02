@@ -132,11 +132,12 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       case 'cat':    cmdCat(arg); break
       case 'dog':    cmdDog(arg); break
       case 'pwd':    dprint(path === '~' ? '/home/visitor' : '/home/visitor/' + path.replace('~/', '')); break
-      case 'whoami': dprint('visitor — curious developer', 'green'); break
-      case 'clear':  if (outRef.current) outRef.current.innerHTML = ''; break
-      case 'tree':   cmdTree(); break
-      case 'help':   cmdHelp(); break
-      case 'sudo':   cmdSudo(cmd.slice(5).trim()); return
+      case 'whoami':   dprint('visitor — curious developer', 'green'); break
+      case 'clear':    if (outRef.current) outRef.current.innerHTML = ''; break
+      case 'tree':     cmdTree(); break
+      case 'help':     cmdHelp(); break
+      case 'neofetch': cmdNeofetch(); break
+      case 'sudo':     cmdSudo(cmd.slice(5).trim()); return
       default:       dprint(translations[langRef.current].terminal.commandNotFound(verb), 'red')
     }
     dprint('')
@@ -391,6 +392,54 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     lines.forEach(([text, cls, ms]) => setTimeout(() => dprint(text, cls), ms))
     // Silence — then the system dies
     setTimeout(() => window.dispatchEvent(new CustomEvent('rm-rf')), 3800)
+  }
+
+  function cmdNeofetch() {
+    const a = '#d4a843'  // amber  — art
+    const b = '#6aabdf'  // blue   — keys
+    const d = '#555548'  // dim    — separators
+    const w = '#f0ebe0'  // white  — values
+
+    const art = [
+      '  ┌──────────────────┐  ',
+      '  │  ❯_              │  ',
+      '  │                  │  ',
+      '  │   ≋  ≋  ≋  ≋    │  ',
+      '  │                  │  ',
+      '  └──────────────────┘  ',
+      '   ────────────────────  ',
+      '   ██████████████████   ',
+      '                        ',
+      '                        ',
+      '                        ',
+      '                        ',
+      '                        ',
+    ]
+
+    const info = [
+      `<span style="color:${b}">visitor</span><span style="color:${d}">@</span><span style="color:${b}">linus-portfolio</span>`,
+      `<span style="color:${d}">────────────────────────────</span>`,
+      `<span style="color:${b}">OS</span><span style="color:${d}">:</span>       <span style="color:${w}">Zürich 24.04 LTS</span>`,
+      `<span style="color:${b}">Host</span><span style="color:${d}">:</span>     <span style="color:${w}">linus-portfolio</span>`,
+      `<span style="color:${b}">Kernel</span><span style="color:${d}">:</span>   <span style="color:${w}">6.6.87-portfolio #1</span>`,
+      `<span style="color:${b}">Uptime</span><span style="color:${d}">:</span>   <span style="color:${w}">since 2024</span>`,
+      `<span style="color:${b}">Shell</span><span style="color:${d}">:</span>    <span style="color:${w}">space-mono 4.0</span>`,
+      `<span style="color:${b}">Terminal</span><span style="color:${d}">:</span> <span style="color:${w}">❯_ drawer v1.0</span>`,
+      `<span style="color:${b}">CPU</span><span style="color:${d}">:</span>      <span style="color:${w}">Brain @ 3.2 thoughts/s</span>`,
+      `<span style="color:${b}">GPU</span><span style="color:${d}">:</span>      <span style="color:${w}">Eyes (integrated)</span>`,
+      `<span style="color:${b}">Memory</span><span style="color:${d}">:</span>   <span style="color:${w}">Kaffee / Kaffee</span>`,
+      ``,
+      [
+        '#e05c5c','#d4a843','#5dba7e','#6aabdf','#a07fd4','#f0ebe0','#555548','#0c0d12',
+      ].map(c => `<span style="color:${c}">███</span>`).join(''),
+    ]
+
+    const rows = Math.max(art.length, info.length)
+    for (let i = 0; i < rows; i++) {
+      const left = art[i] ?? '                        '
+      const right = info[i] ?? ''
+      dprintHTML(`<span style="color:${a};white-space:pre">${left}</span>${right}`)
+    }
   }
 
   function cmdHelp() {
