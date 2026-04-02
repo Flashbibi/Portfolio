@@ -56,43 +56,66 @@ export default function TerminalIntro({ onDone }: Props) {
     if (outRef.current) outRef.current.scrollTop = outRef.current.scrollHeight
   }
 
-  function waitForChoice(dialogLabel: string): Promise<'dark' | 'light'> {
+  function waitForDialog<T extends string>(
+    title: string,
+    label: string,
+    options: Array<{ key: string; label: string; value: T }>,
+    defaultValue: T
+  ): Promise<T> {
     return new Promise(resolve => {
       const box = document.createElement('div')
       box.className = styles.dialog
 
+      // IW = inner width (spaces). Adjust this one value if box-drawing chars
+      // render at a different width than spaces in the browser's fallback font.
+      const IW   = 37   // space-chars width for content rows
+      const DW   = 41   // dash-chars for borders (─ is narrower than space in fallback font)
+      const dash = '─'.repeat(DW)
+      const row  = (cls: string, text: string) =>
+        `<p class="${cls}">  │${text.padEnd(IW)}│</p>`
+      const rowH = (cls: string, html: string, textLen: number) => {
+        const pad = '&nbsp;'.repeat(Math.max(0, IW - textLen))
+        return `<p class="${cls}">  │${html}${pad}│</p>`
+      }
+
+      const optLines = options.map(o => {
+        const t = `[ ${o.key} ]  ${o.label}`
+        return rowH(styles.dialogLine,
+          `   <button class="${styles.dialogBtn}" data-choice="${o.value}">${t}</button>`,
+          3 + t.length)
+      }).join('')
+
       box.innerHTML =
-        `<p class="${styles.dialogBorder}">  ┌─────────────────────────────────────────┐</p>` +
-        `<p class="${styles.dialogBorder}">  │  <span class="${styles.dialogTitle}">decision.sh — environment select</span>     │</p>` +
-        `<p class="${styles.dialogBorder}">  ├─────────────────────────────────────────┤</p>` +
-        `<p class="${styles.dialogBorder}">  │                                         │</p>` +
-        `<p class="${styles.dialogBorder}">  │   ${dialogLabel.padEnd(41)}│</p>` +
-        `<p class="${styles.dialogBorder}">  │                                         │</p>` +
-        `<p class="${styles.dialogLine}">  │   <button class="${styles.dialogBtn}" data-choice="dark">[ 1 ]  Dark Mode </button>                │</p>` +
-        `<p class="${styles.dialogLine}">  │   <button class="${styles.dialogBtn}" data-choice="light">[ 2 ]  Light Mode</button>                │</p>` +
-        `<p class="${styles.dialogBorder}">  │                                         │</p>` +
-        `<p class="${styles.dialogHint}">  │   Press 1 or 2                          │</p>` +
-        `<p class="${styles.dialogBorder}">  └─────────────────────────────────────────┘</p>`
+        `<p class="${styles.dialogBorder}">  ┌${dash}┐</p>` +
+        rowH(styles.dialogBorder, `  <span class="${styles.dialogTitle}">${title}</span>`, 2 + title.length) +
+        `<p class="${styles.dialogBorder}">  ├${dash}┤</p>` +
+        row(styles.dialogBorder, '') +
+        row(styles.dialogBorder, `   ${label}`) +
+        row(styles.dialogBorder, '') +
+        optLines +
+        row(styles.dialogBorder, '') +
+        row(styles.dialogHint, `   Press ${options.map(o => o.key).join(' or ')}`) +
+        `<p class="${styles.dialogBorder}">  └${dash}┘</p>`
 
       outRef.current?.appendChild(box)
       if (outRef.current) outRef.current.scrollTop = outRef.current.scrollHeight
 
-      function pick(choice: 'dark' | 'light') {
+      function pick(value: T) {
         cleanup()
         box.querySelectorAll<HTMLButtonElement>('[data-choice]').forEach(btn => {
-          btn.style.color = btn.dataset.choice === choice ? '#5dba7e' : '#333330'
+          btn.style.color = btn.dataset.choice === value ? '#5dba7e' : '#333330'
         })
-        resolve(choice)
+        resolve(value)
       }
 
       function onKey(e: KeyboardEvent) {
-        if (e.key === '1') pick('dark')
-        if (e.key === '2') pick('light')
+        const opt = options.find(o => o.key === e.key)
+        if (opt) pick(opt.value)
       }
 
       function onClick(e: MouseEvent) {
         const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-choice]')
-        if (btn?.dataset.choice) pick(btn.dataset.choice as 'dark' | 'light')
+        if (btn?.dataset.choice) pick(btn.dataset.choice as T)
       }
 
       function cleanup() {
@@ -101,7 +124,7 @@ export default function TerminalIntro({ onDone }: Props) {
         cleanupChoice.current = null
       }
 
-      cleanupChoice.current = () => { cleanup(); resolve('dark') }
+      cleanupChoice.current = () => { cleanup(); resolve(defaultValue) }
 
       document.addEventListener('keydown', onKey)
       box.addEventListener('click', onClick)
@@ -163,28 +186,66 @@ export default function TerminalIntro({ onDone }: Props) {
         `<span style="color:#f0ebe0;display:inline-block;min-width:180px">contact.md</span>` +
         `<span style="color:#6aabdf;display:inline-block;min-width:180px">projects/</span>` +
         `<span style="color:#5dba7e;display:inline-block;min-width:180px">decision.sh*</span>` +
+        `<span style="color:#5dba7e;display:inline-block;min-width:180px">decision2.sh*</span>` +
         `<span style="color:#5dba7e;display:inline-block;min-width:180px">portfolio.sh*</span>` +
         `<span style="color:#6aabdf">private/</span>`
       )
       print('')
       await delay(900); if (skippedRef.current) return
 
+      // decision.sh — language
       await typeCmd('./decision.sh')
       await delay(400); if (skippedRef.current) return
       print('')
 
-      const choice = await waitForChoice(t.dialogLabel)
+      const langChoice = await waitForDialog(
+        'decision.sh — language select',
+        t.langDialogLabel,
+        [
+          { key: '1', label: 'English', value: 'en' as const },
+          { key: '2', label: 'Deutsch', value: 'de' as const },
+        ],
+        'en' as const
+      )
       if (skippedRef.current) return
 
       try {
-        localStorage.setItem('theme', choice)
-        document.documentElement.setAttribute('data-theme', choice)
+        localStorage.setItem('lang', langChoice)
+        document.documentElement.setAttribute('lang', langChoice)
+        window.dispatchEvent(new CustomEvent('portfolio:lang-set', { detail: langChoice }))
+      } catch { /* ignore */ }
+
+      await delay(400); if (skippedRef.current) return
+      print('')
+      print(t.langSet(langChoice === 'en' ? 'English' : 'Deutsch'), 'green')
+      await delay(800); if (skippedRef.current) return
+      print('')
+
+      // decision2.sh — theme
+      await typeCmd('./decision2.sh')
+      await delay(400); if (skippedRef.current) return
+      print('')
+
+      const theme = await waitForDialog(
+        'decision2.sh — environment select',
+        t.dialogLabel,
+        [
+          { key: '1', label: 'Dark Mode ', value: 'dark' as const },
+          { key: '2', label: 'Light Mode', value: 'light' as const },
+        ],
+        'dark' as const
+      )
+      if (skippedRef.current) return
+
+      try {
+        localStorage.setItem('theme', theme)
+        document.documentElement.setAttribute('data-theme', theme)
         window.dispatchEvent(new Event('portfolio:theme-change'))
       } catch { /* ignore */ }
 
       await delay(400); if (skippedRef.current) return
       print('')
-      print(t.envSet(choice), 'green')
+      print(t.envSet(theme), 'green')
       await delay(800); if (skippedRef.current) return
       print('')
 
