@@ -42,26 +42,35 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   const [booted, setBooted] = useState(false)
   const [height, setHeight] = useState(420)
 
-  function onHandleMouseDown(e: React.MouseEvent) {
-    e.preventDefault()
-    const startY      = e.clientY
+  function startResize(startY: number) {
     const startHeight = height
-
-    function onMouseMove(ev: MouseEvent) {
-      const delta     = startY - ev.clientY
-      const newHeight = Math.max(180, Math.min(window.innerHeight * 0.9, startHeight + delta))
+    const onMove = (clientY: number) => {
+      const newHeight = Math.max(180, Math.min(window.innerHeight * 0.9, startHeight + (startY - clientY)))
       setHeight(newHeight)
     }
-
-    function onMouseUp() {
+    const onMouseMove = (ev: MouseEvent) => onMove(ev.clientY)
+    const onTouchMove = (ev: TouchEvent) => onMove(ev.touches[0].clientY)
+    const onEnd = () => {
       document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('mouseup', onEnd)
+      document.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('touchend', onEnd)
       document.body.style.userSelect = ''
     }
-
     document.body.style.userSelect = 'none'
     document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('mouseup', onEnd)
+    document.addEventListener('touchmove', onTouchMove, { passive: true })
+    document.addEventListener('touchend', onEnd)
+  }
+
+  function onHandleMouseDown(e: React.MouseEvent) {
+    e.preventDefault()
+    startResize(e.clientY)
+  }
+
+  function onHandleTouchStart(e: React.TouchEvent) {
+    startResize(e.touches[0].clientY)
   }
 
   const historyRef    = useRef<string[]>([])
@@ -406,7 +415,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       style={{ height }}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className={styles.handle} onMouseDown={onHandleMouseDown} onClick={e => e.stopPropagation()} />
+      <div className={styles.handle} onMouseDown={onHandleMouseDown} onTouchStart={onHandleTouchStart} onClick={e => e.stopPropagation()} />
       <div className={styles.scanlines} />
       <div className={styles.header}>
         <span className={styles.title}>❯_ terminal — linus-portfolio</span>
