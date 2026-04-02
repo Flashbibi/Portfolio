@@ -9,10 +9,14 @@ import About from '@/components/About'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
 import styles from './page.module.css'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
 const INTRO_SEEN_KEY = 'portfolio:intro-seen'
 
 export default function Home() {
+  const { lang, isGlitching } = useLang()
+  const t = translations[lang].footer
   const [introDone,   setIntroDone]   = useState(false)
   const [drawerOpen,  setDrawerOpen]  = useState(false)
 
@@ -47,16 +51,18 @@ useEffect(() => {
       )}
 
       <div className={`${styles.portfolio} ${introDone ? styles.visible : ''}`}>
-        <Nav onTerminalOpen={() => setDrawerOpen(true)} />
-        <Hero />
-        <About />
-        <Projects />
-        <Contact />
-        <footer className={styles.footer}>
-          <span>Linus — Zürich, Schweiz</span>
-          <span>Next.js · TypeScript · CSS Modules</span>
-          <span>© {new Date().getFullYear()}</span>
-        </footer>
+        <div data-chroma={isGlitching ? '' : undefined}>
+          <Nav onTerminalOpen={() => setDrawerOpen(true)} />
+          <Hero />
+          <About />
+          <Projects />
+          <Contact />
+          <footer className={styles.footer}>
+            <span>{t.location}</span>
+            <span>Next.js · TypeScript · CSS Modules</span>
+            <span>© {new Date().getFullYear()}</span>
+          </footer>
+        </div>
       </div>
 
       <TerminalDrawer

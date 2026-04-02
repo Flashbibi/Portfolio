@@ -2,14 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './Hero.module.css'
-
-const LINES = [
-  'Entwickler & Maker aus der Schweiz.',
-  'Ich baue Dinge — aus Code, Filament und Neugier.',
-  'Informatikstudent. Hobbybastler. Problemlöser.',
-]
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
 export default function Hero() {
+  const { lang } = useLang()
   const [text, setText] = useState('')
   const [mouse, setMouse] = useState({ x: -9999, y: -9999 })
   const heroRef = useRef<HTMLElement>(null)
@@ -33,8 +30,10 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
+    const LINES = translations[lang].hero.lines
     let li = 0, ci = 0, deleting = false
     let timer: ReturnType<typeof setTimeout>
+    setText('')
 
     function tick() {
       const line = LINES[li]
@@ -50,7 +49,9 @@ export default function Hero() {
 
     timer = setTimeout(tick, 800)
     return () => clearTimeout(timer)
-  }, [])
+  }, [lang])
+
+  const t = translations[lang].hero
 
   return (
     <section id="hero" className={styles.hero} ref={heroRef}>
@@ -60,7 +61,7 @@ export default function Hero() {
         style={{ background: `radial-gradient(700px circle at ${mouse.x}px ${mouse.y}px, var(--spotlight-color), transparent 70%)` }}
       />
       <span className={styles.cornerText}>Portfolio — {new Date().getFullYear()}</span>
-      <p className={styles.index}>01 — Willkommen</p>
+      <p className={styles.index}>{t.index}</p>
       <h1 className={styles.name} data-text="Linus">Linus</h1>
       <p className={styles.sub}>
         {text}

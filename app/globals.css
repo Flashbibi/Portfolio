@@ -139,3 +139,22 @@ body {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
 }
+
+
+/* ── Language switch — RGB text split ───────────────────── */
+[data-chroma] h1,
+[data-chroma] h2,
+[data-chroma] h3,
+[data-chroma] p,
+[data-chroma] li,
+[data-chroma] a {
+  animation: chroma-text 0.55s cubic-bezier(0.25, 0, 0.75, 1) forwards;
+}
+
+@keyframes chroma-text {
+  0%   { filter: none; }
+  18%  { filter: drop-shadow(-9px 0 0 rgba(255, 45, 45, 0.95)) drop-shadow(9px 0 0 rgba(45, 110, 255, 0.95)); }
+  40%  { filter: drop-shadow(5px 0 0 rgba(255, 45, 45, 0.55)) drop-shadow(-5px 0 0 rgba(45, 110, 255, 0.55)); }
+  65%  { filter: drop-shadow(-2px 0 0 rgba(255, 45, 45, 0.2)) drop-shadow(2px 0 0 rgba(45, 110, 255, 0.2)); }
+  100% { filter: none; }
+}

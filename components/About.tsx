@@ -1,20 +1,28 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import styles from './About.module.css'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
-const SKILLS = [
-  { name: 'Python',              pct: 85, label: 'Stark' },
-  { name: 'Java',                pct: 75, label: 'Gut' },
-  { name: 'JavaScript',          pct: 75, label: 'Gut' },
-  { name: 'SQL / MySQL',         pct: 80, label: 'Gut' },
-  { name: 'REST API Design',     pct: 70, label: 'Gut' },
-  { name: 'React / Vue.js',      pct: 80, label: 'Gut' },
-  { name: 'Git & Docker Basics', pct: 62, label: 'Solide' },
-  { name: 'Linux / Bash',        pct: 85, label: 'Stark' },
-  { name: 'Blender 3D Modeling', pct: 35, label: 'Learning' },
-  { name: 'ESP32 / Raspberry Pi for fun', pct: 58, label: 'Solide' },
+type SkillLevel = 'strong' | 'good' | 'solid' | 'learning'
+
+const SKILLS: { name: string; pct: number; level: SkillLevel }[] = [
+  { name: 'Python',                    pct: 85, level: 'strong'   },
+  { name: 'Java',                      pct: 75, level: 'good'     },
+  { name: 'JavaScript',                pct: 75, level: 'good'     },
+  { name: 'SQL / MySQL',               pct: 80, level: 'good'     },
+  { name: 'REST API Design',           pct: 70, level: 'good'     },
+  { name: 'React / Vue.js',            pct: 80, level: 'good'     },
+  { name: 'Git & Docker Basics',       pct: 62, level: 'solid'    },
+  { name: 'Linux / Bash',              pct: 85, level: 'strong'   },
+  { name: 'Blender 3D Modeling',       pct: 35, level: 'learning' },
+  { name: 'ESP32 / Raspberry Pi for fun', pct: 58, level: 'solid' },
 ]
 
 export default function About() {
+  const { lang } = useLang()
+  const t = translations[lang].about
   const skillsRef = useRef<HTMLUListElement>(null)
   const [inView, setInView] = useState(false)
 
@@ -31,25 +39,17 @@ export default function About() {
 
   return (
     <section id="about" className={styles.section} data-reveal>
-      <p className={styles.label}>02 — Über mich</p>
+      <p className={styles.label}>{t.label}</p>
       <div className={styles.grid}>
         <div>
           <h2 className={styles.heading}>
-            Maker,<br />
-            <em>Entwickler</em>,<br />
-            Bastler.
+            {t.heading1}<br />
+            <em>{t.heading2}</em>,<br />
+            {t.heading3}
           </h2>
           <div className={styles.body}>
-            <p>
-              Ich bin Linus, Informatiker Fachrichtung Applikationsentwicklung
-              in Ausbildung an der ETH Zürich. Ich mag Projekte, bei denen ich
-              schnell von einer Idee zu einem funktionierenden Prototyp komme.
-            </p>
-            <p>
-              Ich arbeite am liebsten an Softwareprojekten rund um Backend,
-              APIs, Datenbanken und moderne Web-Apps. In meiner Freizeit
-              baue ich zusätzlich kleine Hardware- und 3D-Projekte.
-            </p>
+            <p>{t.bio1}</p>
+            <p>{t.bio2}</p>
           </div>
         </div>
         <div>
@@ -60,7 +60,7 @@ export default function About() {
                 <div className={styles.bar}>
                   <div className={styles.fill} style={{ width: inView ? `${s.pct}%` : '0%' }} />
                 </div>
-                <span className={styles.skillLevel}>{s.label}</span>
+                <span className={styles.skillLevel}>{t.skills[s.level]}</span>
               </li>
             ))}
           </ul>

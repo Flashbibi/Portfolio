@@ -1,8 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { filesystem, fileContents, type FsNode } from '@/data/projects'
+import { filesystem, getFileContent, type FsNode } from '@/data/projects'
 import styles from './TerminalDrawer.module.css'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
+import type { Lang } from '@/context/LanguageContext'
 
 interface Props {
   open: boolean
@@ -29,11 +32,15 @@ function getNode(path: string): FsNode | null {
 }
 
 export default function TerminalDrawer({ open, onClose }: Props) {
+  const { lang } = useLang()
+  const langRef = useRef<Lang>(lang)
+  useEffect(() => { langRef.current = lang }, [lang])
+
   const outRef    = useRef<HTMLDivElement>(null)
   const inputRef  = useRef<HTMLInputElement>(null)
-  const [path, setPath]       = useState('~')
-  const [booted, setBooted]   = useState(false)
-  const [height, setHeight]   = useState(420)
+  const [path, setPath]     = useState('~')
+  const [booted, setBooted] = useState(false)
+  const [height, setHeight] = useState(420)
 
   function onHandleMouseDown(e: React.MouseEvent) {
     e.preventDefault()
@@ -57,7 +64,6 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     document.addEventListener('mouseup', onMouseUp)
   }
 
-  // Command history
   const historyRef    = useRef<string[]>([])
   const historyIdxRef = useRef(-1)
 
@@ -65,13 +71,14 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     if (open) {
       if (!booted) {
         setBooted(true)
-        dprint('  Willkommen zurück. Erkunde die Dateien.', 'muted')
-        dprint('  Tippe  help  für eine Liste der Befehle.', 'muted')
+        const t = translations[langRef.current].terminal
+        dprint(t.welcome, 'muted')
+        dprint(t.helpHint, 'muted')
         dprint('')
       }
       setTimeout(() => inputRef.current?.focus(), 350)
     }
-  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps -- mount-only: effect intentionally runs once to boot the terminal sequence.
+  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function dprint(text: string, cls = '') {
     const p = document.createElement('p')
@@ -104,7 +111,6 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     const cmd = raw.trim()
     if (!cmd) return
 
-    // Push to history, reset index
     historyRef.current = [cmd, ...historyRef.current.slice(0, 49)]
     historyIdxRef.current = -1
 
@@ -121,7 +127,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       case 'clear':  if (outRef.current) outRef.current.innerHTML = ''; break
       case 'tree':   cmdTree(); break
       case 'help':   cmdHelp(); break
-      default:       dprint(`bash: ${verb}: command not found  (tippe 'help')`, 'red')
+      default:       dprint(translations[langRef.current].terminal.commandNotFound(verb), 'red')
     }
     dprint('')
   }
@@ -143,7 +149,6 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       const nextIdx = Math.min(historyIdxRef.current + 1, history.length - 1)
       historyIdxRef.current = nextIdx
       input.value = history[nextIdx] ?? ''
-      // Move cursor to end
       setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0)
       return
     }
@@ -169,7 +174,6 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     const parts = val.split(/\s+/)
     const partial = parts[parts.length - 1]
 
-    // Resolve the directory to search in
     let searchDir = path
     let prefix = ''
     const slashIdx = partial.lastIndexOf('/')
@@ -198,7 +202,6 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       parts[parts.length - 1] = completed
       input.value = parts.join(' ')
     } else {
-      // Show possible completions
       dprint('')
       dprintHTML(
         '  ' + matches.map(m => {
@@ -219,7 +222,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     if (!node) { dprint(`ls: ${arg || '.'}: No such file or directory`, 'red'); return }
     if (node.type === 'file') { dprint(arg); return }
     const keys = Object.keys(node.children)
-    if (!keys.length) { dprint('(leer)', 'dim'); return }
+    if (!keys.length) { dprint(translations[langRef.current].terminal.empty, 'dim'); return }
     const html = keys.map(k => {
       const n = node.children[k]
       if (n.type === 'dir')
@@ -263,13 +266,13 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   }
 
   function cmdCat(arg: string) {
-    if (!arg) { dprint('cat: fehlender Dateiname', 'red'); return }
+    const t = translations[langRef.current].terminal
+    if (!arg) { dprint(t.catMissing, 'red'); return }
     const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
     const node = getNode(target)
     if (!node)               { dprint(`cat: ${arg}: No such file or directory`, 'red'); return }
     if (node.type === 'dir') { dprint(`cat: ${arg}: Is a directory`, 'red'); return }
 
-    // Disambiguate README.md by current path
     let key = arg
     if (arg === 'README.md') {
       if (path.includes('GLAMOS'))   key = 'README.md (GLAMOS)'
@@ -277,34 +280,36 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       else if (path.includes('tur')) key = 'README.md (turret)'
     }
 
-    const content = fileContents[key] ?? fileContents[arg]
+    const content = getFileContent(key, langRef.current) ?? getFileContent(arg, langRef.current)
     if (content) {
-      content.forEach(([t, c]) => {
-        if (t.startsWith('__VIDEO__:')) {
-          dprintVideo(t.slice('__VIDEO__:'.length))
+      content.forEach(([txt, cls]) => {
+        if (txt.startsWith('__VIDEO__:')) {
+          dprintVideo(txt.slice('__VIDEO__:'.length))
         } else {
-          dprint(t, c)
+          dprint(txt, cls)
         }
       })
     } else {
-      dprint('(keine Vorschau)', 'dim')
+      dprint(t.noPreview, 'dim')
     }
   }
 
   function cmdDog(arg: string) {
-    if (!arg) { dprint('dog: fehlender Dateiname', 'red'); return }
+    const t = translations[langRef.current].terminal
+    if (!arg) { dprint(t.dogMissing, 'red'); return }
     const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
     const node = getNode(target)
     if (!node)               { dprint(`dog: ${arg}: No such file or directory`, 'red'); return }
     if (node.type === 'dir') { dprint(`dog: ${arg}: Is a directory`, 'red'); return }
     if (!path.includes('private') || arg !== 'secrets.md') {
-      dprint('dog: unrecognized format  (falscher Ordner?)', 'red'); return
+      dprint(t.dogWrongDir, 'red'); return
     }
+    const l = langRef.current
     dprint('# ultra_secrets.md', 'amber')
     dprint('')
-    dprint('du hast wirklich gesucht. respekt.', 'white')
+    dprint(l === 'de' ? 'du hast wirklich gesucht. respekt.' : 'you really searched hard. respect.', 'white')
     dprint('')
-    dprint('  🐶  ultra geheime aufzeichnung #001', 'green')
+    dprint(l === 'de' ? '  🐶  ultra geheime aufzeichnung #001' : '  🐶  ultra secret recording #001', 'green')
     dprint('')
     const wrapper = document.createElement('div')
     wrapper.className = styles.line
@@ -332,30 +337,24 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       ['        ├── README.md', 'white'],
       ['        └── v8_notes.md', 'white'],
     ]
-    lines.forEach(([t, c]) => dprint('  ' + t, c))
+    lines.forEach(([txt, cls]) => dprint('  ' + txt, cls))
   }
 
   function cmdHelp() {
-    dprint('Verfügbare Befehle:', 'amber')
-    const cmds: [string, string][] = [
-      ['ls [dir]',    'Ordnerinhalt anzeigen'],
-      ['cd <dir>',    'Verzeichnis wechseln  (cd .., cd ~)'],
-      ['cat <file>',  'Datei lesen'],
-      ['tree',        'Gesamte Struktur anzeigen'],
-      ['pwd',         'Aktuellen Pfad'],
-      ['whoami',      'Wer bin ich'],
-      ['clear',       'Terminal leeren'],
-    ]
-    cmds.forEach(([c, d]) =>
+    const t = translations[langRef.current].terminal
+    dprint(t.helpHeader, 'amber')
+    t.commands.forEach(([c, d]) =>
       dprintHTML(
         `  <span style="color:#f0ebe0;display:inline-block;min-width:180px">${c}</span>` +
         `<span style="color:#555548">${d}</span>`
       )
     )
     dprint('')
-    dprint('  ↑ / ↓   Befehlsverlauf durchsuchen', 'muted')
-    dprint('  Tab     Dateinamen vervollständigen', 'muted')
+    dprint(t.historyHint, 'muted')
+    dprint(t.tabHint, 'muted')
   }
+
+  const tNav = translations[lang].terminal
 
   return (
     <div
@@ -367,8 +366,8 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       <div className={styles.scanlines} />
       <div className={styles.header}>
         <span className={styles.title}>❯_ terminal — linus-portfolio</span>
-        <span className={styles.hint}>tippe 'help' für Befehle</span>
-        <button className={styles.close} onClick={onClose}>[ schliessen ]</button>
+        <span className={styles.hint}>{tNav.headerHint}</span>
+        <button className={styles.close} onClick={onClose}>{tNav.closeBtn}</button>
       </div>
 
       <div className={styles.output} ref={outRef} />

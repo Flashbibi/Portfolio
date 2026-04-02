@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { LanguageProvider } from '@/context/LanguageContext'
 
 export const metadata: Metadata = {
   title: 'Linus — Portfolio',
-  description: 'Informatikstudent, Maker & Entwickler aus Zürich, Schweiz.',
+  description: 'CS student, Maker & Developer from Zürich, Switzerland.',
 }
 
 export default function RootLayout({
@@ -12,23 +13,27 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const themeInitScript = `(() => {
+  const initScript = `(() => {
     try {
-      const saved = localStorage.getItem('theme')
-      const theme = saved === 'light' || saved === 'dark' ? saved : 'dark'
-      document.documentElement.setAttribute('data-theme', theme)
+      const theme = localStorage.getItem('theme')
+      document.documentElement.setAttribute('data-theme', theme === 'light' || theme === 'dark' ? theme : 'dark')
+      const lang = localStorage.getItem('lang')
+      document.documentElement.setAttribute('lang', lang === 'de' ? 'de' : 'en')
     } catch {
       document.documentElement.setAttribute('data-theme', 'dark')
+      document.documentElement.setAttribute('lang', 'en')
     }
   })();`
 
   return (
-    <html lang="de" data-theme="dark">
+    <html lang="en" data-theme="dark">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: initScript }} />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <LanguageProvider>{children}</LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

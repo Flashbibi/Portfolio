@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import styles from './Nav.module.css'
 import { useTheme } from '@/context/ThemeContext'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
 interface NavProps {
   onTerminalOpen: () => void
@@ -10,6 +12,8 @@ interface NavProps {
 
 export default function Nav({ onTerminalOpen }: NavProps) {
   const { theme, toggle } = useTheme()
+  const { lang, toggle: toggleLang } = useLang()
+  const t = translations[lang].nav
   const [progress, setProgress] = useState(0)
   const [active, setActive] = useState('')
 
@@ -44,19 +48,26 @@ export default function Nav({ onTerminalOpen }: NavProps) {
       <div className={styles.progressBar} style={{ transform: `scaleX(${progress})` }} />
       <a href="#hero" className={styles.logo}>linus</a>
       <div className={styles.links}>
-        <a href="#about"    className={active === 'about'    ? styles.active : ''}>über mich</a>
-        <a href="#projects" className={active === 'projects' ? styles.active : ''}>projekte</a>
-        <a href="#contact"  className={active === 'contact'  ? styles.active : ''}>kontakt</a>
-        <button className={styles.termBtn} onClick={onTerminalOpen} title="Terminal öffnen" aria-label="Terminal öffnen">
+        <a href="#about"    className={active === 'about'    ? styles.active : ''}>{t.about}</a>
+        <a href="#projects" className={active === 'projects' ? styles.active : ''}>{t.projects}</a>
+        <a href="#contact"  className={active === 'contact'  ? styles.active : ''}>{t.contact}</a>
+        <button className={styles.termBtn} onClick={onTerminalOpen} title={t.openTerminal} aria-label={t.openTerminal}>
           <span aria-hidden="true">❯_</span>
-          <span className={styles.termLabel}>terminal</span>
+          <span className={styles.termLabel}>{t.terminal}</span>
         </button>
         <button
           className={styles.themeToggle}
           onClick={toggle}
-          aria-label={theme === 'dark' ? 'Helles Theme aktivieren' : 'Dunkles Theme aktivieren'}
+          aria-label={theme === 'dark' ? t.lightTheme : t.darkTheme}
         >
           {theme === 'dark' ? '[ light ]' : '[ dark ]'}
+        </button>
+        <button
+          className={styles.themeToggle}
+          onClick={toggleLang}
+          aria-label={lang === 'en' ? 'Deutsch' : 'English'}
+        >
+          {lang === 'en' ? '[ DE ]' : '[ EN ]'}
         </button>
       </div>
     </nav>

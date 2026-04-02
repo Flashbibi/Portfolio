@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './TerminalIntro.module.css'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
 interface Props {
   onDone: () => void
@@ -12,6 +14,7 @@ function delay(ms: number) {
 }
 
 export default function TerminalIntro({ onDone }: Props) {
+  const { lang } = useLang()
   const outRef         = useRef<HTMLDivElement>(null)
   const skippedRef     = useRef(false)
   const startedRef     = useRef(false)
@@ -53,7 +56,7 @@ export default function TerminalIntro({ onDone }: Props) {
     if (outRef.current) outRef.current.scrollTop = outRef.current.scrollHeight
   }
 
-  function waitForChoice(): Promise<'dark' | 'light'> {
+  function waitForChoice(dialogLabel: string): Promise<'dark' | 'light'> {
     return new Promise(resolve => {
       const box = document.createElement('div')
       box.className = styles.dialog
@@ -63,7 +66,7 @@ export default function TerminalIntro({ onDone }: Props) {
         `<p class="${styles.dialogBorder}">  │  <span class="${styles.dialogTitle}">decision.sh — environment select</span>     │</p>` +
         `<p class="${styles.dialogBorder}">  ├─────────────────────────────────────────┤</p>` +
         `<p class="${styles.dialogBorder}">  │                                         │</p>` +
-        `<p class="${styles.dialogBorder}">  │   Wähle dein Environment:               │</p>` +
+        `<p class="${styles.dialogBorder}">  │   ${dialogLabel.padEnd(41)}│</p>` +
         `<p class="${styles.dialogBorder}">  │                                         │</p>` +
         `<p class="${styles.dialogLine}">  │   <button class="${styles.dialogBtn}" data-choice="dark">[ 1 ]  Dark Mode </button>                │</p>` +
         `<p class="${styles.dialogLine}">  │   <button class="${styles.dialogBtn}" data-choice="light">[ 2 ]  Light Mode</button>                │</p>` +
@@ -76,7 +79,6 @@ export default function TerminalIntro({ onDone }: Props) {
 
       function pick(choice: 'dark' | 'light') {
         cleanup()
-        // Highlight chosen button
         box.querySelectorAll<HTMLButtonElement>('[data-choice]').forEach(btn => {
           btn.style.color = btn.dataset.choice === choice ? '#5dba7e' : '#333330'
         })
@@ -118,6 +120,8 @@ export default function TerminalIntro({ onDone }: Props) {
     startedRef.current = true
 
     async function run() {
+      const t = translations[lang].terminalIntro
+
       await delay(300)
       if (skippedRef.current) return
 
@@ -129,7 +133,7 @@ export default function TerminalIntro({ onDone }: Props) {
       print('  ███████╗██║██║ ╚████║╚██████╔╝███████║', 'amber')
       print('  ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝', 'amber')
       print('')
-      print('  portfolio v1.0.0  —  zürich, schweiz', 'dim')
+      print(`  portfolio v1.0.0  —  ${t.tagline}`, 'dim')
       print('')
 
       await delay(800); if (skippedRef.current) return
@@ -169,10 +173,9 @@ export default function TerminalIntro({ onDone }: Props) {
       await delay(400); if (skippedRef.current) return
       print('')
 
-      const choice = await waitForChoice()
+      const choice = await waitForChoice(t.dialogLabel)
       if (skippedRef.current) return
 
-      // Apply theme immediately
       try {
         localStorage.setItem('theme', choice)
         document.documentElement.setAttribute('data-theme', choice)
@@ -181,21 +184,21 @@ export default function TerminalIntro({ onDone }: Props) {
 
       await delay(400); if (skippedRef.current) return
       print('')
-      print(`  [  OK  ] Environment set to: ${choice}.`, 'green')
+      print(t.envSet(choice), 'green')
       await delay(800); if (skippedRef.current) return
       print('')
 
       await typeCmd('./portfolio.sh')
       await delay(400); if (skippedRef.current) return
       print('')
-      print('  Mounting portfolio...', 'muted')
+      print(t.mounting, 'muted')
       await delay(500); if (skippedRef.current) return
-      print('  Loading assets...', 'muted')
+      print(t.loadingAssets, 'muted')
       await delay(500); if (skippedRef.current) return
-      print('  Starting...', 'muted')
+      print(t.starting, 'muted')
       await delay(500); if (skippedRef.current) return
       print('')
-      print('  [  OK  ] Portfolio ready. Opening...', 'green')
+      print(t.ready, 'green')
       await delay(1000); if (skippedRef.current) return
 
       finish()

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { projects, type ProjectCategory } from '@/data/projects'
 import styles from './Projects.module.css'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
 type Filter = 'all' | 'eth' | 'home' | ProjectCategory
 
@@ -21,6 +23,8 @@ function onTiltLeave(e: React.MouseEvent<HTMLElement>) {
 }
 
 export default function Projects() {
+  const { lang } = useLang()
+  const t = translations[lang].projects
   const [filter, setFilter] = useState<Filter>('all')
 
   const visible = projects.filter(p => {
@@ -30,10 +34,24 @@ export default function Projects() {
     return p.category === filter
   })
 
+  const filterLabel: Record<Filter, string> = {
+    all:      t.filters.all,
+    eth:      t.filters.eth,
+    home:     t.filters.home,
+    software: t.filters.software,
+    hardware: t.filters.hardware,
+  }
+
+  const statusLabel: Record<string, string> = {
+    done:    t.status.done,
+    wip:     t.status.wip,
+    planned: t.status.planned,
+  }
+
   return (
     <section id="projects" className={styles.section} data-reveal>
       <div className={styles.header}>
-        <h2 className={styles.heading}>Projekte</h2>
+        <h2 className={styles.heading}>{t.heading}</h2>
         <div className={styles.filters}>
           {(['all', 'eth', 'home', 'software', 'hardware'] as Filter[]).map(f => (
             <button
@@ -41,7 +59,7 @@ export default function Projects() {
               className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
               onClick={() => setFilter(f)}
             >
-              {f === 'all' ? 'Alle' : f === 'eth' ? 'ETH Projekte' : f === 'home' ? 'Home Projekte' : f === 'software' ? 'Software' : 'Hardware / 3D'}
+              {filterLabel[f]}
             </button>
           ))}
         </div>
@@ -63,9 +81,9 @@ export default function Projects() {
               </div>
               <h3 className={styles.title}>
                 {p.title}
-                {p.titleLine2 && <><br />{p.titleLine2}</>}
+                {p.titleLine2 && <><br />{p.titleLine2[lang]}</>}
               </h3>
-              <p className={styles.desc}>{p.description}</p>
+              <p className={styles.desc}>{p.description[lang]}</p>
               {p.tags.length > 0 && (
                 <div className={styles.tags}>
                   {p.tags.map(t => (
@@ -75,7 +93,7 @@ export default function Projects() {
               )}
               <div className={styles.status}>
                 <span className={`${styles.dot} ${styles[p.status]}`} />
-                {p.statusLabel}
+                {statusLabel[p.status]}
               </div>
               <span className={styles.arrow} aria-hidden="true">↗</span>
             </article>

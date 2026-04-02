@@ -1,33 +1,30 @@
+'use client'
+
 import styles from './Contact.module.css'
-
-interface ContactLink {
-  label: string
-  icon: string
-  href: string
-  rel: string | undefined
-}
-
-const LINKS: ContactLink[] = [
-  { label: 'linus.sommermeyer@lernende.ethz.ch', icon: '✉', href: 'mailto:linus.sommermeyer@lernende.ethz.ch', rel: undefined },
-  { label: 'GitHub',            icon: '↗', href: 'https://github.com/Flashbibi', rel: 'noopener noreferrer' },
-  { label: 'LinkedIn',          icon: '↗', href: 'https://www.linkedin.com/in/linus-sommermeyer-a776142a2/', rel: 'noopener noreferrer' },
-  { label: 'CV herunterladen',  icon: '↓', href: '#', rel: undefined },
-]
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 
 export default function Contact() {
+  const { lang } = useLang()
+  const t = translations[lang].contact
+
+  const LINKS = [
+    { label: 'linus.sommermeyer@lernende.ethz.ch', icon: '✉', href: 'mailto:linus.sommermeyer@lernende.ethz.ch' },
+    { label: 'GitHub',   icon: '↗', href: 'https://github.com/Flashbibi' },
+    { label: 'LinkedIn', icon: '↗', href: 'https://www.linkedin.com/in/linus-sommermeyer-a776142a2/' },
+    { label: t.cv,       icon: '↓', href: '#' },
+  ]
+
   return (
     <section id="contact" className={styles.section} data-reveal>
-      <p className={styles.label}>04 — Kontakt</p>
+      <p className={styles.label}>{t.label}</p>
       <div className={styles.wrap}>
         <div>
           <h2 className={styles.heading}>
-            Lass uns<br />
-            <span>reden.</span>
+            {t.heading1}<br />
+            <span>{t.heading2}</span>
           </h2>
-          <p className={styles.sub}>
-            Ob Projekt, Idee oder einfach ein nettes Gespräch — ich freue mich
-            über Nachrichten. Erreichbar per Mail oder auf GitHub.
-          </p>
+          <p className={styles.sub}>{t.sub}</p>
         </div>
         <div>
           <ul className={styles.links}>
