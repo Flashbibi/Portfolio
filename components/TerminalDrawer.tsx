@@ -42,26 +42,35 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   const [booted, setBooted] = useState(false)
   const [height, setHeight] = useState(420)
 
-  function onHandleMouseDown(e: React.MouseEvent) {
-    e.preventDefault()
-    const startY      = e.clientY
+  function startResize(startY: number) {
     const startHeight = height
-
-    function onMouseMove(ev: MouseEvent) {
-      const delta     = startY - ev.clientY
-      const newHeight = Math.max(180, Math.min(window.innerHeight * 0.9, startHeight + delta))
+    const onMove = (clientY: number) => {
+      const newHeight = Math.max(180, Math.min(window.innerHeight * 0.9, startHeight + (startY - clientY)))
       setHeight(newHeight)
     }
-
-    function onMouseUp() {
+    const onMouseMove = (ev: MouseEvent) => onMove(ev.clientY)
+    const onTouchMove = (ev: TouchEvent) => onMove(ev.touches[0].clientY)
+    const onEnd = () => {
       document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('mouseup', onEnd)
+      document.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('touchend', onEnd)
       document.body.style.userSelect = ''
     }
-
     document.body.style.userSelect = 'none'
     document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('mouseup', onEnd)
+    document.addEventListener('touchmove', onTouchMove, { passive: true })
+    document.addEventListener('touchend', onEnd)
+  }
+
+  function onHandleMouseDown(e: React.MouseEvent) {
+    e.preventDefault()
+    startResize(e.clientY)
+  }
+
+  function onHandleTouchStart(e: React.TouchEvent) {
+    startResize(e.touches[0].clientY)
   }
 
   const historyRef    = useRef<string[]>([])
@@ -123,10 +132,12 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       case 'cat':    cmdCat(arg); break
       case 'dog':    cmdDog(arg); break
       case 'pwd':    dprint(path === '~' ? '/home/visitor' : '/home/visitor/' + path.replace('~/', '')); break
-      case 'whoami': dprint('visitor — curious developer', 'green'); break
-      case 'clear':  if (outRef.current) outRef.current.innerHTML = ''; break
-      case 'tree':   cmdTree(); break
-      case 'help':   cmdHelp(); break
+      case 'whoami':   dprint('visitor — curious developer', 'green'); break
+      case 'clear':    if (outRef.current) outRef.current.innerHTML = ''; break
+      case 'tree':     cmdTree(); break
+      case 'help':     cmdHelp(); break
+      case 'neofetch': cmdNeofetch(); break
+      case 'sudo':     cmdSudo(cmd.slice(5).trim()); return
       default:       dprint(translations[langRef.current].terminal.commandNotFound(verb), 'red')
     }
     dprint('')
@@ -340,6 +351,97 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     lines.forEach(([txt, cls]) => dprint('  ' + txt, cls))
   }
 
+  function cmdSudo(args: string) {
+    const isRmRf = /^rm\s+(-rf|-r\s+-f|-f\s+-r)\s+(\/|~|\*|\.)/.test(args)
+    if (!isRmRf) {
+      dprint(`sudo: ${args.split(' ')[0] || 'command'}: command not found`, 'red')
+      dprint('')
+      return
+    }
+
+    const hasNoPreserve = args.includes('--no-preserve-root')
+
+    if (!hasNoPreserve) {
+      const lines: Array<[string, string, number]> = [
+        ['[sudo] password for visitor: ', '',      0],
+        ['••••••••',                       'dim',   700],
+        ['',                               '',      1400],
+        ["rm: it is dangerous to operate recursively on '/'",    'red',   1600],
+        ["rm: use --no-preserve-root to override this failsafe", 'muted', 1950],
+        ['',                               '',      2300],
+      ]
+      lines.forEach(([text, cls, ms]) => setTimeout(() => dprint(text, cls), ms))
+      return
+    }
+
+    // Direct --no-preserve-root call
+    const lines: Array<[string, string, number]> = [
+      ['[sudo] password for visitor: ', '',      0],
+      ['••••••••',                       'dim',   700],
+      ['',                               '',      1400],
+      ['rm: removing \'/bin\'',          'dim',   1600],
+      ['rm: removing \'/boot\'',         'dim',   1900],
+      ['rm: removing \'/etc\'',          'dim',   2150],
+      ['rm: removing \'/lib\'',          'dim',   2370],
+      ['rm: removing \'/lib64\'',        'dim',   2560],
+      ['rm: removing \'/home\'',         'dim',   2720],
+      ['rm: removing \'/usr\'',          'dim',   2850],
+      ['rm: cannot remove \'/proc/1/fd/0\': Operation not permitted', 'muted', 3050],
+      ['rm: cannot remove \'/proc/1/fd/1\': Operation not permitted', 'muted', 3200],
+    ]
+    lines.forEach(([text, cls, ms]) => setTimeout(() => dprint(text, cls), ms))
+    // Silence — then the system dies
+    setTimeout(() => window.dispatchEvent(new CustomEvent('rm-rf')), 3800)
+  }
+
+  function cmdNeofetch() {
+    const a = '#d4a843'  // amber  — art
+    const b = '#6aabdf'  // blue   — keys
+    const d = '#555548'  // dim    — separators
+    const w = '#f0ebe0'  // white  — values
+
+    const art = [
+      '  ┌──────────────────┐  ',
+      '  │  ❯_              │  ',
+      '  │                  │  ',
+      '  │   ≋  ≋  ≋  ≋    │  ',
+      '  │                  │  ',
+      '  └──────────────────┘  ',
+      '   ────────────────────  ',
+      '   ██████████████████   ',
+      '                        ',
+      '                        ',
+      '                        ',
+      '                        ',
+      '                        ',
+    ]
+
+    const info = [
+      `<span style="color:${b}">visitor</span><span style="color:${d}">@</span><span style="color:${b}">linus-portfolio</span>`,
+      `<span style="color:${d}">────────────────────────────</span>`,
+      `<span style="color:${b}">OS</span><span style="color:${d}">:</span>       <span style="color:${w}">Zürich 24.04 LTS</span>`,
+      `<span style="color:${b}">Host</span><span style="color:${d}">:</span>     <span style="color:${w}">linus-portfolio</span>`,
+      `<span style="color:${b}">Kernel</span><span style="color:${d}">:</span>   <span style="color:${w}">6.6.87-portfolio #1</span>`,
+      `<span style="color:${b}">Uptime</span><span style="color:${d}">:</span>   <span style="color:${w}">since 2024</span>`,
+      `<span style="color:${b}">Shell</span><span style="color:${d}">:</span>    <span style="color:${w}">space-mono 4.0</span>`,
+      `<span style="color:${b}">Terminal</span><span style="color:${d}">:</span> <span style="color:${w}">❯_ drawer v1.0</span>`,
+      `<span style="color:${b}">CPU</span><span style="color:${d}">:</span>      <span style="color:${w}">Brain @ 3.2 thoughts/s</span>`,
+      `<span style="color:${b}">GPU</span><span style="color:${d}">:</span>      <span style="color:${w}">Eyes (integrated)</span>`,
+      `<span style="color:${b}">Memory</span><span style="color:${d}">:</span>   <span style="color:${w}">Kaffee / Kaffee</span>`,
+      ``,
+      [
+        '#e05c5c','#d4a843','#5dba7e','#6aabdf','#a07fd4','#f0ebe0','#555548','#0c0d12',
+      ].map(c => `<span style="color:${c}">███</span>`).join(''),
+    ]
+
+    const rows = Math.max(art.length, info.length)
+    for (let i = 0; i < rows; i++) {
+      const left = art[i] ?? '                        '
+      const right = info[i] ?? ''
+      dprintHTML(`<span style="color:${a};white-space:pre">${left}</span>${right}`)
+    }
+  }
+
   function cmdHelp() {
     const t = translations[langRef.current].terminal
     dprint(t.helpHeader, 'amber')
@@ -362,7 +464,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       style={{ height }}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className={styles.handle} onMouseDown={onHandleMouseDown} onClick={e => e.stopPropagation()} />
+      <div className={styles.handle} onMouseDown={onHandleMouseDown} onTouchStart={onHandleTouchStart} onClick={e => e.stopPropagation()} />
       <div className={styles.scanlines} />
       <div className={styles.header}>
         <span className={styles.title}>❯_ terminal — linus-portfolio</span>

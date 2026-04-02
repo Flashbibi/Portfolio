@@ -69,6 +69,8 @@ interface Translations {
   terminalIntro: {
     tagline: string
     dialogLabel: string
+    langDialogLabel: string
+    langSet: (lang: string) => string
     mounting: string
     loadingAssets: string
     starting: string
@@ -164,9 +166,11 @@ const en: Translations = {
     commandNotFound: (verb) => `bash: ${verb}: command not found  (type 'help')`,
   },
   terminalIntro: {
-    tagline:      'zürich, switzerland',
-    dialogLabel:  'Choose your environment:',
-    mounting:     '  Mounting portfolio...',
+    tagline:         'zürich, switzerland',
+    dialogLabel:     'Choose your environment:',
+    langDialogLabel: 'Choose your language:',
+    langSet:         (l) => `  [  OK  ] Language set to: ${l}.`,
+    mounting:        '  Mounting portfolio...',
     loadingAssets:'  Loading assets...',
     starting:     '  Starting...',
     ready:        '  [  OK  ] Portfolio ready. Opening...',
@@ -261,9 +265,11 @@ const de: Translations = {
     commandNotFound: (verb) => `bash: ${verb}: command not found  (tippe 'help')`,
   },
   terminalIntro: {
-    tagline:      'zürich, schweiz',
-    dialogLabel:  'Wähle dein Environment:',
-    mounting:     '  Mounting portfolio...',
+    tagline:         'zürich, schweiz',
+    dialogLabel:     'Wähle dein Environment:',
+    langDialogLabel: 'Wähle deine Sprache:',
+    langSet:         (l) => `  [  OK  ] Sprache gesetzt auf: ${l}.`,
+    mounting:        '  Mounting portfolio...',
     loadingAssets:'  Loading assets...',
     starting:     '  Starting...',
     ready:        '  [  OK  ] Portfolio ready. Opening...',

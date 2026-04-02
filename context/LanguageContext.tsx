@@ -28,6 +28,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
+    function onSet(e: Event) {
+      const l = (e as CustomEvent<string>).detail
+      if (l === 'en' || l === 'de') setLang(l as Lang)
+    }
+    window.addEventListener('portfolio:lang-set', onSet)
+    return () => window.removeEventListener('portfolio:lang-set', onSet)
+  }, [])
+
+  useEffect(() => {
     document.documentElement.setAttribute('lang', lang)
     try {
       localStorage.setItem('lang', lang)

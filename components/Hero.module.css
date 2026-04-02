@@ -153,4 +153,5 @@
 @media (max-width: 900px) {
   .hero       { padding: 3rem 1.5rem 4rem; }
   .cornerText { display: none; }
+  .gridLines  { display: none; }
 }
