@@ -127,6 +127,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       case 'clear':  if (outRef.current) outRef.current.innerHTML = ''; break
       case 'tree':   cmdTree(); break
       case 'help':   cmdHelp(); break
+      case 'sudo':   cmdSudo(cmd.slice(5).trim()); return
       default:       dprint(translations[langRef.current].terminal.commandNotFound(verb), 'red')
     }
     dprint('')
@@ -338,6 +339,49 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       ['        └── v8_notes.md', 'white'],
     ]
     lines.forEach(([txt, cls]) => dprint('  ' + txt, cls))
+  }
+
+  function cmdSudo(args: string) {
+    const isRmRf = /^rm\s+(-rf|-r\s+-f|-f\s+-r)\s+(\/|~|\*|\.)/.test(args)
+    if (!isRmRf) {
+      dprint(`sudo: ${args.split(' ')[0] || 'command'}: command not found`, 'red')
+      dprint('')
+      return
+    }
+
+    const hasNoPreserve = args.includes('--no-preserve-root')
+
+    if (!hasNoPreserve) {
+      const lines: Array<[string, string, number]> = [
+        ['[sudo] password for visitor: ', '',      0],
+        ['••••••••',                       'dim',   700],
+        ['',                               '',      1400],
+        ["rm: it is dangerous to operate recursively on '/'",    'red',   1600],
+        ["rm: use --no-preserve-root to override this failsafe", 'muted', 1950],
+        ['',                               '',      2300],
+      ]
+      lines.forEach(([text, cls, ms]) => setTimeout(() => dprint(text, cls), ms))
+      return
+    }
+
+    // Direct --no-preserve-root call
+    const lines: Array<[string, string, number]> = [
+      ['[sudo] password for visitor: ', '',      0],
+      ['••••••••',                       'dim',   700],
+      ['',                               '',      1400],
+      ['rm: removing \'/bin\'',          'dim',   1600],
+      ['rm: removing \'/boot\'',         'dim',   1900],
+      ['rm: removing \'/etc\'',          'dim',   2150],
+      ['rm: removing \'/lib\'',          'dim',   2370],
+      ['rm: removing \'/lib64\'',        'dim',   2560],
+      ['rm: removing \'/home\'',         'dim',   2720],
+      ['rm: removing \'/usr\'',          'dim',   2850],
+      ['rm: cannot remove \'/proc/1/fd/0\': Operation not permitted', 'muted', 3050],
+      ['rm: cannot remove \'/proc/1/fd/1\': Operation not permitted', 'muted', 3200],
+    ]
+    lines.forEach(([text, cls, ms]) => setTimeout(() => dprint(text, cls), ms))
+    // Silence — then the system dies
+    setTimeout(() => window.dispatchEvent(new CustomEvent('rm-rf')), 3800)
   }
 
   function cmdHelp() {

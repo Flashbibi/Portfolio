@@ -141,6 +141,44 @@ body {
 }
 
 
+/* ── rm -rf / destruction — CSS variable corruption ─────── */
+
+/* Phase 1: styles start breaking — wrong colors, unstyled look */
+:root[data-destroying='1'] {
+  --bg:       #d8d4cc !important;
+  --bg2:      #ccc8be !important;
+  --bg3:      #c0bcb4 !important;
+  --text:     #1a1a1a !important;
+  --text2:    #3a3a3a !important;
+  --text3:    #888    !important;
+  --accent:   #555    !important;
+  --accent2:  #444    !important;
+  --border:   rgba(0,0,0,0.25) !important;
+  --border2:  rgba(0,0,0,0.35) !important;
+  --tag-bg:   rgba(0,0,0,0.08) !important;
+  --tag-text: #444    !important;
+  --spotlight-color: transparent !important;
+}
+
+/* Phase 2: everything goes near-black — system dying */
+:root[data-destroying='2'] {
+  --bg:     #0a0a0a !important;
+  --bg2:    #080808 !important;
+  --bg3:    #060606 !important;
+  --text:   #111111 !important;
+  --text2:  #0e0e0e !important;
+  --text3:  #0a0a0a !important;
+  --accent: #0a0a0a !important;
+  --border:  rgba(255,255,255,0.02) !important;
+  --border2: rgba(255,255,255,0.02) !important;
+}
+
+/* No transitions during destruction */
+:root[data-destroying] *, :root[data-destroying] *::before, :root[data-destroying] *::after {
+  transition: none !important;
+  animation-play-state: paused !important;
+}
+
 /* ── Language switch — RGB text split ───────────────────── */
 [data-chroma] h1,
 [data-chroma] h2,

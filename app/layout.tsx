@@ -4,8 +4,24 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 
 export const metadata: Metadata = {
-  title: 'Linus — Portfolio',
-  description: 'CS student, Maker & Developer from Zürich, Switzerland.',
+  title: 'Linus Sommermeyer — Portfolio',
+  description: 'CS Apprentice & Developer from Zürich. I build things — from code, filament, and curiosity.',
+  openGraph: {
+    type: 'website',
+    siteName: 'Linus Sommermeyer',
+    title: 'Linus Sommermeyer — Portfolio',
+    description: 'CS Apprentice & Developer from Zürich. I build things — from code, filament, and curiosity.',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Linus Sommermeyer — Portfolio',
+    description: 'CS Apprentice & Developer from Zürich. I build things — from code, filament, and curiosity.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({

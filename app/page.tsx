@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import TerminalIntro from '@/components/TerminalIntro'
 import TerminalDrawer from '@/components/TerminalDrawer'
+import DestructionOverlay from '@/components/DestructionOverlay'
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
 import About from '@/components/About'
@@ -17,13 +18,20 @@ const INTRO_SEEN_KEY = 'portfolio:intro-seen'
 export default function Home() {
   const { lang, isGlitching } = useLang()
   const t = translations[lang].footer
-  const [introDone,   setIntroDone]   = useState(false)
-  const [drawerOpen,  setDrawerOpen]  = useState(false)
+  const [introDone,    setIntroDone]    = useState(false)
+  const [drawerOpen,   setDrawerOpen]   = useState(false)
+  const [isDestroying, setIsDestroying] = useState(false)
 
   useEffect(() => {
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === '1') {
       setIntroDone(true)
     }
+  }, [])
+
+  useEffect(() => {
+    function onRmRf() { setIsDestroying(true) }
+    window.addEventListener('rm-rf', onRmRf)
+    return () => window.removeEventListener('rm-rf', onRmRf)
   }, [])
 
 useEffect(() => {
@@ -69,6 +77,8 @@ useEffect(() => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       />
+
+      <DestructionOverlay active={isDestroying} />
 
     </>
   )
