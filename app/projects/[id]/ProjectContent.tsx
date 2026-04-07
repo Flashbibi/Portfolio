@@ -1,19 +1,27 @@
 'use client'
 
+import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { projects, type Project } from '@/data/projects'
+import type { ProjectPage } from '@/lib/markdown'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
 
+const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false })
+
 interface Props {
   project: Project
+  pages: ProjectPage[]
 }
 
-export default function ProjectContent({ project }: Props) {
+export default function ProjectContent({ project, pages }: Props) {
   const { lang } = useLang()
   const t = translations[lang].projectDetail
   const tProjects = translations[lang].projects
+
+  const [activePage, setActivePage] = useState(0)
 
   const navProjects = projects.filter(p => p.status !== 'planned')
 
@@ -23,7 +31,8 @@ export default function ProjectContent({ project }: Props) {
     planned: tProjects.status.planned,
   }
 
-  const details = project.details[lang]
+  const currentPage = pages[activePage]
+  const hasPages = pages.length > 0
 
   return (
     <main className={styles.page}>
@@ -32,6 +41,23 @@ export default function ProjectContent({ project }: Props) {
           {t.back}
         </Link>
 
+        {/* Pages within this project */}
+        {hasPages && (
+          <nav className={styles.pageNav}>
+            <span className={styles.pageNavLabel}>{project.title}</span>
+            {pages.map((page, i) => (
+              <button
+                key={page.slug}
+                className={`${styles.pageNavItem} ${i === activePage ? styles.active : ''}`}
+                onClick={() => setActivePage(i)}
+              >
+                {page.title}
+              </button>
+            ))}
+          </nav>
+        )}
+
+        {/* Other projects */}
         <nav className={styles.nav}>
           {navProjects.map(item => (
             <Link
@@ -67,25 +93,25 @@ export default function ProjectContent({ project }: Props) {
           )}
         </h1>
 
-        <p className={styles.description}>{project.description[lang]}</p>
+        <div className={styles.tags}>
+          {project.tags.map(tag => (
+            <span key={tag} className={styles.tag}>{tag}</span>
+          ))}
+        </div>
 
-        {project.tags.length > 0 && (
-          <div className={styles.tags}>
-            {project.tags.map(tag => (
-              <span key={tag} className={styles.tag}>
-                {tag}
-              </span>
-            ))}
-          </div>
+        {hasPages ? (
+          <>
+            {currentPage.model && (
+              <ModelViewer model={currentPage.model} />
+            )}
+            <article
+              className={styles.markdown}
+              dangerouslySetInnerHTML={{ __html: currentPage.html }}
+            />
+          </>
+        ) : (
+          <p className={styles.description}>{t.detailsEmpty}</p>
         )}
-
-        <ul className={styles.details}>
-          {details.length > 0 ? (
-            details.map(detail => <li key={detail}>{detail}</li>)
-          ) : (
-            <li>{t.detailsEmpty}</li>
-          )}
-        </ul>
       </section>
     </main>
   )
