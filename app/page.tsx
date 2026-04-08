@@ -68,7 +68,11 @@ useEffect(() => {
           <footer className={styles.footer}>
             <span>{t.location}</span>
             <span>Next.js · TypeScript · CSS Modules</span>
-            <span>© {new Date().getFullYear()}</span>
+            <span className={styles.footerRight}>
+              <span>© {new Date().getFullYear()}</span>
+              <a href="/impressum" className={styles.footerLink}>Impressum</a>
+              <a href="/datenschutz" className={styles.footerLink}>Datenschutz</a>
+            </span>
           </footer>
         </div>
       </div>

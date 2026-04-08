@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 export type Lang = 'en' | 'de'
 
@@ -17,8 +17,9 @@ const LangContext = createContext<LangContextValue>({
 })
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang]           = useState<Lang>('en')
-  const [isGlitching, setGlitch]  = useState(false)
+  const [lang, setLang]          = useState<Lang>('en')
+  const [isGlitching, setGlitch] = useState(false)
+  const isFirstRender            = useRef(true)
 
   useEffect(() => {
     try {
@@ -37,6 +38,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return }
     document.documentElement.setAttribute('lang', lang)
     try {
       localStorage.setItem('lang', lang)
