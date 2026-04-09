@@ -77,7 +77,14 @@ interface Translations {
     ready: string
     envSet: (choice: string) => string
   }
+  chat: {
+    header:      string
+    welcome:     string
+    placeholder: string
+    error:       string
+  }
   footer: {
+
     location: string
   }
   projectDetail: {
@@ -179,6 +186,12 @@ const en: Translations = {
   footer: {
     location: 'Linus — Zürich, Switzerland',
   },
+  chat: {
+    header:      '[ miau — ask me anything ]',
+    welcome:     "Meow! I'm Linus' assistant. What would you like to know?",
+    placeholder: 'Ask me something...',
+    error:       "Error — please try again.",
+  },
   projectDetail: {
     back:         '← back',
     detailsEmpty: 'Details coming soon.',
@@ -277,6 +290,12 @@ const de: Translations = {
   },
   footer: {
     location: 'Linus — Zürich, Schweiz',
+  },
+  chat: {
+    header:      '[ miau — frag mich was ]',
+    welcome:     "Miau! Ich bin Linus' Assistent. Was möchtest du wissen?",
+    placeholder: 'Frag mich was...',
+    error:       "Fehler — versuch's nochmal.",
   },
   projectDetail: {
     back:         '← zurück',

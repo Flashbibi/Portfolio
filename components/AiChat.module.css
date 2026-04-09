@@ -1,0 +1,184 @@
+/* ── Container ────────────────────────────────────────────────────────────── */
+
+.chat {
+  position: fixed;
+  bottom: 7rem;
+  right: 2rem;
+  width: 340px;
+  max-height: 480px;
+  background: var(--term-bg);
+  border: 1px solid var(--term-border);
+  font-family: 'Space Mono', monospace;
+  font-size: 12.5px;
+  color: var(--term-text);
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+
+  /* Closed state */
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition:
+    opacity    0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform  0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* ── Scanlines (same as TerminalDrawer) ────────────────────────────────────── */
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--term-border2);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 11px;
+  color: var(--term-text2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.close {
+  background: none;
+  border: none;
+  color: var(--term-text2);
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 0.2rem 0.5rem;
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+.close:hover { color: var(--term-amber); }
+
+/* ── Messages area ────────────────────────────────────────────────────────── */
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  position: relative;
+  z-index: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--term-border) transparent;
+}
+.messages::-webkit-scrollbar       { width: 3px; }
+.messages::-webkit-scrollbar-thumb { background: var(--term-border); }
+
+.userMsg {
+  margin: 0 0 0.5rem;
+  color: var(--term-amber);
+  word-break: break-word;
+}
+
+.assistantMsg {
+  margin: 0 0 0.5rem;
+  color: var(--term-text);
+  word-break: break-word;
+}
+
+.errorMsg {
+  color: var(--term-red);
+}
+
+.userPrefix      { color: var(--term-amber); }
+.assistantPrefix { color: var(--term-green); }
+
+/* ── Loading cursor ───────────────────────────────────────────────────────── */
+
+.loadingCursor {
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Input row ────────────────────────────────────────────────────────────── */
+
+.promptRow {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1rem 0.65rem;
+  flex-shrink: 0;
+  border-top: 1px solid var(--term-border2);
+  position: relative;
+  z-index: 1;
+}
+
+.promptSymbol {
+  color: var(--term-amber);
+  flex-shrink: 0;
+}
+
+.input {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 12.5px;
+  color: var(--term-white);
+  caret-color: var(--term-cursor);
+  flex: 1;
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: var(--term-text3);
+}
+
+.input:disabled {
+  opacity: 0.5;
+}
+
+/* ── Light theme ──────────────────────────────────────────────────────────── */
+
+:global([data-theme='light']) .chat {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--term-border);
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .chat {
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 60vh;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0;
+  }
+}

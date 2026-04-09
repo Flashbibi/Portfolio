@@ -9,6 +9,8 @@ import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
+import AiMascot from '@/components/AiMascot'
+import AiChat   from '@/components/AiChat'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
@@ -21,6 +23,7 @@ export default function Home() {
   const [introDone,    setIntroDone]    = useState(false)
   const [drawerOpen,   setDrawerOpen]   = useState(false)
   const [isDestroying, setIsDestroying] = useState(false)
+  const [chatOpen,     setChatOpen]     = useState(false)
 
   useEffect(() => {
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === '1') {
@@ -81,6 +84,9 @@ useEffect(() => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       />
+
+      <AiMascot onClick={() => setChatOpen(prev => !prev)} chatOpen={chatOpen} />
+      <AiChat open={chatOpen} onClose={() => setChatOpen(false)} />
 
       <DestructionOverlay active={isDestroying} />
 
