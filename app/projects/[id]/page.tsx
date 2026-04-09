@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { projects } from '@/data/projects'
+import { getProjectPages } from '@/lib/markdown'
 import ProjectContent from './ProjectContent'
 
 interface PageProps {
@@ -34,5 +35,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
     redirect('/')
   }
 
-  return <ProjectContent project={project} />
+  const pages = getProjectPages(params.id)
+
+  return <ProjectContent project={project} pages={pages} />
 }

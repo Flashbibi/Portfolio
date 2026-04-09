@@ -1,0 +1,72 @@
+.wrapper {
+  position: fixed;
+  z-index: 1000;
+  cursor: grab;
+  user-select: none;
+}
+
+.wrapper.dragging {
+  cursor: grabbing;
+}
+
+/* ── Canvas ───────────────────────────────────────────────────────────────── */
+
+.canvas {
+  display: block;
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* Ambient glow follows the sprite's actual alpha channel */
+  filter: drop-shadow(0 4px 8px rgba(212, 168, 67, 0.25));
+  transition: filter 0.2s ease;
+}
+
+/* Stronger glow on hover — still alpha-aware, no positional offset */
+.canvasHovered {
+  filter: drop-shadow(0 0 10px rgba(212, 168, 67, 0.7))
+          drop-shadow(0 0 20px rgba(212, 168, 67, 0.35));
+}
+
+/* ── Speech bubble ────────────────────────────────────────────────────────── */
+
+.bubble {
+  position: fixed;
+  bottom: calc(2rem + 90px);
+  left: 0;
+  transform: translateX(-50%);
+  max-width: 210px;
+  min-width: 130px;
+  padding: 8px 12px;
+  background: rgba(11, 11, 9, 0.94);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  animation: bubbleLifecycle 5.5s ease forwards;
+  z-index: 1002;
+}
+
+/* Triangle pointer toward the cat */
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid var(--accent);
+}
+
+/* ── Keyframes ────────────────────────────────────────────────────────────── */
+
+@keyframes bubbleLifecycle {
+  0%   { opacity: 0; transform: translateY(8px); }
+  7%   { opacity: 1; transform: translateY(0);   }
+  82%  { opacity: 1; transform: translateY(0);   }
+  100% { opacity: 0; transform: translateY(4px); }
+}

@@ -1,0 +1,32 @@
+.wrap {
+  width: 100%;
+  height: 420px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.hint {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  pointer-events: none;
+  margin: 0;
+}
+
+@media (max-width: 680px) {
+  .wrap {
+    height: 280px;
+  }
+}

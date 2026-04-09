@@ -238,9 +238,9 @@ export const fileContents: Record<string, { en: FileLines; de: FileLines }> = {
     en: [
       ['# contact.md', 'amber'],
       ['', ''],
-      ['email:    linus.sommermeyer@lernende.ethz.ch', 'white'],
+      ['email:    linus@sommermeyer.ch', 'white'],
       ['github:   github.com/Flashbibi', 'blue'],
-      ['linkedin: linkedin.com/in/linus-sommermeyer-a776142a2', 'blue'],
+      ['linkedin: linkedin.com/in/lsommermeyer', 'blue'],
       ['location: Zürich, Switzerland', 'muted'],
       ['', ''],
       ['available for:', 'muted'],
@@ -251,9 +251,9 @@ export const fileContents: Record<string, { en: FileLines; de: FileLines }> = {
     de: [
       ['# contact.md', 'amber'],
       ['', ''],
-      ['email:    linus.sommermeyer@lernende.ethz.ch', 'white'],
+      ['email:    linus@sommermeyer.ch', 'white'],
       ['github:   github.com/Flashbibi', 'blue'],
-      ['linkedin: linkedin.com/in/linus-sommermeyer-a776142a2', 'blue'],
+      ['linkedin: linkedin.com/in/lsommermeyer', 'blue'],
       ['ort:      Zürich, Schweiz', 'muted'],
       ['', ''],
       ['verfügbar für:', 'muted'],

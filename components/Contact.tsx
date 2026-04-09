@@ -9,9 +9,9 @@ export default function Contact() {
   const t = translations[lang].contact
 
   const LINKS = [
-    { label: 'linus.sommermeyer@lernende.ethz.ch', icon: '✉', href: 'mailto:linus.sommermeyer@lernende.ethz.ch' },
+    { label: 'linus@sommermeyer.ch', icon: '✉', href: 'mailto:linus@sommermeyer.ch' },
     { label: 'GitHub',   icon: '↗', href: 'https://github.com/Flashbibi' },
-    { label: 'LinkedIn', icon: '↗', href: 'https://www.linkedin.com/in/linus-sommermeyer-a776142a2/' },
+    { label: 'LinkedIn', icon: '↗', href: 'https://www.linkedin.com/in/lsommermeyer/' },
     { label: t.cv,       icon: '↓', href: '#' },
   ]
 

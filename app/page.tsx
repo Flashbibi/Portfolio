@@ -9,6 +9,8 @@ import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
+import AiMascot from '@/components/AiMascot'
+import AiChat   from '@/components/AiChat'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
@@ -21,6 +23,7 @@ export default function Home() {
   const [introDone,    setIntroDone]    = useState(false)
   const [drawerOpen,   setDrawerOpen]   = useState(false)
   const [isDestroying, setIsDestroying] = useState(false)
+  const [chatOpen,     setChatOpen]     = useState(false)
 
   useEffect(() => {
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === '1') {
@@ -68,7 +71,11 @@ useEffect(() => {
           <footer className={styles.footer}>
             <span>{t.location}</span>
             <span>Next.js · TypeScript · CSS Modules</span>
-            <span>© {new Date().getFullYear()}</span>
+            <span className={styles.footerRight}>
+              <span>© {new Date().getFullYear()}</span>
+              <a href="/impressum" className={styles.footerLink}>Impressum</a>
+              <a href="/datenschutz" className={styles.footerLink}>Datenschutz</a>
+            </span>
           </footer>
         </div>
       </div>
@@ -77,6 +84,9 @@ useEffect(() => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       />
+
+      <AiMascot onClick={() => setChatOpen(prev => !prev)} chatOpen={chatOpen} terminalOpen={drawerOpen} />
+      <AiChat open={chatOpen} onClose={() => setChatOpen(false)} terminalOpen={drawerOpen} />
 
       <DestructionOverlay active={isDestroying} />
 

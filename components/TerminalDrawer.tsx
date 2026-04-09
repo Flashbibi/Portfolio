@@ -486,7 +486,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
           type="text"
           autoComplete="off"
           autoCorrect="off"
-          autoCapitalize="off"
+          autoCapitalize="none"
           spellCheck={false}
           onKeyDown={handleKeyDown}
         />

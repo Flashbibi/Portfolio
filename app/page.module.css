@@ -19,12 +19,31 @@
   letter-spacing: 0.1em;
 }
 
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footerLink {
+  color: var(--text3);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  transition: color 0.2s;
+}
+.footerLink:hover { color: var(--accent); }
+
 @media (max-width: 900px) {
   .footer {
     padding: 2rem 1.5rem;
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
+  }
+  .footerRight {
+    flex-direction: column;
+    gap: 0.4rem;
   }
 }
 
