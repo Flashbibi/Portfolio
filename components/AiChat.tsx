@@ -22,6 +22,8 @@ interface Props {
 }
 
 const LS_KEY = 'aichat_messages'
+const MAX_USER_MESSAGES = 20
+const MAX_INPUT_LENGTH = 500
 
 function loadMessages(): Message[] | null {
   try {
@@ -136,9 +138,12 @@ export default function AiChat({ open, onClose, terminalOpen = false }: Props) {
     // Keep remaining counter — it's server-side, clearing chat doesn't reset it
   }
 
+  const userMessageCount = messages.filter(m => m.role === 'user').length
+  const limitReached = userMessageCount >= MAX_USER_MESSAGES
+
   async function send(text?: string) {
     const txt = (text ?? input).trim()
-    if (!txt || loading) return
+    if (!txt || loading || limitReached) return
 
     const userMsg: Message = { role: 'user', content: txt }
     const next = [...messages, userMsg]
@@ -287,8 +292,9 @@ export default function AiChat({ open, onClose, terminalOpen = false }: Props) {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKey}
-          disabled={loading}
-          placeholder={t.placeholder}
+          disabled={loading || limitReached}
+          placeholder={limitReached ? (lang === 'de' ? 'Limit erreicht — Chat leeren zum Fortfahren' : 'Limit reached — clear chat to continue') : t.placeholder}
+          maxLength={MAX_INPUT_LENGTH}
           autoComplete="off"
           spellCheck={false}
         />

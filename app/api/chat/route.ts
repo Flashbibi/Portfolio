@@ -1,30 +1,28 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { Redis } from "@upstash/redis";
 import { NextRequest } from "next/server";
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// In-memory rate limit store: ip -> { count, resetAt }
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
+
 const RATE_LIMIT_MAX = 20;
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 
-function getRateLimitInfo(ip: string): { limited: boolean; remaining: number } {
-  const now = Date.now();
-  const entry = rateLimitStore.get(ip);
+const MAX_INPUT_LENGTH = 500;   // chars per message
+const MAX_HISTORY_MESSAGES = 10; // messages sent to API (trimmed from start)
+const MAX_TOKENS = 512;          // response token cap
 
-  if (!entry || now > entry.resetAt) {
-    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return { limited: false, remaining: RATE_LIMIT_MAX - 1 };
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) {
-    return { limited: true, remaining: 0 };
-  }
-
-  entry.count++;
-  return { limited: false, remaining: RATE_LIMIT_MAX - entry.count };
+async function getRateLimitInfo(ip: string): Promise<{ limited: boolean; remaining: number }> {
+  const key = `rl:${ip}`;
+  const count = await redis.incr(key);
+  if (count === 1) await redis.expire(key, 60 * 60);
+  if (count > RATE_LIMIT_MAX) return { limited: true, remaining: 0 };
+  return { limited: false, remaining: RATE_LIMIT_MAX - count };
 }
 
 const SYSTEM_PROMPT = `You are the personal assistant cat of Linus Sommermeyer's portfolio website.
@@ -78,7 +76,7 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ??
     "unknown";
 
-  const { limited, remaining } = getRateLimitInfo(ip);
+  const { limited, remaining } = await getRateLimitInfo(ip);
 
   if (limited) {
     return new Response(
@@ -113,12 +111,38 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Validate & sanitize messages
+  const validRoles = new Set(["user", "assistant"]);
+  const sanitized = messages
+    .filter(
+      (m) =>
+        m &&
+        typeof m.role === "string" &&
+        validRoles.has(m.role) &&
+        typeof m.content === "string" &&
+        m.content.trim().length > 0
+    )
+    .map((m) => ({
+      role: m.role,
+      content: m.content.slice(0, MAX_INPUT_LENGTH),
+    }));
+
+  if (sanitized.length === 0) {
+    return new Response(
+      JSON.stringify({ error: "messages array is required" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Only send the last N messages to cap token cost
+  const trimmed = sanitized.slice(-MAX_HISTORY_MESSAGES);
+
   try {
     const stream = client.messages.stream({
       model: "claude-haiku-4-5",
-      max_tokens: 1024,
+      max_tokens: MAX_TOKENS,
       system: SYSTEM_PROMPT,
-      messages: messages as Anthropic.MessageParam[],
+      messages: trimmed as Anthropic.MessageParam[],
     });
 
     const readable = new ReadableStream({
