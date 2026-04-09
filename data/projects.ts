@@ -149,10 +149,11 @@ export const filesystem: FsNode = {
     linus: {
       type: 'dir',
       children: {
-        'about.md':      { type: 'file' },
-        'contact.md':    { type: 'file' },
-        'guestbook.md':  { type: 'file' },
-        'portfolio.sh':  { type: 'file', exec: true },
+        'about.md':        { type: 'file' },
+        'achievements.md': { type: 'file' },
+        'contact.md':      { type: 'file' },
+        'guestbook.md':    { type: 'file' },
+        'portfolio.sh':    { type: 'file', exec: true },
         private: {
           type: 'dir',
           children: {

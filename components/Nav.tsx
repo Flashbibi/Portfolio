@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import styles from './Nav.module.css'
 import { useTheme } from '@/context/ThemeContext'
 import { useLang } from '@/context/LanguageContext'
+import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
 
 interface NavProps {
@@ -13,6 +14,7 @@ interface NavProps {
 export default function Nav({ onTerminalOpen }: NavProps) {
   const { theme, toggle } = useTheme()
   const { lang, toggle: toggleLang } = useLang()
+  const { unlock } = useAchievement()
   const t = translations[lang].nav
   const [progress, setProgress] = useState(0)
   const [active, setActive] = useState('')
@@ -64,7 +66,7 @@ export default function Nav({ onTerminalOpen }: NavProps) {
         </button>
         <button
           className={styles.themeToggle}
-          onClick={toggleLang}
+          onClick={() => { toggleLang(); unlock('bilingual') }}
           aria-label={lang === 'en' ? 'Deutsch' : 'English'}
         >
           {lang === 'en' ? '[ DE ]' : '[ EN ]'}

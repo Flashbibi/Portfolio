@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { LanguageProvider } from '@/context/LanguageContext'
+import { AchievementProvider } from '@/context/AchievementContext'
+import AchievementToast from '@/components/AchievementToast'
 
 export const metadata: Metadata = {
   title: 'Linus Sommermeyer — Portfolio',
@@ -48,7 +50,12 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <AchievementProvider>
+              {children}
+              <AchievementToast />
+            </AchievementProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

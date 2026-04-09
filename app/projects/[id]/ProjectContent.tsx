@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { projects, type Project } from '@/data/projects'
+import { EXPLORER_PROJECTS, LS_VISITED } from '@/data/achievements'
 import type { ProjectPage } from '@/lib/markdown'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
+import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
 
 const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false })
@@ -18,7 +20,18 @@ interface Props {
 
 export default function ProjectContent({ project, pages }: Props) {
   const { lang } = useLang()
+  const { unlock } = useAchievement()
   const t = translations[lang].projectDetail
+
+  useEffect(() => {
+    try {
+      const raw     = localStorage.getItem(LS_VISITED)
+      const visited = new Set<string>(raw ? JSON.parse(raw) as string[] : [])
+      visited.add(project.id)
+      localStorage.setItem(LS_VISITED, JSON.stringify(Array.from(visited)))
+      if (EXPLORER_PROJECTS.every(id => visited.has(id))) unlock('explorer')
+    } catch { /* ignore */ }
+  }, [project.id, unlock])
   const tProjects = translations[lang].projects
 
   const [activePage, setActivePage] = useState(0)

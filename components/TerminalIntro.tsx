@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './TerminalIntro.module.css'
 import { useLang } from '@/context/LanguageContext'
+import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
 
 interface Props {
@@ -15,6 +16,7 @@ function delay(ms: number) {
 
 export default function TerminalIntro({ onDone }: Props) {
   const { lang } = useLang()
+  const { unlock } = useAchievement()
   const outRef         = useRef<HTMLDivElement>(null)
   const skippedRef     = useRef(false)
   const startedRef     = useRef(false)
@@ -132,6 +134,7 @@ export default function TerminalIntro({ onDone }: Props) {
   }
 
   function finish() {
+    unlock('first-boot')
     cleanupChoice.current?.()
     skippedRef.current = true
     setVisible(false)

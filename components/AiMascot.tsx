@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './AiMascot.module.css'
 import { useLang } from '@/context/LanguageContext'
+import { useAchievement } from '@/context/AchievementContext'
 
 const MESSAGES = {
   de: [
@@ -168,6 +169,7 @@ interface Props {
 
 export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
   const { lang } = useLang()
+  const { unlock } = useAchievement()
   const canvasRef  = useRef<HTMLCanvasElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const tintedRef  = useRef<HTMLCanvasElement | null>(null)
@@ -262,6 +264,7 @@ export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
         animRef.current   = 'struggle'
         movingRef.current = false
         if (w) w.style.transition = 'none'
+        unlock('cat-wrangler')
       }, LONG_PRESS_MS)
     }
 

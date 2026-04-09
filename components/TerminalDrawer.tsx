@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { filesystem, getFileContent, type FsNode } from '@/data/projects'
+import { achievements } from '@/data/achievements'
 import styles from './TerminalDrawer.module.css'
 import { useLang } from '@/context/LanguageContext'
+import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
 import type { Lang } from '@/context/LanguageContext'
 
@@ -36,9 +38,16 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   const langRef = useRef<Lang>(lang)
   useEffect(() => { langRef.current = lang }, [lang])
 
+  const { unlock, unlocked } = useAchievement()
+  const unlockedRef = useRef<Set<string>>(unlocked)
+  useEffect(() => { unlockedRef.current = unlocked }, [unlocked])
+
   const outRef    = useRef<HTMLDivElement>(null)
   const inputRef  = useRef<HTMLInputElement>(null)
-  const [path, setPath]     = useState('~')
+  const [path, setPath] = useState('~')
+  const pathRef         = useRef('~')
+  // Keep pathRef in sync; also updated synchronously in cmdCd
+  useEffect(() => { pathRef.current = path }, [path])
   const [booted, setBooted] = useState(false)
   const [height, setHeight] = useState(420)
 
@@ -80,6 +89,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     if (open) {
       if (!booted) {
         setBooted(true)
+        unlock('terminal')
         const t = translations[langRef.current].terminal
         dprint(t.welcome, 'muted')
         dprint(t.helpHint, 'muted')
@@ -110,7 +120,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       `<span class="${styles.cu}">visitor</span>` +
       `<span class="${styles.ca}">@</span>` +
       `<span class="${styles.ch}">linus-portfolio</span>` +
-      `<span class="${styles.cp}">${escapeHtml(path)}</span>` +
+      `<span class="${styles.cp}">${escapeHtml(pathRef.current)}</span>` +
       `<span class="${styles.cs}"> $ </span>` +
       `<span style="color:#f0ebe0">${escapeHtml(cmd)}</span>`
     )
@@ -127,13 +137,15 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     const [verb, arg = ''] = cmd.split(/\s+/)
 
     switch (verb) {
-      case 'ls':     cmdLs(arg); break
-      case 'cd':     cmdCd(arg, setPath); break
-      case 'cat':
-        if (arg === 'guestbook.md') { cmdGuestbookCat(); return }
-        cmdCat(arg); break
-      case 'dog':    cmdDog(arg); break
-      case 'pwd':    dprint(path === '~' ? '/home/visitor' : '/home/visitor/' + path.replace('~/', '')); break
+      case 'ls':  cmdLs(arg); break
+      case 'cd':  cmdCd(arg, setPath); break
+      case 'cat': cmdCat(arg); return   // cmdCat handles its own trailing newline
+      case 'dog': cmdDog(arg); break
+      case 'pwd': {
+        const p = pathRef.current
+        dprint(p === '~' ? '/home/visitor' : '/home/visitor/' + p.replace('~/', ''))
+        break
+      }
       case 'whoami':   dprint('visitor — curious developer', 'green'); break
       case 'who':      cmdWho(); return
       case 'sign':     cmdSign(cmd.slice(4).trim()); return
@@ -189,7 +201,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     const parts = val.split(/\s+/)
     const partial = parts[parts.length - 1]
 
-    let searchDir = path
+    let searchDir = pathRef.current
     let prefix = ''
     const slashIdx = partial.lastIndexOf('/')
     if (slashIdx >= 0) {
@@ -197,7 +209,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       prefix = partial.slice(0, slashIdx + 1)
       searchDir = dirPart.startsWith('~')
         ? dirPart
-        : (path === '~' ? '~/' + dirPart : path + '/' + dirPart)
+        : (pathRef.current === '~' ? '~/' + dirPart : pathRef.current + '/' + dirPart)
     }
 
     const node = getNode(searchDir)
@@ -209,6 +221,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     )
 
     if (matches.length === 0) return
+    unlock('tab-master')
 
     if (matches.length === 1) {
       const match = matches[0]
@@ -230,9 +243,10 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   }
 
   function cmdLs(arg: string) {
+    const p = pathRef.current
     const target = arg
-      ? (arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg))
-      : path
+      ? (arg.startsWith('~') ? arg : (p === '~' ? '~/' + arg : p + '/' + arg))
+      : p
     const node = getNode(target)
     if (!node) { dprint(`ls: ${arg || '.'}: No such file or directory`, 'red'); return }
     if (node.type === 'file') { dprint(arg); return }
@@ -250,18 +264,27 @@ export default function TerminalDrawer({ open, onClose }: Props) {
   }
 
   function cmdCd(arg: string, setP: (p: string) => void) {
-    if (!arg || arg === '~') { setP('~'); return }
-    if (arg === '..') {
-      if (path === '~') return
-      const parts = path.split('/')
-      parts.pop()
-      setP(parts.join('/') || '~')
+    const p = pathRef.current
+    const cleanArg = arg.replace(/\/+$/, '') // strip trailing slashes
+    if (!cleanArg || cleanArg === '~') {
+      pathRef.current = '~'
+      setP('~')
       return
     }
-    const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
+    if (cleanArg === '..') {
+      if (p === '~') return
+      const parts = p.split('/')
+      parts.pop()
+      const next = parts.join('/') || '~'
+      pathRef.current = next
+      setP(next)
+      return
+    }
+    const target = cleanArg.startsWith('~') ? cleanArg : (p === '~' ? '~/' + cleanArg : p + '/' + cleanArg)
     const node = getNode(target)
-    if (!node)              { dprint(`cd: ${arg}: No such file or directory`, 'red'); return }
+    if (!node)               { dprint(`cd: ${arg}: No such file or directory`, 'red'); return }
     if (node.type !== 'dir') { dprint(`cd: ${arg}: Not a directory`, 'red'); return }
+    pathRef.current = target
     setP(target)
   }
 
@@ -282,22 +305,30 @@ export default function TerminalDrawer({ open, onClose }: Props) {
 
   function cmdCat(arg: string) {
     const t = translations[langRef.current].terminal
-    if (!arg) { dprint(t.catMissing, 'red'); return }
-    const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
-    const node = getNode(target)
-    if (!node)               { dprint(`cat: ${arg}: No such file or directory`, 'red'); return }
-    if (node.type === 'dir') { dprint(`cat: ${arg}: Is a directory`, 'red'); return }
+    if (!arg) { dprint(t.catMissing, 'red'); dprint(''); return }
 
+    const p = pathRef.current
+    const target = arg.startsWith('~') ? arg : (p === '~' ? '~/' + arg : p + '/' + arg)
+    const node = getNode(target)
+    if (!node)               { dprint(`cat: ${arg}: No such file or directory`, 'red'); dprint(''); return }
+    if (node.type === 'dir') { dprint(`cat: ${arg}: Is a directory`, 'red'); dprint(''); return }
+
+    // Dynamic files — only reachable here because getNode confirmed they exist
+    if (target === '~/linus/achievements.md') { cmdAchievementsCat(); return }
+    if (target === '~/linus/guestbook.md')    { cmdGuestbookCat();    return }
+
+    // Static content
     let key = arg
     if (arg === 'README.md') {
-      if (path.includes('GLAMOS'))            key = 'README.md (GLAMOS)'
-      else if (path.includes('fab'))          key = 'README.md (fabricator)'
-      else if (path.includes('gletscher'))    key = 'README.md (gletscher-player)'
-      else if (path.includes('tur'))          key = 'README.md (turret)'
+      if (p.includes('GLAMOS'))         key = 'README.md (GLAMOS)'
+      else if (p.includes('fab'))       key = 'README.md (fabricator)'
+      else if (p.includes('gletscher')) key = 'README.md (gletscher-player)'
+      else if (p.includes('tur'))       key = 'README.md (turret)'
     }
 
     const content = getFileContent(key, langRef.current) ?? getFileContent(arg, langRef.current)
     if (content) {
+      if (key === 'secrets.md') unlock('curious')
       content.forEach(([txt, cls]) => {
         if (txt.startsWith('__VIDEO__:')) {
           dprintVideo(txt.slice('__VIDEO__:'.length))
@@ -308,18 +339,21 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     } else {
       dprint(t.noPreview, 'dim')
     }
+    dprint('')
   }
 
   function cmdDog(arg: string) {
     const t = translations[langRef.current].terminal
+    const p = pathRef.current
     if (!arg) { dprint(t.dogMissing, 'red'); return }
-    const target = arg.startsWith('~') ? arg : (path === '~' ? '~/' + arg : path + '/' + arg)
+    const target = arg.startsWith('~') ? arg : (p === '~' ? '~/' + arg : p + '/' + arg)
     const node = getNode(target)
     if (!node)               { dprint(`dog: ${arg}: No such file or directory`, 'red'); return }
     if (node.type === 'dir') { dprint(`dog: ${arg}: Is a directory`, 'red'); return }
-    if (!path.includes('private') || arg !== 'secrets.md') {
+    if (!p.includes('private') || arg !== 'secrets.md') {
       dprint(t.dogWrongDir, 'red'); return
     }
+    unlock('dog-cat')
     const l = langRef.current
     dprint('# ultra_secrets.md', 'amber')
     dprint('')
@@ -342,6 +376,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     const lines: [string, string][] = [
       ['~/linus', 'amber'],
       ['├── about.md', 'white'],
+      ['├── achievements.md', 'white'],
       ['├── contact.md', 'white'],
       ['├── guestbook.md', 'white'],
       ['├── portfolio.sh*', 'green'],
@@ -383,6 +418,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     }
 
     // Direct --no-preserve-root call
+    unlock('destroyer')
     const lines: Array<[string, string, number]> = [
       ['[sudo] password for visitor: ', '',      0],
       ['••••••••',                       'dim',   700],
@@ -450,6 +486,27 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     }
   }
 
+  function cmdAchievementsCat() {
+    const ul = unlockedRef.current
+    dprint('# achievements.md', 'amber')
+    dprint('────────────────────────────────────────────', 'dim')
+    achievements.forEach(a => {
+      if (ul.has(a.id)) {
+        dprintHTML(
+          `  <span style="color:#5dba7e">[✓]</span>  ${a.icon}  ` +
+          `<span style="color:#f0ebe0">${a.title}</span>  ` +
+          `<span style="color:#555548">— ${a.desc}</span>`
+        )
+      } else {
+        dprintHTML(`  <span style="color:#333330">[🔒]  ██████████████████████████  —  ???</span>`)
+      }
+    })
+    dprint('────────────────────────────────────────────', 'dim')
+    const total = achievements.length
+    dprint(`  ${ul.size} / ${total} unlocked`, ul.size === total ? 'green' : 'muted')
+    dprint('')
+  }
+
   async function cmdGuestbookCat() {
     const t = translations[langRef.current].terminal
     dprint('# guestbook.md', 'amber')
@@ -457,6 +514,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     try {
       const res = await fetch('/api/guestbook')
       const { entries } = await res.json()
+      unlock('people-watcher')
       if (!entries || entries.length === 0) {
         dprint(t.guestbookEmpty, 'muted')
       } else {
@@ -485,7 +543,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       if (res.status === 429)      { dprint(t.signRateLimited, 'red') }
       else if (res.status === 422) { dprint(t.signInappropriate, 'red') }
       else if (!res.ok)            { dprint(t.signError, 'red') }
-      else                         { dprint(t.signSuccess, 'green') }
+      else                         { dprint(t.signSuccess, 'green'); unlock('left-a-mark') }
     } catch {
       dprint(t.signError, 'red')
     }

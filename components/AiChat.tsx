@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { marked } from 'marked'
 import styles from './AiChat.module.css'
 import { useLang } from '@/context/LanguageContext'
+import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
 
 // Configure marked for inline-friendly output
@@ -43,6 +44,7 @@ function saveMessages(msgs: Message[]) {
 
 export default function AiChat({ open, onClose, terminalOpen = false }: Props) {
   const { lang } = useLang()
+  const { unlock } = useAchievement()
   const t = translations[lang].chat
 
   const makeWelcome = useCallback(
@@ -145,6 +147,7 @@ export default function AiChat({ open, onClose, terminalOpen = false }: Props) {
     const txt = (text ?? input).trim()
     if (!txt || loading || limitReached) return
 
+    if (userMessageCount === 0) unlock('cat-whisperer')
     const userMsg: Message = { role: 'user', content: txt }
     const next = [...messages, userMsg]
     setMessages(next)
