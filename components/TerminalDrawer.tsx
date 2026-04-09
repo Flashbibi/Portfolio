@@ -129,10 +129,14 @@ export default function TerminalDrawer({ open, onClose }: Props) {
     switch (verb) {
       case 'ls':     cmdLs(arg); break
       case 'cd':     cmdCd(arg, setPath); break
-      case 'cat':    cmdCat(arg); break
+      case 'cat':
+        if (arg === 'guestbook.md') { cmdGuestbookCat(); return }
+        cmdCat(arg); break
       case 'dog':    cmdDog(arg); break
       case 'pwd':    dprint(path === '~' ? '/home/visitor' : '/home/visitor/' + path.replace('~/', '')); break
       case 'whoami':   dprint('visitor — curious developer', 'green'); break
+      case 'who':      cmdWho(); return
+      case 'sign':     cmdSign(cmd.slice(4).trim()); return
       case 'clear':    if (outRef.current) outRef.current.innerHTML = ''; break
       case 'tree':     cmdTree(); break
       case 'help':     cmdHelp(); break
@@ -286,9 +290,10 @@ export default function TerminalDrawer({ open, onClose }: Props) {
 
     let key = arg
     if (arg === 'README.md') {
-      if (path.includes('GLAMOS'))   key = 'README.md (GLAMOS)'
-      else if (path.includes('fab')) key = 'README.md (fabricator)'
-      else if (path.includes('tur')) key = 'README.md (turret)'
+      if (path.includes('GLAMOS'))            key = 'README.md (GLAMOS)'
+      else if (path.includes('fab'))          key = 'README.md (fabricator)'
+      else if (path.includes('gletscher'))    key = 'README.md (gletscher-player)'
+      else if (path.includes('tur'))          key = 'README.md (turret)'
     }
 
     const content = getFileContent(key, langRef.current) ?? getFileContent(arg, langRef.current)
@@ -338,11 +343,14 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       ['~/linus', 'amber'],
       ['├── about.md', 'white'],
       ['├── contact.md', 'white'],
+      ['├── guestbook.md', 'white'],
       ['├── portfolio.sh*', 'green'],
       ['└── projects/', 'blue'],
       ['    ├── GLAMOS/', 'blue'],
       ['    │   └── README.md', 'white'],
       ['    ├── fabricator/', 'blue'],
+      ['    │   └── README.md', 'white'],
+      ['    ├── gletscher-player/', 'blue'],
       ['    │   └── README.md', 'white'],
       ['    └── turret/', 'blue'],
       ['        ├── README.md', 'white'],
@@ -440,6 +448,65 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       const right = info[i] ?? ''
       dprintHTML(`<span style="color:${a};white-space:pre">${left}</span>${right}`)
     }
+  }
+
+  async function cmdGuestbookCat() {
+    const t = translations[langRef.current].terminal
+    dprint('# guestbook.md', 'amber')
+    dprint('────────────────────────────────────────────', 'dim')
+    try {
+      const res = await fetch('/api/guestbook')
+      const { entries } = await res.json()
+      if (!entries || entries.length === 0) {
+        dprint(t.guestbookEmpty, 'muted')
+      } else {
+        entries.forEach((e: { msg: string; ts: number }) => {
+          const d = new Date(e.ts)
+          const label = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+          dprint(`  [${label}]  ${e.msg}`)
+        })
+      }
+    } catch {
+      dprint(t.signError, 'red')
+    }
+    dprint('────────────────────────────────────────────', 'dim')
+    dprint('')
+  }
+
+  async function cmdSign(msg: string) {
+    const t = translations[langRef.current].terminal
+    if (!msg) { dprint(t.signMissing, 'red'); dprint(''); return }
+    try {
+      const res = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ msg }),
+      })
+      if (res.status === 429)      { dprint(t.signRateLimited, 'red') }
+      else if (res.status === 422) { dprint(t.signInappropriate, 'red') }
+      else if (!res.ok)            { dprint(t.signError, 'red') }
+      else                         { dprint(t.signSuccess, 'green') }
+    } catch {
+      dprint(t.signError, 'red')
+    }
+    dprint('')
+  }
+
+  async function cmdWho() {
+    const t = translations[langRef.current].terminal
+    try {
+      const res = await fetch('/api/who', { method: 'POST' })
+      const { count } = await res.json()
+      const l = langRef.current
+      if (l === 'de') {
+        dprint(`  ${count} ${count === 1 ? 'Besucher' : 'Besucher'} gerade online`, 'green')
+      } else {
+        dprint(`  ${count} ${count === 1 ? 'visitor' : 'visitors'} online right now`, 'green')
+      }
+    } catch {
+      dprint(t.whoError, 'red')
+    }
+    dprint('')
   }
 
   function cmdHelp() {

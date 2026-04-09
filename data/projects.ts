@@ -149,9 +149,10 @@ export const filesystem: FsNode = {
     linus: {
       type: 'dir',
       children: {
-        'about.md':     { type: 'file' },
-        'contact.md':   { type: 'file' },
-        'portfolio.sh': { type: 'file', exec: true },
+        'about.md':      { type: 'file' },
+        'contact.md':    { type: 'file' },
+        'guestbook.md':  { type: 'file' },
+        'portfolio.sh':  { type: 'file', exec: true },
         private: {
           type: 'dir',
           children: {
@@ -166,6 +167,10 @@ export const filesystem: FsNode = {
               children: { 'README.md': { type: 'file' } },
             },
             fabricator: {
+              type: 'dir',
+              children: { 'README.md': { type: 'file' } },
+            },
+            'gletscher-player': {
               type: 'dir',
               children: { 'README.md': { type: 'file' } },
             },
@@ -318,6 +323,28 @@ export const fileContents: Record<string, { en: FileLines; de: FileLines }> = {
       ['', ''],
       ['GUI-Tool zur Verwaltung von Minecraft-Servern.', 'white'],
       ['Windows .exe, Systemtray, Backup-System.', 'white'],
+    ],
+  },
+  'README.md (gletscher-player)': {
+    en: [
+      ['# Gletscher Video Player', 'amber'],
+      ['', ''],
+      ['stack:   Python, mpv, IPC Socket', 'white'],
+      ['status:  ✓ Done', 'green'],
+      ['', ''],
+      ['Interactive video system for the', 'white'],
+      ['glacier exhibition in Zurich.', 'white'],
+      ['Seamless transitions on Raspberry Pi.', 'white'],
+    ],
+    de: [
+      ['# Gletscher Video Player', 'amber'],
+      ['', ''],
+      ['stack:   Python, mpv, IPC Socket', 'white'],
+      ['status:  ✓ Fertig', 'green'],
+      ['', ''],
+      ['Interaktives Video-System für die', 'white'],
+      ['Gletscher-Ausstellung in Zürich.', 'white'],
+      ['Nahtlose Übergänge auf Raspberry Pi.', 'white'],
     ],
   },
   'README.md (turret)': {

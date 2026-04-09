@@ -65,6 +65,14 @@ interface Translations {
     dogMissing: string
     dogWrongDir: string
     commandNotFound: (verb: string) => string
+    signMissing: string
+    signSuccess: string
+    signRateLimited: string
+    signInappropriate: string
+    signError: string
+    whoError: string
+    guestbookEmpty: string
+    guestbookFooter: (count: number) => string
   }
   terminalIntro: {
     tagline: string
@@ -154,16 +162,18 @@ const en: Translations = {
   },
   terminal: {
     welcome: '  Welcome back. Explore the files.',
-    helpHint: "  Type  help  for a list of commands.",
+    helpHint: "  Type  help  for commands  ·  sign <message>  to leave a mark.",
     helpHeader: 'Available commands:',
     commands: [
-      ['ls [dir]',   'List directory contents'],
-      ['cd <dir>',   'Change directory  (cd .., cd ~)'],
-      ['cat <file>', 'Read file'],
-      ['tree',       'Show full structure'],
-      ['pwd',        'Current path'],
-      ['whoami',     'Who am I'],
-      ['clear',      'Clear terminal'],
+      ['ls [dir]',        'List directory contents'],
+      ['cd <dir>',        'Change directory  (cd .., cd ~)'],
+      ['cat <file>',      'Read file'],
+      ['tree',            'Show full structure'],
+      ['pwd',             'Current path'],
+      ['whoami',          'Who am I'],
+      ['who',             'How many visitors are online right now'],
+      ['sign <message>',  'Leave a message in the guestbook'],
+      ['clear',           'Clear terminal'],
     ],
     historyHint: '  ↑ / ↓   Browse command history',
     tabHint:     '  Tab     Autocomplete filenames',
@@ -175,6 +185,14 @@ const en: Translations = {
     dogMissing:  'dog: missing filename',
     dogWrongDir: 'dog: unrecognized format  (wrong directory?)',
     commandNotFound: (verb) => `bash: ${verb}: command not found  (type 'help')`,
+    signMissing:       'sign: missing message  (usage: sign <your message>)',
+    signSuccess:       '  [  OK  ] Message saved to guestbook.',
+    signRateLimited:   'sign: too many messages — try again in an hour.',
+    signInappropriate: 'sign: message rejected — keep it clean.',
+    signError:         'sign: failed to save — try again later.',
+    whoError:        'who: failed to fetch visitor count.',
+    guestbookEmpty:  '  (no entries yet — be the first! use: sign <message>)',
+    guestbookFooter: (n) => `  ${n} ${n === 1 ? 'entry' : 'entries'}  ·  sign with: sign <message>`,
   },
   terminalIntro: {
     tagline:         'zürich, switzerland',
@@ -202,6 +220,7 @@ const en: Translations = {
       "What are your skills?",
       "Tell me about your projects",
       "How can I contact you?",
+      "How do I sign the guestbook?",
     ],
   },
   projectDetail: {
@@ -267,16 +286,18 @@ const de: Translations = {
   },
   terminal: {
     welcome: '  Willkommen zurück. Erkunde die Dateien.',
-    helpHint: '  Tippe  help  für eine Liste der Befehle.',
+    helpHint: '  Tippe  help  für Befehle  ·  sign <nachricht>  um eine Spur zu hinterlassen.',
     helpHeader: 'Verfügbare Befehle:',
     commands: [
-      ['ls [dir]',   'Ordnerinhalt anzeigen'],
-      ['cd <dir>',   'Verzeichnis wechseln  (cd .., cd ~)'],
-      ['cat <file>', 'Datei lesen'],
-      ['tree',       'Gesamte Struktur anzeigen'],
-      ['pwd',        'Aktuellen Pfad'],
-      ['whoami',     'Wer bin ich'],
-      ['clear',      'Terminal leeren'],
+      ['ls [dir]',        'Ordnerinhalt anzeigen'],
+      ['cd <dir>',        'Verzeichnis wechseln  (cd .., cd ~)'],
+      ['cat <file>',      'Datei lesen'],
+      ['tree',            'Gesamte Struktur anzeigen'],
+      ['pwd',             'Aktuellen Pfad'],
+      ['whoami',          'Wer bin ich'],
+      ['who',             'Wie viele Besucher sind gerade online'],
+      ['sign <nachricht>', 'Nachricht im Guestbook hinterlassen'],
+      ['clear',           'Terminal leeren'],
     ],
     historyHint: '  ↑ / ↓   Befehlsverlauf durchsuchen',
     tabHint:     '  Tab     Dateinamen vervollständigen',
@@ -288,6 +309,14 @@ const de: Translations = {
     dogMissing:  'dog: fehlender Dateiname',
     dogWrongDir: 'dog: unrecognized format  (falscher Ordner?)',
     commandNotFound: (verb) => `bash: ${verb}: command not found  (tippe 'help')`,
+    signMissing:       'sign: fehlende Nachricht  (usage: sign <deine Nachricht>)',
+    signSuccess:       '  [  OK  ] Nachricht im Guestbook gespeichert.',
+    signRateLimited:   'sign: zu viele Nachrichten — versuch\'s in einer Stunde nochmal.',
+    signInappropriate: 'sign: Nachricht abgelehnt — bleib sauber.',
+    signError:         'sign: speichern fehlgeschlagen — versuch\'s später nochmal.',
+    whoError:        'who: Besucherzahl konnte nicht abgerufen werden.',
+    guestbookEmpty:  '  (noch keine Einträge — sei der Erste! Nutze: sign <nachricht>)',
+    guestbookFooter: (n) => `  ${n} ${n === 1 ? 'Eintrag' : 'Einträge'}  ·  eintragen mit: sign <nachricht>`,
   },
   terminalIntro: {
     tagline:         'zürich, schweiz',
@@ -315,6 +344,7 @@ const de: Translations = {
       "Was sind deine Fähigkeiten?",
       "Erzähl mir von deinen Projekten",
       "Wie kann ich dich kontaktieren?",
+      "Wie trage ich mich ins Guestbook ein?",
     ],
   },
   projectDetail: {

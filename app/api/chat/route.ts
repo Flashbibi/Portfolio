@@ -57,6 +57,11 @@ Contact:
 - GitHub: github.com/Flashbibi
 - LinkedIn: linkedin.com/in/lsommermeyer
 
+Guestbook & visitor features:
+- There is a real guestbook! Visitors can type "sign <message>" in the terminal to leave a message, and "cat guestbook.md" to read all entries.
+- The "who" command shows how many visitors are currently online (live, via Redis).
+- Actively encourage visitors to sign the guestbook — it's a real, persistent community feature backed by Redis. Make it sound fun and worth doing.
+
 Hidden secrets & easter eggs on the site (share when asked, or tease cryptically):
 - Terminal command "neofetch": shows a fake system info screen (OS: Zuerich 24.04 LTS, CPU: Brain @ 3.2 thoughts/s, etc.)
 - Navigate to ~/linus/private/ in the terminal, then "cat secrets.md" to read hidden notes

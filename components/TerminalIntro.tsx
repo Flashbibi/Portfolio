@@ -184,6 +184,7 @@ export default function TerminalIntro({ onDone }: Props) {
       printHTML(
         `  <span style="color:#f0ebe0;display:inline-block;min-width:180px">about.md</span>` +
         `<span style="color:#f0ebe0;display:inline-block;min-width:180px">contact.md</span>` +
+        `<span style="color:#f0ebe0;display:inline-block;min-width:180px">guestbook.md</span>` +
         `<span style="color:#6aabdf;display:inline-block;min-width:180px">projects/</span>` +
         `<span style="color:#5dba7e;display:inline-block;min-width:180px">decision.sh*</span>` +
         `<span style="color:#5dba7e;display:inline-block;min-width:180px">decision2.sh*</span>` +

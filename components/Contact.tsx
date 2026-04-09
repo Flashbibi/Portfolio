@@ -12,7 +12,6 @@ export default function Contact() {
     { label: 'linus@sommermeyer.ch', icon: '✉', href: 'mailto:linus@sommermeyer.ch' },
     { label: 'GitHub',   icon: '↗', href: 'https://github.com/Flashbibi' },
     { label: 'LinkedIn', icon: '↗', href: 'https://www.linkedin.com/in/lsommermeyer/' },
-    { label: t.cv,       icon: '↓', href: '#' },
   ]
 
   return (
