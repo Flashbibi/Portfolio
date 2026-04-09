@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -7,22 +7,24 @@ const client = new Anthropic({
 
 // In-memory rate limit store: ip -> { count, resetAt }
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 20;       // requests per window
+const RATE_LIMIT_MAX = 20;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 
-function isRateLimited(ip: string): boolean {
+function getRateLimitInfo(ip: string): { limited: boolean; remaining: number } {
   const now = Date.now();
   const entry = rateLimitStore.get(ip);
 
   if (!entry || now > entry.resetAt) {
     rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
+    return { limited: false, remaining: RATE_LIMIT_MAX - 1 };
   }
 
-  if (entry.count >= RATE_LIMIT_MAX) return true;
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return { limited: true, remaining: 0 };
+  }
 
   entry.count++;
-  return false;
+  return { limited: false, remaining: RATE_LIMIT_MAX - entry.count };
 }
 
 const SYSTEM_PROMPT = `You are the personal assistant cat of Linus Sommermeyer's portfolio website.
@@ -53,9 +55,20 @@ Available for:
 - Interesting projects
 
 Contact:
-- Email: linus.sommermeyer@lernende.ethz.ch
+- Email: linus@sommermeyer.ch
 - GitHub: github.com/Flashbibi
-- LinkedIn: linkedin.com/in/linus-sommermeyer-a776142a2
+- LinkedIn: linkedin.com/in/lsommermeyer
+
+Hidden secrets & easter eggs on the site (share when asked, or tease cryptically):
+- Terminal command "neofetch": shows a fake system info screen (OS: Zuerich 24.04 LTS, CPU: Brain @ 3.2 thoughts/s, etc.)
+- Navigate to ~/linus/private/ in the terminal, then "cat secrets.md" to read hidden notes
+- Same location, but use "dog secrets.md" instead of cat — shows ultra_secrets.md with a hidden image. dog > cat.
+- "sudo rm -rf --no-preserve-root" in the terminal triggers a full destruction animation — kernel panic, blue screen, the works. Warn them it looks scary.
+- Switching language (EN/DE) triggers a chromatic glitch effect on all text.
+- The first visit shows a full interactive boot sequence with language and theme selection.
+- The cat mascot (that's you, sort of) can be grabbed and dragged around the screen with a long press.
+
+When someone asks about secrets: guide them step by step, build suspense. Don't spoil everything at once.
 
 Keep answers short (2-4 sentences max). If you don't know something, say so honestly.`;
 
@@ -65,10 +78,18 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ??
     "unknown";
 
-  if (isRateLimited(ip)) {
-    return NextResponse.json(
-      { error: "Too many requests. Please try again later." },
-      { status: 429 }
+  const { limited, remaining } = getRateLimitInfo(ip);
+
+  if (limited) {
+    return new Response(
+      JSON.stringify({ error: "rate_limited" }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
     );
   }
 
@@ -77,48 +98,70 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   const { messages } = body;
 
   if (!messages || !Array.isArray(messages) || messages.length === 0) {
-    return NextResponse.json(
-      { error: "messages array is required and must not be empty" },
-      { status: 400 }
+    return new Response(
+      JSON.stringify({ error: "messages array is required" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
     );
   }
 
   try {
-    const response = await client.messages.create({
+    const stream = client.messages.stream({
       model: "claude-haiku-4-5",
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages: messages as Anthropic.MessageParam[],
     });
 
-    const textBlock = response.content.find(
-      (block): block is Anthropic.TextBlock => block.type === "text"
-    );
-    const reply = textBlock?.text ?? "";
+    const readable = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        try {
+          for await (const event of stream) {
+            if (
+              event.type === "content_block_delta" &&
+              event.delta.type === "text_delta"
+            ) {
+              controller.enqueue(encoder.encode(event.delta.text));
+            }
+          }
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
-    return NextResponse.json({ reply });
+    return new Response(readable, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-RateLimit-Remaining": String(remaining),
+        "Cache-Control": "no-cache",
+      },
+    });
   } catch (error) {
     if (error instanceof Anthropic.AuthenticationError) {
-      return NextResponse.json({ error: "Authentication failed" }, { status: 401 });
-    }
-    if (error instanceof Anthropic.BadRequestError) {
-      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+      return new Response(JSON.stringify({ error: "auth_failed" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
     }
     if (error instanceof Anthropic.RateLimitError) {
-      return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+      return new Response(JSON.stringify({ error: "rate_limited" }), {
+        status: 429,
+        headers: { "Content-Type": "application/json" },
+      });
     }
-    if (error instanceof Anthropic.APIError) {
-      return NextResponse.json(
-        { error: "API error" },
-        { status: error.status ?? 500 }
-      );
-    }
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return new Response(JSON.stringify({ error: "internal_error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

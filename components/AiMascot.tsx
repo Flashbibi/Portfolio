@@ -2,19 +2,97 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './AiMascot.module.css'
+import { useLang } from '@/context/LanguageContext'
 
-const MESSAGES = [
-  "Psst... schau dir mal die Projekte an 👀",
-  "Written in Space Mono since 2025.",
-  "3D-Druck um 2 Uhr nachts ist völlig normal.",
-  "cat about.md // empfohlen",
-  "Ich bin aus Pixeln gemacht. Respekt.",
-  "sudo apt-get install coffee",
-  "Der Turret ist... sagen wir, ein Hobbyprojekt.",
-  "Linus tippt gerade irgendwo Code.",
-  "Have you tried turning it off and on again?",
-  "print('Hallo Welt') war der Anfang von allem.",
-]
+const MESSAGES = {
+  de: [
+    "Written in Space Mono since 2025.",
+    "3D-Druck um 2 Uhr nachts ist voellig normal.",
+    "cat about.md // empfohlen",
+    "Ich bin aus Pixeln gemacht. Respekt.",
+    "sudo apt-get install coffee",
+    "Der Turret ist... sagen wir, ein Hobbyprojekt.",
+    "Linus tippt gerade irgendwo Code.",
+    "Have you tried turning it off and on again?",
+    "print('Hallo Welt') war der Anfang von allem.",
+    "Git blame zeigt immer auf Linus.",
+    "Es gibt keine Bugs. Nur undokumentierte Features.",
+    "Raspberry Pi > Cloud. Fight me.",
+    "Die beste Dokumentation ist kein Kommentar.",
+    "Zuerich. 18. Noch nicht muede.",
+    "ETH steht fuer: Endlos Tippen Hier.",
+    "v8 bedeutet es gab 7 schlechtere Versionen.",
+    "Servo, ESP32, Hoffnung.",
+    "Ich heisse nicht wirklich Linus Torvalds.",
+    "Flask + Vue.js = Freitagabend gone.",
+    "Manchmal funktioniert der erste Commit.",
+    "segmentation fault (core dumped)",
+    "undefined is not a function. Klassiker.",
+    "Works on my machine.",
+    "99 little bugs in the code...",
+    "Kaffee ist nur fluessiger Code.",
+    "rm -rf node_modules && npm i -- Therapie.",
+    "Dark mode ist kein Trend. Es ist Ueberleben.",
+    "Ich habe das Terminal geoffnet und vergessen warum.",
+    "Stack Overflow ist auch nur Google.",
+    "Linus schlaeft. Manchmal.",
+  ],
+  en: [
+    "Written in Space Mono since 2025.",
+    "3D printing at 2am is perfectly normal.",
+    "cat about.md // recommended",
+    "I am made of pixels. Respect.",
+    "sudo apt-get install coffee",
+    "The turret is... let's say, a hobby project.",
+    "Linus is typing somewhere right now.",
+    "Have you tried turning it off and on again?",
+    "print('Hello World') was the beginning of everything.",
+    "Git blame always points to Linus.",
+    "There are no bugs. Only undocumented features.",
+    "Raspberry Pi > Cloud. Fight me.",
+    "The best documentation is no comment.",
+    "Zurich. 18. Not tired yet.",
+    "ETH stands for: Endless Typing Here.",
+    "v8 means there were 7 worse versions.",
+    "Servo, ESP32, hope.",
+    "My name is not actually Linus Torvalds.",
+    "Flask + Vue.js = Friday night gone.",
+    "Sometimes the first commit just works.",
+    "segmentation fault (core dumped)",
+    "undefined is not a function. Classic.",
+    "Works on my machine.",
+    "99 little bugs in the code...",
+    "Coffee is just liquid code.",
+    "rm -rf node_modules && npm i -- therapy.",
+    "Dark mode is not a trend. It is survival.",
+    "I opened the terminal and forgot why.",
+    "Stack Overflow is just Google with opinions.",
+    "Linus sleeps. Sometimes.",
+  ],
+}
+
+const TERMINAL_TEASERS = {
+  de: [
+    "Psst... probier mal neofetch.",
+    "dog > cat. Manchmal.",
+    "Was steht wohl in ~/linus/private/?",
+    "sudo rm -rf ... ich wuerde das nicht tippen.",
+    "Manche Befehle sollte man nicht kennen.",
+    "Irgendwo hier ist ein Hund versteckt.",
+    "Nicht alle Verzeichnisse sind fuer dich.",
+    "cd private. Falls du dich traust.",
+  ],
+  en: [
+    "Psst... try neofetch.",
+    "dog > cat. Sometimes.",
+    "What's in ~/linus/private/ anyway?",
+    "sudo rm -rf ... I wouldn't type that.",
+    "Some commands you shouldn't know.",
+    "There's a dog hidden somewhere.",
+    "Not all directories are meant for you.",
+    "cd private. If you dare.",
+  ],
+}
 
 // Sprite sheet: 256×320 px, 32×32 per frame, 8 cols × 10 rows
 const FRAME_SIZE   = 32
@@ -28,11 +106,13 @@ const ANIMS = {
   look:     { y:  96, frames: 4, ms: 180 },  // row 4
   walk:     { y: 128, frames: 8, ms: 100 },  // row 5
   struggle: { y: 128, frames: 8, ms:  40 },  // row 5 fast — grabbed
+  liedown:  { y: 192, frames: 4, ms: 220 },  // row 7 — sleeping
   fall:     { y: 288, frames: 8, ms:  80 },  // row 10 — falling
 } as const
 type AnimKey = keyof typeof ANIMS
 
 const IDLE_ANIMS: AnimKey[] = ['idle', 'sit', 'look']
+const INACTIVITY_MS = 60_000
 
 function buildSheet(img: HTMLImageElement): HTMLCanvasElement {
   const sheet  = document.createElement('canvas')
@@ -81,11 +161,13 @@ function buildSheet(img: HTMLImageElement): HTMLCanvasElement {
 }
 
 interface Props {
-  onClick:  () => void
-  chatOpen: boolean
+  onClick:      () => void
+  chatOpen:     boolean
+  terminalOpen: boolean
 }
 
-export default function AiMascot({ onClick, chatOpen }: Props) {
+export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
+  const { lang } = useLang()
   const canvasRef  = useRef<HTMLCanvasElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const tintedRef  = useRef<HTMLCanvasElement | null>(null)
@@ -117,6 +199,10 @@ export default function AiMascot({ onClick, chatOpen }: Props) {
   // Hover
   const hoveredRef = useRef(false)
   const [hovered, setHovered] = useState(false)
+
+  // Inactivity
+  const isInactiveRef      = useRef(false)
+  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Speech bubble
   const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -275,7 +361,10 @@ export default function AiMascot({ onClick, chatOpen }: Props) {
 
       // Auto-walk (blocked while hovering or dragging)
       if (posXRef.current >= 0 && !hoveredRef.current && !isDraggingRef.current) {
-        if (now >= pauseUntilRef.current) {
+        if (isInactiveRef.current) {
+          movingRef.current = false
+          animRef.current   = 'liedown'
+        } else if (now >= pauseUntilRef.current) {
           const dx = targetXRef.current - posXRef.current
           if (Math.abs(dx) < WALK_SPEED) {
             posXRef.current       = targetXRef.current
@@ -347,7 +436,8 @@ export default function AiMascot({ onClick, chatOpen }: Props) {
     function scheduleNext() {
       const delay = 30_000 + Math.random() * 30_000
       timerRef.current = setTimeout(() => {
-        const msg = MESSAGES[Math.floor(Math.random() * MESSAGES.length)]
+        const pool = MESSAGES[lang]
+        const msg = pool[Math.floor(Math.random() * pool.length)]
         setBubble(msg)
         timerRef.current = setTimeout(() => {
           setBubble(null)
@@ -359,13 +449,56 @@ export default function AiMascot({ onClick, chatOpen }: Props) {
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
   }, [])
 
+  // ── Inactivity → liedown ──────────────────────────────────────────────────
+  useEffect(() => {
+    function resetTimer() {
+      if (isInactiveRef.current) {
+        isInactiveRef.current = false
+        // Wake up: resume normal walk
+        pauseUntilRef.current = Date.now()
+      }
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current)
+      inactivityTimerRef.current = setTimeout(() => {
+        isInactiveRef.current = true
+      }, INACTIVITY_MS)
+    }
+
+    resetTimer()
+    window.addEventListener('mousemove', resetTimer)
+    window.addEventListener('keydown',   resetTimer)
+    window.addEventListener('click',     resetTimer)
+    window.addEventListener('scroll',    resetTimer)
+    window.addEventListener('touchstart',resetTimer)
+    return () => {
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current)
+      window.removeEventListener('mousemove', resetTimer)
+      window.removeEventListener('keydown',   resetTimer)
+      window.removeEventListener('click',     resetTimer)
+      window.removeEventListener('scroll',    resetTimer)
+      window.removeEventListener('touchstart',resetTimer)
+    }
+  }, [])
+
+  // ── Terminal open → show secret teaser ────────────────────────────────────
+  const prevTerminalRef = useRef(false)
+  useEffect(() => {
+    if (terminalOpen && !prevTerminalRef.current) {
+      const pool = TERMINAL_TEASERS[lang]
+      const msg = pool[Math.floor(Math.random() * pool.length)]
+      setBubble(msg)
+      const t = setTimeout(() => setBubble(null), 5500)
+      return () => clearTimeout(t)
+    }
+    prevTerminalRef.current = terminalOpen
+  }, [terminalOpen])
+
   return (
     <>
       <div
         ref={bubbleRef}
         key={bubble}
         className={styles.bubble}
-        style={{ visibility: bubble && !chatOpen ? 'visible' : 'hidden' }}
+        style={{ visibility: bubble && (!chatOpen || terminalOpen) ? 'visible' : 'hidden' }}
       >
         {bubble}
       </div>

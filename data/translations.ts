@@ -78,10 +78,14 @@ interface Translations {
     envSet: (choice: string) => string
   }
   chat: {
-    header:      string
-    welcome:     string
-    placeholder: string
-    error:       string
+    header:       string
+    welcome:      string
+    placeholder:  string
+    error:        string
+    rateLimited:  string
+    clear:        string
+    copied:       string
+    suggestions:  string[]
   }
   footer: {
 
@@ -191,6 +195,14 @@ const en: Translations = {
     welcome:     "Meow! I'm Linus' assistant. What would you like to know?",
     placeholder: 'Ask me something...',
     error:       "Error — please try again.",
+    rateLimited: "Too many requests — try again in an hour.",
+    clear:       'clear',
+    copied:      'copied!',
+    suggestions: [
+      "What are your skills?",
+      "Tell me about your projects",
+      "How can I contact you?",
+    ],
   },
   projectDetail: {
     back:         '← back',
@@ -296,6 +308,14 @@ const de: Translations = {
     welcome:     "Miau! Ich bin Linus' Assistent. Was möchtest du wissen?",
     placeholder: 'Frag mich was...',
     error:       "Fehler — versuch's nochmal.",
+    rateLimited: "Zu viele Anfragen — versuch's in einer Stunde nochmal.",
+    clear:       'leeren',
+    copied:      'kopiert!',
+    suggestions: [
+      "Was sind deine Fähigkeiten?",
+      "Erzähl mir von deinen Projekten",
+      "Wie kann ich dich kontaktieren?",
+    ],
   },
   projectDetail: {
     back:         '← zurück',

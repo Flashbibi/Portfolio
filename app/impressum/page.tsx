@@ -21,8 +21,8 @@ export default function Impressum() {
           <p>Zürich, Schweiz</p>
           <p>
             E-Mail:{' '}
-            <a href="mailto:linus.sommermeyer@lernende.ethz.ch" className={styles.link}>
-              linus.sommermeyer@lernende.ethz.ch
+            <a href="mailto:linus@sommermeyer.ch" className={styles.link}>
+              linus@sommermeyer.ch
             </a>
           </p>
         </section>

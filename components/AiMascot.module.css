@@ -47,7 +47,7 @@
   letter-spacing: 0.02em;
   pointer-events: none;
   animation: bubbleLifecycle 5.5s ease forwards;
-  z-index: 1;
+  z-index: 1002;
 }
 
 /* Triangle pointer toward the cat */

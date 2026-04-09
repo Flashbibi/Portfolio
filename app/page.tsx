@@ -85,8 +85,8 @@ useEffect(() => {
         onClose={() => setDrawerOpen(false)}
       />
 
-      <AiMascot onClick={() => setChatOpen(prev => !prev)} chatOpen={chatOpen} />
-      <AiChat open={chatOpen} onClose={() => setChatOpen(false)} />
+      <AiMascot onClick={() => setChatOpen(prev => !prev)} chatOpen={chatOpen} terminalOpen={drawerOpen} />
+      <AiChat open={chatOpen} onClose={() => setChatOpen(false)} terminalOpen={drawerOpen} />
 
       <DestructionOverlay active={isDestroying} />
 
