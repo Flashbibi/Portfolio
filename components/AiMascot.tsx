@@ -450,7 +450,7 @@ export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
     }
     scheduleNext()
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [])
+  }, [lang])
 
   // ── Inactivity → liedown ──────────────────────────────────────────────────
   useEffect(() => {
@@ -493,7 +493,7 @@ export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
       return () => clearTimeout(t)
     }
     prevTerminalRef.current = terminalOpen
-  }, [terminalOpen])
+  }, [terminalOpen, lang])
 
   return (
     <>
