@@ -18,7 +18,9 @@ export const achievements: Achievement[] = [
   { id: 'cat-whisperer',  icon: '💬', title: 'Cat Whisperer',     desc: 'Had a chat with the mascot.'            },
   { id: 'explorer',       icon: '🗺️', title: 'Explorer',          desc: 'Visited every project page.'            },
   { id: 'tab-master',     icon: '⌨️', title: 'Tab Master',        desc: 'Used tab autocomplete in the terminal.' },
+  { id: 'reality-glitcher', icon: '🌀', title: 'Reality Glitcher', desc: 'Found cracks in the simulation.'        },
 ]
 
-export const EXPLORER_PROJECTS = ['glamos', 'fabricator', 'gletscher-player', 'turret']
-export const LS_VISITED        = 'portfolio:visited-projects'
+export const EXPLORER_PROJECTS         = ['glamos', 'fabricator', 'gletscher-player', 'turret']
+export const LS_VISITED                = 'portfolio:visited-projects'
+export const REALITY_GLITCHER_THRESHOLD = 5

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './About.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
+import GlitchText from './GlitchText'
 
 type SkillLevel = 'strong' | 'good' | 'solid' | 'learning'
 
@@ -48,8 +49,8 @@ export default function About() {
             {t.heading3}
           </h2>
           <div className={styles.body}>
-            <p>{t.bio1}</p>
-            <p>{t.bio2}</p>
+            <p><GlitchText id="home-about-bio1" active={null}>{t.bio1}</GlitchText></p>
+            <p><GlitchText id="home-about-bio2" active={null}>{t.bio2}</GlitchText></p>
           </div>
         </div>
         <div>

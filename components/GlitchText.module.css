@@ -1,0 +1,146 @@
+/* ── Measurement probe — always invisible, never affects layout ────────────── */
+.measure {
+  position:      absolute;
+  visibility:    hidden;
+  pointer-events: none;
+  white-space:   nowrap;
+  top:           0;
+  left:          0;
+}
+
+/* ── Base glitch span ────────────────────────────────────────────────────────*/
+.glitch {
+  display:    inline-block;
+  position:   relative;
+  white-space: nowrap;
+}
+
+/* --gw / --gs are injected as inline CSS vars by GlitchText.tsx (GLOW table),
+   keyed on theme + category. No class-level overrides needed. */
+
+/* ── Phase: corrupt ──────────────────────────────────────────────────────── */
+.pCorrupt {
+  animation: gShake 0.12s steps(3) infinite;
+}
+
+/* RGB split: pseudo-elements show attr(data-original) with color channel offset */
+.pCorrupt::before,
+.pCorrupt::after {
+  content:        attr(data-original);
+  position:       absolute;
+  inset:          0;
+  pointer-events: none;
+  opacity:        0.65;
+}
+.pCorrupt::before {
+  color:     #ff3838;
+  transform: translate(2px, -1px);
+  clip-path: inset(0 0 55% 0);
+}
+.pCorrupt::after {
+  color:     #00e5ff;
+  transform: translate(-2px, 1px);
+  clip-path: inset(45% 0 0 0);
+}
+
+/* ── Phase: morph ────────────────────────────────────────────────────────── */
+.pMorph {
+  animation: gShake 0.08s steps(2) infinite;
+  overflow:  hidden;
+}
+
+/* Scanline sweep */
+.pMorph::after {
+  content:    '';
+  position:   absolute;
+  left:       0;
+  right:      0;
+  top:        0;
+  height:     3px;
+  background: linear-gradient(
+    transparent,
+    var(--gw, rgba(212, 168, 67, 0.8)),
+    transparent
+  );
+  animation: gScanline 0.1s linear forwards;
+  pointer-events: none;
+}
+
+/* ── Phase: settle ───────────────────────────────────────────────────────── */
+.pSettle {
+  cursor:      pointer;
+  text-shadow: 0 0 6px var(--gw,  rgba(212, 168, 67, 0.90)),
+               0 0 14px var(--gs, rgba(212, 168, 67, 0.40));
+  border-bottom: 1px dashed var(--gw, rgba(212, 168, 67, 0.60));
+  animation:   gFlicker 0.55s steps(1) infinite;
+}
+.pSettle:hover,
+.pSettle:focus-visible {
+  outline:     none;
+  text-shadow: 0 0 10px var(--gw,  rgba(212, 168, 67, 0.95)),
+               0 0 22px var(--gs,  rgba(212, 168, 67, 0.55)),
+               0 0 36px var(--gs,  rgba(212, 168, 67, 0.25));
+}
+
+/* ── Phase: exiting ──────────────────────────────────────────────────────── */
+.pExiting {
+  animation:   gFadeOut 0.20s ease forwards;
+}
+
+/* ── Keyframes ───────────────────────────────────────────────────────────── */
+@keyframes gShake {
+  0%   { transform: translateX(0);    }
+  33%  { transform: translateX(-1px); }
+  66%  { transform: translateX(1px);  }
+  100% { transform: translateX(0);    }
+}
+
+@keyframes gScanline {
+  from { transform: translateY(-100%); opacity: 1; }
+  to   { transform: translateY(200%);  opacity: 0; }
+}
+
+@keyframes gFlicker {
+  0%, 80% { opacity: 1;   }
+  85%      { opacity: 0.7; }
+  90%      { opacity: 1;   }
+  95%      { opacity: 0.8; }
+  100%     { opacity: 1;   }
+}
+
+@keyframes gFadeOut {
+  from {
+    text-shadow: 0 0 6px var(--gw, rgba(212, 168, 67, 0.90));
+    border-bottom-color: var(--gw, rgba(212, 168, 67, 0.60));
+    opacity: 1;
+  }
+  to {
+    text-shadow: none;
+    border-bottom-color: transparent;
+    opacity: 0.6;
+  }
+}
+
+/* ── Reduced motion: cross-fade only, no scramble animations ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .pCorrupt,
+  .pMorph,
+  .pExiting {
+    animation: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .pCorrupt::before,
+  .pCorrupt::after,
+  .pMorph::after {
+    display: none;
+  }
+
+  .pSettle {
+    animation: none;
+  }
+
+  .pExiting {
+    opacity: 0;
+  }
+}

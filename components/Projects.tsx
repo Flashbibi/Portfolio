@@ -6,6 +6,7 @@ import { projects, type ProjectCategory } from '@/data/projects'
 import styles from './Projects.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
+import GlitchText from './GlitchText'
 
 type Filter = 'all' | 'eth' | 'home' | ProjectCategory
 
@@ -83,7 +84,11 @@ export default function Projects() {
                 {p.title}
                 {p.titleLine2 && <><br />{p.titleLine2[lang]}</>}
               </h3>
-              <p className={styles.desc}>{p.description[lang]}</p>
+              <p className={styles.desc}>
+                <GlitchText id={`home-projects-${p.id}-desc`} active={null}>
+                  {p.description[lang]}
+                </GlitchText>
+              </p>
               {p.tags.length > 0 && (
                 <div className={styles.tags}>
                   {p.tags.map(t => (

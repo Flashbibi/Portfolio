@@ -3,6 +3,7 @@
 import styles from './Contact.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
+import GlitchText from './GlitchText'
 
 export default function Contact() {
   const { lang } = useLang()
@@ -23,7 +24,9 @@ export default function Contact() {
             {t.heading1}<br />
             <span>{t.heading2}</span>
           </h2>
-          <p className={styles.sub}>{t.sub}</p>
+          <p className={styles.sub}>
+            <GlitchText id="home-contact-sub" active={null}>{t.sub}</GlitchText>
+          </p>
         </div>
         <div>
           <ul className={styles.links}>
