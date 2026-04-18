@@ -60,7 +60,7 @@
 .line { margin: 0; white-space: pre; }
 .dim   { color: #3a3a32; }
 .green { color: #5dba7e; }
-.amber { color: #d4a843; }
+.amber { color: #d4a843; font-family: monospace; }
 .white { color: #f0ebe0; }
 .red   { color: #e05c5c; }
 .blue  { color: #6aabdf; }
