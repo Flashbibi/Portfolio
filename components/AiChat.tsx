@@ -240,10 +240,10 @@ export default function AiChat({ open, onClose, terminalOpen = false }: Props) {
           {remaining !== null && (
             <span className={styles.rateLimit}>{remaining}/{20}</span>
           )}
-          <button className={styles.clearBtn} onClick={clearChat} aria-label="Clear chat">
+          <button className={styles.clearBtn} onClick={clearChat} aria-label={t.clearLabel}>
             [ {t.clear} ]
           </button>
-          <button className={styles.close} onClick={onClose} aria-label="Schliessen">
+          <button className={styles.close} onClick={onClose} aria-label={t.close}>
             [ x ]
           </button>
         </div>
