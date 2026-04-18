@@ -9,7 +9,7 @@ export interface Project {
   title: string
   titleLine2?: { en: string; de: string }
   description: { en: string; de: string }
-  tags: string[]
+  tags: { en: string[]; de: string[] }
   status: ProjectStatus
   category: ProjectCategory
   origin: 'eth' | 'home'
@@ -26,7 +26,7 @@ export const projects: Project[] = [
       en: 'Interactive React app for visualizing Swiss glacier mass balance data. Responsive design, CSV processing, animated charts.',
       de: 'Interaktive React-App zur Visualisierung von Schweizer Gletschermassenbilanz-Daten. Responsive Design, CSV-Verarbeitung, animierte Charts.',
     },
-    tags: ['React', 'D3.js', 'CSV'],
+    tags: { en: ['React', 'D3.js', 'CSV'], de: ['React', 'D3.js', 'CSV'] },
     status: 'done',
     category: 'software',
     origin: 'eth',
@@ -52,7 +52,7 @@ export const projects: Project[] = [
       en: 'Flask + Vue.js tool for managing Minecraft servers. Standalone Windows .exe via PyInstaller, system tray icon, backup management.',
       de: 'Flask + Vue.js Tool zur Verwaltung von Minecraft-Servern. Standalone Windows-Exe via PyInstaller, Systemtray-Icon, Backup-Management.',
     },
-    tags: ['Flask', 'Vue.js', 'PyInstaller'],
+    tags: { en: ['Flask', 'Vue.js', 'PyInstaller'], de: ['Flask', 'Vue.js', 'PyInstaller'] },
     status: 'wip',
     category: 'software',
     origin: 'home',
@@ -78,7 +78,7 @@ export const projects: Project[] = [
       en: 'Python-based interactive video system for a glacier exhibition. mpv with IPC socket for seamless transitions on Raspberry Pi.',
       de: 'Python-basiertes interaktives Video-System für eine Gletscherausstellung. mpv mit IPC-Socket für nahtlose Übergänge auf Raspberry Pi.',
     },
-    tags: ['Python', 'Raspberry Pi', 'mpv'],
+    tags: { en: ['Python', 'Raspberry Pi', 'mpv'], de: ['Python', 'Raspberry Pi', 'mpv'] },
     status: 'done',
     category: 'software',
     origin: 'home',
@@ -104,7 +104,7 @@ export const projects: Project[] = [
       en: 'Automatic turret (v8) with DS3218MG servos, ePETG-CF housing, and Blender 3D modeling for the 3D assembly.',
       de: 'Automatisches Geschütz (v8) mit DS3218MG-Servos, ePETG-CF-Gehäuse und Blender 3D Modeling für die 3D-Assembly.',
     },
-    tags: ['Blender', 'ESP32', '3D-Druck'],
+    tags: { en: ['Blender', 'ESP32', '3D-Print'], de: ['Blender', 'ESP32', '3D-Druck'] },
     status: 'wip',
     category: 'hardware',
     origin: 'home',
@@ -130,7 +130,7 @@ export const projects: Project[] = [
       en: 'More coming soon.',
       de: 'Mehr kommt bald.',
     },
-    tags: [],
+    tags: { en: [], de: [] },
     status: 'planned',
     category: 'hardware',
     origin: 'home',

@@ -89,10 +89,10 @@ export default function Projects() {
                   {p.description[lang]}
                 </GlitchText>
               </p>
-              {p.tags.length > 0 && (
+              {p.tags[lang].length > 0 && (
                 <div className={styles.tags}>
-                  {p.tags.map(t => (
-                    <span key={t} className={styles.tag}>{t}</span>
+                  {p.tags[lang].map(tag => (
+                    <span key={tag} className={styles.tag}>{tag}</span>
                   ))}
                 </div>
               )}

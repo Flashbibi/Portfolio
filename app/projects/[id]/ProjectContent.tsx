@@ -107,7 +107,7 @@ export default function ProjectContent({ project, pages }: Props) {
         </h1>
 
         <div className={styles.tags}>
-          {project.tags.map(tag => (
+          {project.tags[lang].map(tag => (
             <span key={tag} className={styles.tag}>{tag}</span>
           ))}
         </div>
