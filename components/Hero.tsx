@@ -62,7 +62,7 @@ export default function Hero() {
       />
       <span className={styles.cornerText}>Portfolio — {new Date().getFullYear()}</span>
       <p className={styles.index}>{t.index}</p>
-      <h1 className={styles.name} data-text="Linus">Linus</h1>
+      <h1 className={styles.name} data-text="Linus" aria-label="Linus">Linus</h1>
       <p className={styles.sub}>
         {text}
         <span className={styles.cursor} />
