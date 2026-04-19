@@ -12,6 +12,7 @@ import Contact from '@/components/Contact'
 import AiMascot from '@/components/AiMascot'
 import AiChat   from '@/components/AiChat'
 import BossFightWindow from '@/components/bossFight/BossFightWindow'
+import BossFightGame   from '@/components/bossFight/BossFightGame'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
@@ -90,9 +91,7 @@ useEffect(() => {
 
       {bossFightOpen && (
         <BossFightWindow onClose={() => setBossFightOpen(false)}>
-          <div style={{ padding: '16px', fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#000', background: '#c0c0c0' }}>
-            Game will go here.
-          </div>
+          <BossFightGame />
         </BossFightWindow>
       )}
 
