@@ -88,4 +88,4 @@ export function drawBackground(ctx: CanvasRenderingContext2D, worldX: number): v
 }
 
 // Offset used for lane baseline — bottom of cat collision box (CAT_H / 2)
-const CAT_H_HALF = 20
+const CAT_H_HALF = 24

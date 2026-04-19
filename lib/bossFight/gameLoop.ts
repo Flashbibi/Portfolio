@@ -49,13 +49,13 @@ function randomTokenInterval(): number {
 
 // ─── Update ─────────────────────────────────────────────────────────────────
 
-export function update(state: GameState, keys: Set<string>): void {
+export function update(state: GameState, keys: Set<string>, dt: number): void {
   if (state.mode === 'gameover') return
   if (state.mode === 'wave3hold') {
     // Still tick particles and scroll so the scene doesn't freeze
-    tickParticles(state)
-    state.worldX += BG_SCROLL_SPEED
-    state.shake = Math.max(0, state.shake - SHAKE_DECAY)
+    tickParticles(state, dt)
+    state.worldX += BG_SCROLL_SPEED * dt
+    state.shake   = Math.max(0, state.shake - SHAKE_DECAY * dt)
     return
   }
 
@@ -68,40 +68,39 @@ export function update(state: GameState, keys: Set<string>): void {
 
   // ── Cat y interpolation ──
   const targetY = LANES[state.cat.lane]
-  state.cat.y += (targetY - state.cat.y) * LANE_LERP
+  state.cat.y += (targetY - state.cat.y) * LANE_LERP * dt
 
   // ── Cat walk animation ──
-  state.cat.animTick++
+  state.cat.animTick += dt
   if (state.cat.animTick >= ANIM_PERIOD) {
     state.cat.animTick = 0
     state.cat.animFrame = (state.cat.animFrame + 1) % 4
   }
 
   // ── I-frames countdown ──
-  if (state.cat.iframes > 0) state.cat.iframes--
+  if (state.cat.iframes > 0) state.cat.iframes = Math.max(0, state.cat.iframes - dt)
 
   // ── Move bugs + wobble ──
   const bugSpeed = (b: typeof state.bugs[0]) =>
     b.type === 'fast' ? BUG_SPEED_FAST : BUG_SPEED_NORMAL
   for (const bug of state.bugs) {
-    bug.x -= bugSpeed(bug)
-    bug.wobblePhase += BUG_WOBBLE_SPEED
+    bug.x -= bugSpeed(bug) * dt
+    bug.wobblePhase += BUG_WOBBLE_SPEED * dt
   }
 
   // ── Move tokens ──
   for (const tok of state.tokens) {
-    tok.x -= TOKEN_SPEED
+    tok.x -= TOKEN_SPEED * dt
   }
 
   // ── Collisions ──
-  if (state.cat.iframes === 0) {
+  if (state.cat.iframes <= 0) {
     for (const bug of state.bugs) {
       if (catHitsBug(state.cat, bug)) {
-        state.cat.hp    -= 1
-        state.cat.iframes = CAT_IFRAMES
-        state.shake       = SHAKE_ON_HIT
-        // Particles at cat position
-        state.particles.push(...spawnHitParticles(state.cat.x + 18, state.cat.y, C.red))
+        state.cat.hp      -= 1
+        state.cat.iframes  = CAT_IFRAMES
+        state.shake        = SHAKE_ON_HIT
+        state.particles.push(...spawnHitParticles(state.cat.x + 28, state.cat.y, C.red))
         break
       }
     }
@@ -120,7 +119,7 @@ export function update(state: GameState, keys: Set<string>): void {
   state.tokens = state.tokens.filter(t => t.x > -20)
 
   // ── Bug spawning ──
-  state.spawnTimer--
+  state.spawnTimer -= dt
   if (state.spawnTimer <= 0) {
     const pattern = pickPattern()
     for (const lane of pattern) {
@@ -132,7 +131,7 @@ export function update(state: GameState, keys: Set<string>): void {
   }
 
   // ── Token spawning ──
-  state.tokenTimer--
+  state.tokenTimer -= dt
   if (state.tokenTimer <= 0) {
     const safeLanes = ([0, 1, 2] as const).filter(l => isSafeLane(l, state.bugs))
     if (safeLanes.length > 0) {
@@ -143,7 +142,7 @@ export function update(state: GameState, keys: Set<string>): void {
   }
 
   // ── Particles ──
-  tickParticles(state)
+  tickParticles(state, dt)
 
   // ── Game over check ──
   if (state.cat.hp <= 0) {
@@ -153,13 +152,13 @@ export function update(state: GameState, keys: Set<string>): void {
   }
 
   // ── Wave timer ──
-  state.waveTimer--
+  state.waveTimer -= dt
   if (state.waveTimer <= 0) {
     if (state.wave === 1) {
-      state.wave      = 2
-      state.waveTimer = WAVE_2_DURATION
-      state.bugs      = []
-      state.tokens    = []
+      state.wave       = 2
+      state.waveTimer  = WAVE_2_DURATION
+      state.bugs       = []
+      state.tokens     = []
       state.spawnTimer = spawnInterval(2)
     } else {
       // Wave 2 done — hold for Phase 3 (powerup)
@@ -170,16 +169,16 @@ export function update(state: GameState, keys: Set<string>): void {
   }
 
   // ── Scroll + shake ──
-  state.worldX += BG_SCROLL_SPEED
-  state.shake   = Math.max(0, state.shake - SHAKE_DECAY)
+  state.worldX += BG_SCROLL_SPEED * dt
+  state.shake   = Math.max(0, state.shake - SHAKE_DECAY * dt)
 }
 
-function tickParticles(state: GameState): void {
+function tickParticles(state: GameState, dt: number): void {
   for (const p of state.particles) {
-    p.x  += p.vx
-    p.y  += p.vy
-    p.vy += 0.15      // gravity
-    p.life--
+    p.x    += p.vx * dt
+    p.y    += p.vy * dt
+    p.vy   += 0.15 * dt   // gravity
+    p.life -= dt
   }
   state.particles = state.particles.filter(p => p.life > 0)
 }

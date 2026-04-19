@@ -5,16 +5,16 @@ import { getCatSprite } from '@/lib/bossFight/catSprite'
 // Sprite sheet: 32×32 per frame, walk row at y=128, 8 frames.
 // Map our 4 game animFrames to every-other walk frame for a clean 4-step cycle.
 const FRAME_SIZE  = 32
-const DRAW_SIZE   = 64   // 2× scale — sprite rendered at 64×64
+const DRAW_SIZE   = 96   // 3× scale — sprite rendered at 96×96
 const WALK_ROW_Y  = 128
 const WALK_FRAMES = [0, 2, 4, 6]  // sprite frame indices for game animFrames 0-3
 
-// Collision box: 48w × 40h centred on cat.y.
-// Sprite is drawn at 64×64 — scaled up 2× for legibility as protagonist.
-//   draw_x = cat.x − 8       → centres 64px horizontally in the 48px collision box
-//   draw_y = cat.y − 44      → aligns sprite bottom with box bottom (cat.y + 20)
-const DRAW_OFFSET_X = -8
-const DRAW_OFFSET_Y = -44
+// Collision box: 56w × 48h centred on cat.y.
+// Sprite is drawn at 96×96 — scaled up 3× so she reads as protagonist on the 640×360 canvas.
+//   draw_x = cat.x − 20      → centres 96px horizontally in the 56px collision box
+//   draw_y = cat.y − 72      → aligns sprite bottom with box bottom (cat.y + 24)
+const DRAW_OFFSET_X = -20
+const DRAW_OFFSET_Y = -72
 
 export function drawCat(ctx: CanvasRenderingContext2D, cat: Cat): void {
   // i-frame blink: skip every other 6-frame window
@@ -40,7 +40,7 @@ export function drawCat(ctx: CanvasRenderingContext2D, cat: Cat): void {
   // Armed state: green antenna above sprite head
   if (cat.armed) {
     ctx.fillStyle = C.green
-    ctx.fillRect(cx + 36, cy - 50, 4, 14)
-    ctx.fillRect(cx + 30, cy - 54, 12, 4)
+    ctx.fillRect(cx + 42, cy - 76, 6, 20)
+    ctx.fillRect(cx + 36, cy - 80, 18, 6)
   }
 }

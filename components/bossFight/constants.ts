@@ -1,3 +1,6 @@
+// All time values are in frames at 60fps. Movement values are in pixels per 60fps-frame.
+// The game loop scales by delta-time so behaviour is identical on any refresh rate.
+
 export const CW = 640
 export const CH = 360
 export const LANES = [150, 215, 280] as const
@@ -6,8 +9,8 @@ export const WORLD_W = 1600
 export const BG_SCROLL_SPEED = 1.5
 
 export const CAT_X = 90
-export const CAT_W = 48
-export const CAT_H = 40
+export const CAT_W = 56
+export const CAT_H = 48
 export const CAT_HP = 3
 export const CAT_IFRAMES = 80
 export const LANE_LERP = 0.3

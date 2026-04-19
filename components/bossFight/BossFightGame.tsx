@@ -7,10 +7,11 @@ import { createInitialState, update, draw } from '@/lib/bossFight/gameLoop'
 import { loadCatSprite } from '@/lib/bossFight/catSprite'
 
 export default function BossFightGame() {
-  const canvasRef  = useRef<HTMLCanvasElement>(null)
-  const stateRef   = useRef<GameState>(createInitialState())
-  const keysRef    = useRef<Set<string>>(new Set())
-  const rafRef     = useRef<number>(0)
+  const canvasRef    = useRef<HTMLCanvasElement>(null)
+  const stateRef     = useRef<GameState>(createInitialState())
+  const keysRef      = useRef<Set<string>>(new Set())
+  const rafRef       = useRef<number>(0)
+  const lastTimeRef  = useRef<number>(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -20,6 +21,7 @@ export default function BossFightGame() {
 
     ctx.imageSmoothingEnabled = false
     loadCatSprite()
+    lastTimeRef.current = performance.now()
 
     function onKeyDown(e: KeyboardEvent) {
       const k = e.key
@@ -43,8 +45,11 @@ export default function BossFightGame() {
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup',   onKeyUp)
 
-    function loop() {
-      update(stateRef.current, keysRef.current)
+    function loop(now: number) {
+      // dt is normalized to 1.0 at 60fps; capped at 50ms to absorb tab-unfocus spikes
+      const dt = Math.min(now - lastTimeRef.current, 50) / (1000 / 60)
+      lastTimeRef.current = now
+      update(stateRef.current, keysRef.current, dt)
       // Edge-triggered keys are consumed by update — clear them after each frame
       keysRef.current.clear()
       draw(ctx!, stateRef.current)
