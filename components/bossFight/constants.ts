@@ -12,30 +12,30 @@ export const CAT_X = 90
 export const CAT_W = 56
 export const CAT_H = 48
 export const CAT_HP = 3
-export const CAT_IFRAMES = 80
-export const LANE_LERP = 0.3
+export const CAT_IFRAMES = 32
+export const LANE_LERP = 0.5
 export const ANIM_PERIOD = 6
 
 export const BUG_W = 22
 export const BUG_H = 20
 export const BUG_WOBBLE_AMP = 3
 export const BUG_WOBBLE_SPEED = 0.12
-export const BUG_SPEED_NORMAL = 2.2
-export const BUG_SPEED_FAST   = 3.6
+export const BUG_SPEED_NORMAL = 5.5
+export const BUG_SPEED_FAST   = 9.0
 
 export const TOKEN_W = 12
 export const TOKEN_H = 12
-export const TOKEN_SPEED = 3
+export const TOKEN_SPEED = 7.5
 export const TOKEN_SCORE = 5
 export const TOKEN_SPAWN_MIN = 50
 export const TOKEN_SPAWN_MAX = 90
 export const TOKEN_SAFE_START = 380
 export const TOKEN_SAFE_END   = 690
 
-export const WAVE_1_DURATION = 540
-export const WAVE_2_DURATION = 600
-export const SPAWN_BASE      = 95
-export const SPAWN_MIN       = 55
+export const WAVE_1_DURATION = 300
+export const WAVE_2_DURATION = 360
+export const SPAWN_BASE      = 38
+export const SPAWN_MIN       = 22
 export const SPAWN_WAVE_DEC  = 8
 export const FAST_BUG_CHANCE_W2 = 0.30
 
