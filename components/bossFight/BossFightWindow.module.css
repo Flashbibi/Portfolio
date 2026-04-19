@@ -1,0 +1,78 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1100;
+  pointer-events: all;
+}
+
+.window {
+  position: fixed;
+  z-index: 1101;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow: 2px 2px 0 #000000;
+  width: 520px;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.window.visible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.titleBar {
+  background: #0000aa;
+  padding: 3px 4px 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
+  user-select: none;
+  gap: 4px;
+}
+
+.titleBar:active {
+  cursor: grabbing;
+}
+
+.titleText {
+  color: #ffffff;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+
+.closeBtn {
+  width: 16px;
+  height: 14px;
+  background: #c0c0c0;
+  border: 1px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  font-size: 9px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  padding: 0;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+
+.closeBtn:active {
+  border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.body {
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  margin: 4px;
+  min-height: 200px;
+}
