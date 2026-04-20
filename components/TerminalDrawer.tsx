@@ -8,10 +8,12 @@ import { useLang } from '@/context/LanguageContext'
 import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
 import type { Lang } from '@/context/LanguageContext'
+import { runBootSequence } from '@/components/bossFight/BootSequence'
 
 interface Props {
   open: boolean
   onClose: () => void
+  onBossFightOpen?: () => void
 }
 
 function escapeHtml(s: string) {
@@ -33,7 +35,7 @@ function getNode(path: string): FsNode | null {
   return node
 }
 
-export default function TerminalDrawer({ open, onClose }: Props) {
+export default function TerminalDrawer({ open, onClose, onBossFightOpen }: Props) {
   const { lang } = useLang()
   const langRef = useRef<Lang>(lang)
   useEffect(() => { langRef.current = lang }, [lang])
@@ -154,6 +156,7 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       case 'help':     cmdHelp(); break
       case 'neofetch': cmdNeofetch(); break
       case 'sudo':     cmdSudo(cmd.slice(5).trim()); return
+      case 'fight':    cmdFight(); return
       default:       dprint(translations[langRef.current].terminal.commandNotFound(verb), 'red')
     }
     dprint('')
@@ -392,6 +395,18 @@ export default function TerminalDrawer({ open, onClose }: Props) {
       ['        └── v8_notes.md', 'white'],
     ]
     lines.forEach(([txt, cls]) => dprint('  ' + txt, cls))
+  }
+
+  function cmdFight() {
+    if (window.innerWidth < 768) {
+      dprint('> bug-hunter.exe requires desktop. try again from a larger screen.', 'muted')
+      dprint('')
+      return
+    }
+    runBootSequence(dprint, () => {
+      dprint('')
+      onBossFightOpen?.()
+    })
   }
 
   function cmdSudo(args: string) {
