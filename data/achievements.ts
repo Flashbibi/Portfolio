@@ -26,6 +26,6 @@ export const achievements: Achievement[] = [
   { id: 'reflexes',        icon: '⚡', title: 'Reflexes',         desc: 'Cancelled 10 boss projectiles in a single run.' },
 ]
 
-export const EXPLORER_PROJECTS         = ['glamos', 'fabricator', 'gletscher-player', 'turret']
+export const EXPLORER_PROJECTS         = ['glamos', 'fabricator', 'gletscher-player', 'turret', 'portfolio']
 export const LS_VISITED                = 'portfolio:visited-projects'
 export const REALITY_GLITCHER_THRESHOLD = 5
