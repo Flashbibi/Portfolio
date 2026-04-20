@@ -12,6 +12,7 @@ export default function BossFightGame() {
   const keysRef      = useRef<Set<string>>(new Set())
   const rafRef       = useRef<number>(0)
   const lastTimeRef  = useRef<number>(0)
+  const heldRef      = useRef<Set<string>>(new Set())
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -26,6 +27,7 @@ export default function BossFightGame() {
     function onKeyDown(e: KeyboardEvent) {
       const k = e.key
       keysRef.current.add(k)
+      heldRef.current.add(k)
 
       // Restart on R when not actively playing
       if ((k === 'r' || k === 'R') && stateRef.current.mode !== 'playing') {
@@ -40,6 +42,7 @@ export default function BossFightGame() {
 
     function onKeyUp(e: KeyboardEvent) {
       keysRef.current.delete(e.key)
+      heldRef.current.delete(e.key)
     }
 
     window.addEventListener('keydown', onKeyDown)
@@ -49,6 +52,8 @@ export default function BossFightGame() {
       // dt is normalized to 1.0 at 60fps; capped at 50ms to absorb tab-unfocus spikes
       const dt = Math.min(now - lastTimeRef.current, 50) / (1000 / 60)
       lastTimeRef.current = now
+      // Re-add SPACE each frame while held, so shooting is continuous
+      if (heldRef.current.has(' ')) keysRef.current.add(' ')
       update(stateRef.current, keysRef.current, dt)
       // Edge-triggered keys are consumed by update — clear them after each frame
       keysRef.current.clear()

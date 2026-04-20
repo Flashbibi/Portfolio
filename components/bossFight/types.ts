@@ -39,7 +39,41 @@ export interface Particle {
   size: number
 }
 
-export type GameMode = 'playing' | 'gameover' | 'wave3hold'
+export interface Powerup {
+  x: number
+  y: number
+  targetLane: number
+  retargetTimer: number
+  glowPhase: number
+}
+
+export interface PlayerBullet {
+  id: number
+  x: number   // center-x
+  y: number   // center-y
+  lane: number
+}
+
+export interface BossBullet {
+  id: number
+  x: number   // center-x
+  y: number   // center-y
+  lane: number
+  speed: number
+}
+
+export interface Boss {
+  x: number       // fixed left edge
+  y: number       // current center-y (bobs)
+  hp: number
+  maxHp: number
+  phase: 1 | 2 | 3
+  shootTimer: number
+  bobPhase: number
+  flashTimer: number
+}
+
+export type GameMode = 'playing' | 'powerup' | 'boss' | 'gameover' | 'victory'
 
 export interface GameState {
   mode: GameMode
@@ -55,4 +89,10 @@ export interface GameState {
   shake: number
   worldX: number
   nextId: number
+  // Boss phase fields
+  powerup: Powerup | null
+  boss: Boss | null
+  playerBullets: PlayerBullet[]
+  bossBullets: BossBullet[]
+  bossDelay: number   // -1 = not pending; >0 = counting down after powerup pickup
 }

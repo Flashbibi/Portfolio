@@ -1,5 +1,10 @@
-import { Cat, Bug, Token, Particle } from '@/components/bossFight/types'
-import { CAT_X, CAT_HP, LANES } from '@/components/bossFight/constants'
+import { Cat, Bug, Token, Particle, Boss, Powerup, PlayerBullet, BossBullet } from '@/components/bossFight/types'
+import {
+  CAT_X, CAT_HP, LANES,
+  BOSS_HP, BOSS_PHASE_1_COOLDOWN,
+  PLAYER_BULLET_W, BOSS_BULLET_W,
+  CW,
+} from '@/components/bossFight/constants'
 
 export function makeCat(): Cat {
   return {
@@ -58,4 +63,52 @@ export function spawnHitParticles(
       color,
     )
   )
+}
+
+export function spawnBurstParticles(
+  x: number, y: number, color: string, count: number,
+): Particle[] {
+  return Array.from({ length: count }, () =>
+    makeParticle(
+      x, y,
+      (Math.random() - 0.5) * 6,
+      (Math.random() - 0.5) * 6 - 2,
+      color,
+    )
+  )
+}
+
+export function makePowerup(): Powerup {
+  return {
+    x:             CW + PLAYER_BULLET_W,
+    y:             LANES[1],
+    targetLane:    1,
+    retargetTimer: 0,
+    glowPhase:     0,
+  }
+}
+
+export function makePlayerBullet(
+  id: number, x: number, y: number, lane: number,
+): PlayerBullet {
+  return { id, x, y, lane }
+}
+
+export function makeBossBullet(
+  id: number, x: number, lane: number, speed: number,
+): BossBullet {
+  return { id, x, y: LANES[lane], lane, speed }
+}
+
+export function makeBoss(): Boss {
+  return {
+    x:          CW - 160,
+    y:          LANES[1] - 20,
+    hp:         BOSS_HP,
+    maxHp:      BOSS_HP,
+    phase:      1,
+    shootTimer: BOSS_PHASE_1_COOLDOWN,
+    bobPhase:   0,
+    flashTimer: 0,
+  }
 }
