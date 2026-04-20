@@ -106,6 +106,12 @@ interface Translations {
     back: string
     detailsEmpty: string
     metaTitle: string
+    achievements: {
+      heading: string
+      showAll: (n: number) => string
+      hideLocked: string
+      empty: string
+    }
   }
 }
 
@@ -233,6 +239,12 @@ const en: Translations = {
     back:         '← back',
     detailsEmpty: 'Details coming soon.',
     metaTitle:    'Project — Linus',
+    achievements: {
+      heading:    'Achievements',
+      showAll:    (n) => `[ show all ${n} ]`,
+      hideLocked: '[ hide locked ]',
+      empty:      'No achievements unlocked yet.',
+    },
   },
 }
 
@@ -360,6 +372,12 @@ const de: Translations = {
     back:         '← zurück',
     detailsEmpty: 'Details folgen bald.',
     metaTitle:    'Projekt — Linus',
+    achievements: {
+      heading:    'Errungenschaften',
+      showAll:    (n) => `[ alle ${n} anzeigen ]`,
+      hideLocked: '[ gesperrte ausblenden ]',
+      empty:      'Noch keine Errungenschaften freigeschaltet.',
+    },
   },
 }
 

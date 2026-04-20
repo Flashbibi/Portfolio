@@ -5,58 +5,58 @@ order: 3
 
 ## Delta-Time
 
-Der Boss-Fight-Game-Loop läuft auf `requestAnimationFrame`. Der naive Ansatz — Objekte pro Frame um feste Pixelwerte bewegen — bricht zusammen, sobald die Framerate schwankt. Bei 120fps bewegt sich die Katze doppelt so schnell wie bei 60fps.
+The boss fight game loop runs on `requestAnimationFrame`. The naive approach — moving objects a fixed number of pixels per frame — breaks the moment frame rate fluctuates. At 120fps the cat moves twice as fast as at 60fps.
 
-Die Lösung: Delta-Time-Normalisierung. `dt = Math.min(elapsed, 50) / (1000/60)`. Bei 60fps ist `dt ≈ 1.0`. Bei 30fps ist `dt ≈ 2.0`, sodass Objekte pro Frame weiter reisen und die Bewegungsgeschwindigkeit konstant bleibt. Der 50ms-Cap verhindert einen Spike nach Tab-Wechsel — ohne ihn würde ein einziger Frame alles quer über den Screen schicken. Der `visibilitychange`-Handler pausiert den Loop komplett bei verstecktem Tab und resettet `lastTime` bei Rückkehr, sodass der Cap kaum je benötigt wird.
+The fix: delta-time normalization. `dt = Math.min(elapsed, 50) / (1000/60)`. At 60fps, `dt ≈ 1.0`. At 30fps, `dt ≈ 2.0`, so objects travel further per frame to keep velocity constant. The 50ms cap prevents a spike on tab switch — without it, a single frame would send everything flying across the screen. The `visibilitychange` handler pauses the loop entirely when the tab is hidden and resets `lastTime` on return, so the cap is rarely needed in practice.
 
 ---
 
 ## CSS Custom Properties Mid-Animation
 
-`GlitchText` durchläuft vier Phasen: idle → corrupt → morph → settle. Der Glow-Effekt in jeder Phase variiert nach Theme (dark/light) und Glitch-Kategorie. Naiver Ansatz: separate CSS-Klassen für jede Kombination — 3 × 2 = 6 Kombinationen, jede Animations-Regel sechsfach.
+`GlitchText` runs through four phases: idle → corrupt → morph → settle. The glow effect in each phase varies by theme (dark/light) and glitch category. The naive approach: separate CSS classes per combination — 3 × 2 = 6 combinations, every animation rule multiplied by 6.
 
-Stattdessen setzt `GlitchText.tsx` `--gw` und `--gs` als Inline-CSS-Custom-Properties auf dem Span. Die CSS-Keyframes referenzieren `var(--gw)` — zum Beispiel in `gFadeOut`. CSS Custom Properties werden per Frame zur Computed-Style-Zeit aufgelöst, nicht beim Start der Animation. Das bedeutet: ändert sich `--gw` mitten in einer laufenden Animation (Phasenwechsel, Theme-Switch), liest die Animation sofort den neuen Wert. Ein Set Keyframes, null Klassen-Kombinationen.
+Instead, `GlitchText.tsx` sets `--gw` and `--gs` as inline CSS custom properties on the span. The CSS keyframes reference `var(--gw)` — for example in `gFadeOut`. CSS custom properties are resolved at computed-style time per frame, not at animation start. That means if `--gw` changes mid-animation (phase transition, theme switch), the animation reads the new value immediately. One keyframe set. No class combinations.
 
 ---
 
-## Lokale LLMs, warum nicht
+## Local LLMs — Why Not
 
-Der ursprüngliche Plan war ein lokales LLM (Ollama + Mistral) — kein API-Key, keine Kosten, vollständige Kontrolle. Das Problem: das Portfolio läuft auf Vercel. Vercel Serverless Functions haben ein 50MB Deployment-Limit, kein persistenter Prozess, kein laufender Inference-Server. Selbst quantisierte Modelle bei 1–2GB funktionieren nicht. Eine eigene VPS bedeutet permanente Infrastruktur.
+The original plan was a local LLM (Ollama + Mistral) — no API key, no cost, full control. The problem: the portfolio runs on Vercel. Vercel serverless functions have a 50MB deployment limit, no persistent process, no running inference server. Even quantized models at 1–2GB don't fit. A separate VPS means permanent infrastructure to maintain.
 
-Die Alternative: Anthropic Claude Haiku 4.5 via API. Haiku streamt in ~300ms, ist günstig genug für Portfolio-Traffic, und braucht nur einen Env-Var. Die Streaming-Response wird direkt durch eine Next.js API-Route durchgeleitet — kein Buffering, kein komplettes Abwarten. Rate-Limiting: 20 Nachrichten pro IP/Stunde via Upstash Redis (auch serverless, kein Persistent-State-Problem). Der Trade-Off ist bewusst: Abhängigkeit gegen Zuverlässigkeit.
+The alternative: Anthropic Claude Haiku 4.5 via API. Haiku streams in ~300ms, is cheap enough for portfolio traffic, and needs only one environment variable. The streaming response flows directly through a Next.js API route — no buffering, no waiting for a full completion. Rate limiting: 20 messages per IP per hour, tracked via Upstash Redis (also serverless — no persistent state problem). The trade-off is deliberate: dependency for reliability.
 
 ---
 
 ## Shown vs. Found Achievements
 
-Das System hat 18 Achievements. Nicht alle sollten vorab sichtbar sein — `curious`, `dog-cat`, `destroyer` funktionieren nur als Überraschung. Zwei konkurrierende UX-Ziele: Gamification braucht Sichtbarkeit (Nutzer, die nicht wissen dass es Achievements gibt, werden keine suchen), aber vollständige Transparenz macht die Discoveries mechanisch.
+The system has 18 achievements. Not all of them should be telegraphed upfront — `curious`, `dog-cat`, and `destroyer` only work as surprises. Two competing UX goals: gamification needs visibility (users who don't know achievements exist won't look for them), but full transparency makes discoveries mechanical.
 
-Lösung: Progressive Disclosure in zwei Stufen. **Default**: nur freigeschaltete Achievements sichtbar. Kein leeres Panel — `first-boot` wird automatisch beim ersten Besuch entsperrt. **Opt-in**: "Show all" enthüllt gesperrte Achievements mit Name, aber die Descriptions bleiben verborgen. Das sagt "es gibt etwas" ohne das Wie zu spoilern. **Session-scoped**: `sessionStorage` resettet den Reveal-State pro Session — wer die Discovery-Erfahrung beim nächsten Besuch frisch haben will, bekommt sie.
+The solution: progressive disclosure in two layers. **Default**: only unlocked achievements are visible. The panel is never empty — `first-boot` unlocks automatically on first visit. **Opt-in**: "show all" reveals locked entries by name, but descriptions stay hidden. That signals something exists without spoiling the how. **Session-scoped**: `sessionStorage` resets the reveal state per session — users who want the discovery experience fresh on their next visit get it.
 
 ---
 
-## Background-Iterationen
+## Background Iterations
 
-Drei Iterationen, keine davon hat sich richtig angefühlt.
+Three iterations, none of them felt right.
 
-**v1** — Canvas-Partikel mit Verbindungslinien. Klassisch, sofort generisch.
-**v2** — CSS-Noise-Overlay. Subtil, ohne Beitrag.
-**v3** — Statisches Linienraster. Sauber, aber tot.
+**v1** — Canvas particles with connecting lines. Classic. Immediately generic.
+**v2** — CSS noise overlay. Subtle, contributing nothing.
+**v3** — Static line grid. Clean, but dead.
 
-Jede Iteration hatte mehr Technik als die vorherige. Keine kam näher an das Ziel.
+Each iteration added more than the last. None got closer to the goal.
 
-Die finale Lösung: zwei CSS-Pseudo-Elemente (vertikale Linie + rotiertes Quadrat) plus ein `radial-gradient`-Spotlight, das dem Cursor via `mousemove` folgt. ~30 Zeilen CSS, ein `useState`.
+The final version: two CSS pseudo-elements (a vertical rule and a rotated square) plus a `radial-gradient` spotlight that follows the cursor via `mousemove`. ~30 lines of CSS, one `useState`.
 
-Der Effekt kam nicht durch mehr Technik, sondern durch weniger.
+The effect came from doing less, not more.
 
 ---
 
 ## Auto-Playing Terminal
 
-`TerminalIntro` spielt beim ersten Laden eine geskriptete Boot-Sequenz ab: Mount-Messages, `ls`, `cd`, Language-Dialog, Theme-Dialog, `./portfolio.sh`. ~8 Sekunden. Drei technische Herausforderungen:
+`TerminalIntro` plays a scripted boot sequence on first load: mount messages, `ls`, `cd`, language dialog, theme dialog, `./portfolio.sh`. About 8 seconds. Three technical challenges:
 
-**Abort-Korrektheit**: Der User kann jederzeit skippen. `skippedRef.current = true` wird nach jedem `await delay()` und nach jedem getippten Zeichen in `typeCmd` gecheckt. Ohne das würde die async Sequenz im Hintergrund weiterlaufen und DOM-Nodes an einen bereits unmounted Div appenden.
+**Abort correctness**: The user can skip at any point. `skippedRef.current = true` is checked after every `await delay()` and every character typed in `typeCmd`. Without this, the async sequence keeps running in the background, appending DOM nodes to an already-unmounted div.
 
-**Dialog-Interruption**: `waitForDialog` returned ein Promise, das bei Tastendruck oder Klick resolved. Beim Skip ruft `cleanupChoice.current()` das Promise mit dem Default-Wert auf und entfernt alle Event-Listener — keine dangling Handlers.
+**Dialog interruption**: `waitForDialog` returns a promise that resolves on keypress or click. On skip, `cleanupChoice.current()` resolves the pending promise with its default value and removes all event listeners — no dangling handlers.
 
-**State-Propagation ohne React-Kontext**: Language und Theme werden via `localStorage` + DOM-Attribute + Custom Events (`portfolio:lang-set`, `portfolio:theme-change`) gesetzt. Der Rest der App lauscht auf diese Events. Das entkoppelt die Intro-Sequenz vollständig vom React-State-Baum.
+**State propagation without React context**: Language and theme are set via `localStorage` + DOM attributes + custom events (`portfolio:lang-set`, `portfolio:theme-change`). The rest of the app listens for these events. This decouples the intro sequence from the React state tree entirely.

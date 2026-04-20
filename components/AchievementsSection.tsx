@@ -3,12 +3,16 @@
 import { useEffect, useState } from 'react'
 import { achievements } from '@/data/achievements'
 import { useAchievement } from '@/context/AchievementContext'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/data/translations'
 import styles from './AchievementsSection.module.css'
 
 const SS_KEY = 'portfolio:achievements-reveal'
 
 export default function AchievementsSection() {
   const { unlocked } = useAchievement()
+  const { lang } = useLang()
+  const t = translations[lang].projectDetail.achievements
   const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
@@ -32,12 +36,12 @@ export default function AchievementsSection() {
   return (
     <div className={styles.section}>
       <div className={styles.header}>
-        <span className={styles.label}>Achievements</span>
+        <span className={styles.label}>{t.heading}</span>
         <span className={styles.count}>{unlocked.size} / {achievements.length}</span>
       </div>
 
       {visible.length === 0 && (
-        <p className={styles.empty}>No achievements unlocked yet.</p>
+        <p className={styles.empty}>{t.empty}</p>
       )}
 
       <div className={styles.grid}>
@@ -59,7 +63,7 @@ export default function AchievementsSection() {
       </div>
 
       <button className={styles.toggle} onClick={toggleShowAll}>
-        {showAll ? '[ hide locked ]' : `[ show all ${achievements.length} ]`}
+        {showAll ? t.hideLocked : t.showAll(achievements.length)}
       </button>
     </div>
   )
