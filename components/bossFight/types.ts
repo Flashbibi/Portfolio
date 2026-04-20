@@ -76,6 +76,11 @@ export interface Boss {
 export type GameMode = 'playing' | 'powerup' | 'boss' | 'gameover' | 'victory'
 export type WaveSubState = 'active' | 'cooldown' | 'banner'
 
+export interface RunStats {
+  tokensCollected:     number
+  projectilesCancelled: number
+}
+
 export interface GameState {
   mode: GameMode
   wave: 1 | 2
@@ -99,4 +104,5 @@ export interface GameState {
   playerBullets: PlayerBullet[]
   bossBullets: BossBullet[]
   bossDelay: number   // -1 = not pending; >0 = counting down after powerup pickup
+  runStats: RunStats
 }

@@ -5,14 +5,18 @@ import { CW, CH } from '@/components/bossFight/constants'
 import { GameState } from '@/components/bossFight/types'
 import { createInitialState, update, draw } from '@/lib/bossFight/gameLoop'
 import { loadCatSprite } from '@/lib/bossFight/catSprite'
+import { useAchievement } from '@/context/AchievementContext'
 
 export default function BossFightGame() {
-  const canvasRef    = useRef<HTMLCanvasElement>(null)
-  const stateRef     = useRef<GameState>(createInitialState())
-  const keysRef      = useRef<Set<string>>(new Set())
-  const rafRef       = useRef<number>(0)
-  const lastTimeRef  = useRef<number>(0)
-  const heldRef      = useRef<Set<string>>(new Set())
+  const canvasRef      = useRef<HTMLCanvasElement>(null)
+  const stateRef       = useRef<GameState>(createInitialState())
+  const keysRef        = useRef<Set<string>>(new Set())
+  const rafRef         = useRef<number>(0)
+  const lastTimeRef    = useRef<number>(0)
+  const heldRef        = useRef<Set<string>>(new Set())
+  const { unlock }     = useAchievement()
+  const unlockRef      = useRef(unlock)
+  unlockRef.current    = unlock
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -54,7 +58,7 @@ export default function BossFightGame() {
       lastTimeRef.current = now
       // Re-add SPACE each frame while held, so shooting is continuous
       if (heldRef.current.has(' ')) keysRef.current.add(' ')
-      update(stateRef.current, keysRef.current, dt)
+      update(stateRef.current, keysRef.current, dt, (id) => unlockRef.current(id))
       // Edge-triggered keys are consumed by update — clear them after each frame
       keysRef.current.clear()
       draw(ctx!, stateRef.current)

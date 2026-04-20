@@ -1,4 +1,4 @@
-import { GameState, GameMode, Boss } from '@/components/bossFight/types'
+import { GameState, GameMode, Boss, RunStats } from '@/components/bossFight/types'
 import {
   LANES, LANE_LERP, ANIM_PERIOD,
   CAT_IFRAMES, CAT_W,
@@ -42,6 +42,10 @@ import { drawParticles, drawTokens, getShakeOffset } from '@/lib/bossFight/drawi
 
 // ─── Initial state ──────────────────────────────────────────────────────────
 
+function makeRunStats(): RunStats {
+  return { tokensCollected: 0, projectilesCancelled: 0 }
+}
+
 export function createInitialState(): GameState {
   return {
     mode:          'playing',
@@ -65,6 +69,7 @@ export function createInitialState(): GameState {
     playerBullets: [],
     bossBullets:   [],
     bossDelay:     -1,
+    runStats:      makeRunStats(),
   }
 }
 
@@ -78,11 +83,11 @@ function randomTokenInterval(): number {
 
 // ─── Update ─────────────────────────────────────────────────────────────────
 
-export function update(state: GameState, keys: Set<string>, dt: number): void {
+export function update(state: GameState, keys: Set<string>, dt: number, onAchievement?: (id: string) => void): void {
   if (state.mode === 'gameover' || state.mode === 'victory') return
 
   if (state.mode === 'powerup') { updatePowerupPhase(state, keys, dt); return }
-  if (state.mode === 'boss')    { updateBossPhase(state, keys, dt);    return }
+  if (state.mode === 'boss')    { updateBossPhase(state, keys, dt, onAchievement); return }
 
   // ── Playing mode (waves 1 & 2) ──
 
@@ -134,6 +139,8 @@ export function update(state: GameState, keys: Set<string>, dt: number): void {
       state.score += TOKEN_SCORE
       state.particles.push(...spawnHitParticles(state.tokens[i].x, state.tokens[i].y, C.amber))
       state.tokens.splice(i, 1)
+      state.runStats.tokensCollected += 1
+      if (state.runStats.tokensCollected === 50) onAchievement?.('token-collector')
     }
   }
 
@@ -247,7 +254,7 @@ function updatePowerupPhase(state: GameState, keys: Set<string>, dt: number): vo
 
 // ─── Boss phase ─────────────────────────────────────────────────────────────
 
-function updateBossPhase(state: GameState, keys: Set<string>, dt: number): void {
+function updateBossPhase(state: GameState, keys: Set<string>, dt: number, onAchievement?: (id: string) => void): void {
   tickCatCommon(state, keys, dt)
 
   const boss = state.boss!
@@ -311,6 +318,8 @@ function updateBossPhase(state: GameState, keys: Set<string>, dt: number): void 
         state.particles.push(...spawnHitParticles(pb.x, pb.y, C.amber))
         state.playerBullets.splice(pi, 1)
         state.bossBullets.splice(bi, 1)
+        state.runStats.projectilesCancelled += 1
+        if (state.runStats.projectilesCancelled === 10) onAchievement?.('reflexes')
         continue outer
       }
     }
@@ -346,6 +355,8 @@ function updateBossPhase(state: GameState, keys: Set<string>, dt: number): void 
         state.shake  = BOSS_DEFEAT_SHAKE
         state.particles.push(...spawnBurstParticles(boss.x + BOSS_W / 2, boss.y, C.green, 30))
         state.mode   = 'victory'
+        onAchievement?.('exterminator')
+        if (state.cat.hp === 3) onAchievement?.('flawless-victory')
         return
       }
     }

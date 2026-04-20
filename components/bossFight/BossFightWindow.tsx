@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './BossFightWindow.module.css'
+import { useAchievement } from '@/context/AchievementContext'
 
 interface Props {
   onClose: () => void
@@ -9,9 +10,12 @@ interface Props {
 }
 
 export default function BossFightWindow({ onClose, children }: Props) {
-  const windowRef = useRef<HTMLDivElement>(null)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const windowRef      = useRef<HTMLDivElement>(null)
+  const [pos, setPos]  = useState({ x: 0, y: 0 })
   const [visible, setVisible] = useState(false)
+  const { unlock }     = useAchievement()
+
+  useEffect(() => { unlock('bug-hunter') }, [unlock])
 
   useEffect(() => {
     const el = windowRef.current
