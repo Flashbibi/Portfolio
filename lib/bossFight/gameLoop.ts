@@ -587,8 +587,8 @@ function drawStartScreen(ctx: CanvasRenderingContext2D, state: GameState): void 
   // Subtitle
   ctx.globalAlpha = 0.75
   ctx.fillStyle = C.amber
-  ctx.font = '14px monospace'
-  ctx.fillText('a cat vs. segfault story', CW / 2, 128)
+  ctx.font = '18px monospace'
+  ctx.fillText('a cat vs. segfault story', CW / 2, 135)
   ctx.globalAlpha = 1
 
   // Controls block (left-aligned, centered region)
@@ -599,12 +599,12 @@ function drawStartScreen(ctx: CanvasRenderingContext2D, state: GameState): void 
     'ESC    exit',
   ]
   ctx.fillStyle = C.cyanDim
-  ctx.font = '12px monospace'
+  ctx.font = '18px monospace'
   ctx.textAlign = 'left'
   ctx.textBaseline = 'top'
-  const blockX = CW / 2 - 110
+  const blockX = CW / 2 - 140
   for (let i = 0; i < controlLines.length; i++) {
-    ctx.fillText(controlLines[i], blockX, 175 + i * 22)
+    ctx.fillText(controlLines[i], blockX, 160 + i * 28)
   }
 
   // Blinking prompt
@@ -612,7 +612,7 @@ function drawStartScreen(ctx: CanvasRenderingContext2D, state: GameState): void 
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = C.white
-    ctx.font = '14px monospace'
+    ctx.font = '18px monospace'
     ctx.fillText('PRESS SPACE TO START', CW / 2, 320)
   }
 
@@ -623,7 +623,7 @@ function drawStartScreen(ctx: CanvasRenderingContext2D, state: GameState): void 
 
 function drawStatLine(ctx: CanvasRenderingContext2D, label: string, value: string, y: number): void {
   ctx.globalAlpha  = 0.85
-  ctx.font         = '12px monospace'
+  ctx.font         = '20px monospace'
   ctx.textBaseline = 'middle'
   ctx.fillStyle    = C.white
   ctx.textAlign    = 'right'
@@ -649,13 +649,13 @@ function drawVictory(ctx: CanvasRenderingContext2D, state: GameState): void {
 
   ctx.globalAlpha = 0.8
   ctx.fillStyle = C.amber
-  ctx.font = '13px monospace'
-  ctx.fillText('the segfault has been resolved', CW / 2, 120)
+  ctx.font = '18px monospace'
+  ctx.fillText('the segfault has been resolved', CW / 2, 130)
   ctx.globalAlpha = 1
 
   const { tokensCollected, projectilesCancelled, damageTaken } = state.runStats
-  const statsY = 153
-  const lineH  = 22
+  const statsY = 157
+  const lineH  = 28
   drawStatLine(ctx, 'final score:', String(state.score).padStart(6, '0'), statsY)
   drawStatLine(ctx, 'tokens collected:', String(tokensCollected),         statsY + lineH)
   drawStatLine(ctx, 'bullets cancelled:', String(projectilesCancelled),   statsY + lineH * 2)
@@ -663,10 +663,10 @@ function drawVictory(ctx: CanvasRenderingContext2D, state: GameState): void {
 
   if (Math.floor(state.blinkTick / 30) % 2 === 0) {
     ctx.fillStyle    = C.cyanDim
-    ctx.font         = '11px monospace'
+    ctx.font         = '18px monospace'
     ctx.textAlign    = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText('PRESS R TO PLAY AGAIN   /   ESC TO EXIT', CW / 2, 318)
+    ctx.fillText('PRESS R TO PLAY AGAIN   /   ESC TO EXIT', CW / 2, 310)
   }
 
   ctx.restore()
@@ -688,13 +688,13 @@ function drawGameOver(ctx: CanvasRenderingContext2D, state: GameState): void {
 
   ctx.globalAlpha = 0.65
   ctx.fillStyle = '#cc4455'
-  ctx.font = '13px monospace'
-  ctx.fillText('debug failed', CW / 2, 125)
+  ctx.font = '18px monospace'
+  ctx.fillText('debug failed', CW / 2, 130)
   ctx.globalAlpha = 1
 
   const { tokensCollected, damageTaken, waveReached } = state.runStats
-  const statsY = 158
-  const lineH  = 22
+  const statsY = 163
+  const lineH  = 28
   drawStatLine(ctx, 'final score:', String(state.score).padStart(6, '0'), statsY)
   drawStatLine(ctx, 'tokens:', String(tokensCollected),                   statsY + lineH)
   drawStatLine(ctx, 'damage taken:', `${damageTaken} / 3`,               statsY + lineH * 2)
@@ -702,10 +702,10 @@ function drawGameOver(ctx: CanvasRenderingContext2D, state: GameState): void {
 
   if (Math.floor(state.blinkTick / 30) % 2 === 0) {
     ctx.fillStyle    = C.cyanDim
-    ctx.font         = '11px monospace'
+    ctx.font         = '18px monospace'
     ctx.textAlign    = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText('PRESS R TO TRY AGAIN   /   ESC TO EXIT', CW / 2, 318)
+    ctx.fillText('PRESS R TO TRY AGAIN   /   ESC TO EXIT', CW / 2, 310)
   }
 
   ctx.restore()
