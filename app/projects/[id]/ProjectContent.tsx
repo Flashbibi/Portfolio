@@ -10,9 +10,9 @@ import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
+import AchievementsSection from '@/components/AchievementsSection'
 
 const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false })
-import AchievementsSection from '@/components/AchievementsSection'
 
 interface Props {
   project: Project
