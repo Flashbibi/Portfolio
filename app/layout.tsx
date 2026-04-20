@@ -3,6 +3,7 @@ import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { AchievementProvider } from '@/context/AchievementContext'
+import { GlitchProvider } from '@/context/GlitchContext'
 import AchievementToast from '@/components/AchievementToast'
 
 export const metadata: Metadata = {
@@ -52,7 +53,9 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <AchievementProvider>
-              {children}
+              <GlitchProvider>
+                {children}
+              </GlitchProvider>
               <AchievementToast />
             </AchievementProvider>
           </LanguageProvider>

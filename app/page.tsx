@@ -11,6 +11,8 @@ import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
 import AiMascot from '@/components/AiMascot'
 import AiChat   from '@/components/AiChat'
+import BossFightWindow from '@/components/bossFight/BossFightWindow'
+import BossFightGame   from '@/components/bossFight/BossFightGame'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
@@ -20,10 +22,11 @@ const INTRO_SEEN_KEY = 'portfolio:intro-seen'
 export default function Home() {
   const { lang, isGlitching } = useLang()
   const t = translations[lang].footer
-  const [introDone,    setIntroDone]    = useState(false)
-  const [drawerOpen,   setDrawerOpen]   = useState(false)
-  const [isDestroying, setIsDestroying] = useState(false)
-  const [chatOpen,     setChatOpen]     = useState(false)
+  const [introDone,      setIntroDone]      = useState(false)
+  const [drawerOpen,     setDrawerOpen]     = useState(false)
+  const [isDestroying,   setIsDestroying]   = useState(false)
+  const [chatOpen,       setChatOpen]       = useState(false)
+  const [bossFightOpen,  setBossFightOpen]  = useState(false)
 
   useEffect(() => {
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === '1') {
@@ -83,7 +86,14 @@ useEffect(() => {
       <TerminalDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        onBossFightOpen={() => setBossFightOpen(true)}
       />
+
+      {bossFightOpen && (
+        <BossFightWindow onClose={() => setBossFightOpen(false)}>
+          <BossFightGame />
+        </BossFightWindow>
+      )}
 
       <AiMascot onClick={() => setChatOpen(prev => !prev)} chatOpen={chatOpen} terminalOpen={drawerOpen} />
       <AiChat open={chatOpen} onClose={() => setChatOpen(false)} terminalOpen={drawerOpen} />

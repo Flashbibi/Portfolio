@@ -18,7 +18,14 @@ export const achievements: Achievement[] = [
   { id: 'cat-whisperer',  icon: '💬', title: 'Cat Whisperer',     desc: 'Had a chat with the mascot.'            },
   { id: 'explorer',       icon: '🗺️', title: 'Explorer',          desc: 'Visited every project page.'            },
   { id: 'tab-master',     icon: '⌨️', title: 'Tab Master',        desc: 'Used tab autocomplete in the terminal.' },
+  { id: 'reality-glitcher', icon: '🌀', title: 'Reality Glitcher', desc: 'Found cracks in the simulation.'        },
+  { id: 'bug-hunter',      icon: '🐛', title: 'Bug Hunter',       desc: 'Entered the fight.'                      },
+  { id: 'exterminator',    icon: '☠️', title: 'Exterminator',     desc: 'Defeated the Segfault.'                  },
+  { id: 'flawless-victory',icon: '✨', title: 'Flawless Victory', desc: 'Defeated the Segfault without taking damage.' },
+  { id: 'token-collector', icon: '🪙', title: 'Token Collector',  desc: 'Collected 50 tokens in a single run.'    },
+  { id: 'reflexes',        icon: '⚡', title: 'Reflexes',         desc: 'Cancelled 10 boss projectiles in a single run.' },
 ]
 
-export const EXPLORER_PROJECTS = ['glamos', 'fabricator', 'gletscher-player', 'turret']
-export const LS_VISITED        = 'portfolio:visited-projects'
+export const EXPLORER_PROJECTS         = ['glamos', 'fabricator', 'gletscher-player', 'turret']
+export const LS_VISITED                = 'portfolio:visited-projects'
+export const REALITY_GLITCHER_THRESHOLD = 5

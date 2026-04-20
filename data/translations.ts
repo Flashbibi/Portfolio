@@ -92,7 +92,10 @@ interface Translations {
     error:        string
     rateLimited:  string
     clear:        string
+    clearLabel:   string
     copied:       string
+    open:         string
+    close:        string
     suggestions:  string[]
   }
   footer: {
@@ -215,7 +218,10 @@ const en: Translations = {
     error:       "Error — please try again.",
     rateLimited: "Too many requests — try again in an hour.",
     clear:       'clear',
+    clearLabel:  'Clear chat',
     copied:      'copied!',
+    open:        'Open chat',
+    close:       'Close',
     suggestions: [
       "What are your skills?",
       "Tell me about your projects",
@@ -339,7 +345,10 @@ const de: Translations = {
     error:       "Fehler — versuch's nochmal.",
     rateLimited: "Zu viele Anfragen — versuch's in einer Stunde nochmal.",
     clear:       'leeren',
+    clearLabel:  'Chat löschen',
     copied:      'kopiert!',
+    open:        'Chat öffnen',
+    close:       'Schliessen',
     suggestions: [
       "Was sind deine Fähigkeiten?",
       "Erzähl mir von deinen Projekten",

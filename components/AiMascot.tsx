@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './AiMascot.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { useAchievement } from '@/context/AchievementContext'
+import { translations } from '@/data/translations'
 
 const MESSAGES = {
   de: [
@@ -170,6 +171,7 @@ interface Props {
 export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
   const { lang } = useLang()
   const { unlock } = useAchievement()
+  const t = translations[lang].chat
   const canvasRef  = useRef<HTMLCanvasElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const tintedRef  = useRef<HTMLCanvasElement | null>(null)
@@ -450,7 +452,7 @@ export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
     }
     scheduleNext()
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [])
+  }, [lang])
 
   // ── Inactivity → liedown ──────────────────────────────────────────────────
   useEffect(() => {
@@ -493,7 +495,7 @@ export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
       return () => clearTimeout(t)
     }
     prevTerminalRef.current = terminalOpen
-  }, [terminalOpen])
+  }, [terminalOpen, lang])
 
   return (
     <>
@@ -512,7 +514,7 @@ export default function AiMascot({ onClick, chatOpen, terminalOpen }: Props) {
         onMouseEnter={() => { hoveredRef.current = true;  setHovered(true)  }}
         onMouseLeave={() => { hoveredRef.current = false; setHovered(false) }}
         role="button"
-        aria-label="Chat öffnen"
+        aria-label={t.open}
       >
         <canvas
           ref={canvasRef}
