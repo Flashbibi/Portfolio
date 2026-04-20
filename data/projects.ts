@@ -122,8 +122,23 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'next',
+    id: 'portfolio',
     num: '005',
+    title: 'Portfolio',
+    titleLine2: { en: 'This Site', de: 'Diese Seite' },
+    description: {
+      en: 'This site. Next.js + TypeScript, terminal drawer, boss fight easter egg, achievements, AI chat, and an ever-evolving design.',
+      de: 'Diese Seite. Next.js + TypeScript, Terminal-Drawer, Boss-Fight-Easter-Egg, Achievements, AI-Chat und ein stetig wachsendes Design.',
+    },
+    tags: { en: ['Next.js', 'TypeScript', 'CSS Modules'], de: ['Next.js', 'TypeScript', 'CSS Modules'] },
+    status: 'wip',
+    category: 'software',
+    origin: 'home',
+    details: { en: [], de: [] },
+  },
+  {
+    id: 'next',
+    num: '006',
     title: 'Next',
     titleLine2: { en: 'Project', de: 'Projekt' },
     description: {
@@ -181,6 +196,10 @@ export const filesystem: FsNode = {
                 'README.md':   { type: 'file' },
                 'v8_notes.md': { type: 'file' },
               },
+            },
+            portfolio: {
+              type: 'dir',
+              children: { 'README.md': { type: 'file' } },
             },
           },
         },
