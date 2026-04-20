@@ -43,34 +43,40 @@ import { drawParticles, drawTokens, getShakeOffset } from '@/lib/bossFight/drawi
 // ─── Initial state ──────────────────────────────────────────────────────────
 
 function makeRunStats(): RunStats {
-  return { tokensCollected: 0, projectilesCancelled: 0 }
+  return { tokensCollected: 0, projectilesCancelled: 0, damageTaken: 0, waveReached: 'WAVE 1' }
 }
 
 export function createInitialState(): GameState {
   return {
-    mode:          'playing',
-    wave:          1,
-    waveTimer:     WAVE_1_DURATION,
-    waveSubState:  'active',
-    cooldownTimer: 0,
-    bannerTimer:   0,
-    score:         0,
-    cat:           makeCat(),
-    bugs:          [],
-    tokens:        [],
-    particles:     [],
-    spawnTimer:    spawnInterval(1),
-    tokenTimer:    randomTokenInterval(),
-    shake:         0,
-    worldX:        0,
-    nextId:        1,
-    powerup:       null,
-    boss:          null,
-    playerBullets: [],
-    bossBullets:   [],
-    bossDelay:     -1,
-    runStats:      makeRunStats(),
+    mode:               'startScreen',
+    wave:               1,
+    waveTimer:          WAVE_1_DURATION,
+    waveSubState:       'active',
+    cooldownTimer:      0,
+    bannerTimer:        0,
+    score:              0,
+    cat:                makeCat(),
+    bugs:               [],
+    tokens:             [],
+    particles:          [],
+    spawnTimer:         spawnInterval(1),
+    tokenTimer:         randomTokenInterval(),
+    shake:              0,
+    worldX:             0,
+    nextId:             1,
+    powerup:            null,
+    boss:               null,
+    playerBullets:      [],
+    bossBullets:        [],
+    bossDelay:          -1,
+    runStats:           makeRunStats(),
+    blinkTick:          0,
+    victoryBurstTimer:  60,
   }
+}
+
+export function createPlayingState(): GameState {
+  return { ...createInitialState(), mode: 'playing' }
 }
 
 function spawnInterval(wave: 1 | 2): number {
@@ -84,7 +90,27 @@ function randomTokenInterval(): number {
 // ─── Update ─────────────────────────────────────────────────────────────────
 
 export function update(state: GameState, keys: Set<string>, dt: number, onAchievement?: (id: string) => void): void {
-  if (state.mode === 'gameover' || state.mode === 'victory') return
+  state.blinkTick += dt
+
+  // ── Start screen: only scroll background, wait for SPACE ──
+  if (state.mode === 'startScreen') {
+    state.worldX += BG_SCROLL_SPEED * dt
+    if (keys.has(' ')) {
+      state.mode      = 'playing'
+      state.blinkTick = 0
+    }
+    return
+  }
+
+  // ── End states: keep particles alive, victory gets periodic bursts ──
+  if (state.mode === 'gameover') {
+    tickParticles(state, dt)
+    return
+  }
+  if (state.mode === 'victory') {
+    updateVictoryIdle(state, dt)
+    return
+  }
 
   if (state.mode === 'powerup') { updatePowerupPhase(state, keys, dt); return }
   if (state.mode === 'boss')    { updateBossPhase(state, keys, dt, onAchievement); return }
@@ -124,9 +150,10 @@ export function update(state: GameState, keys: Set<string>, dt: number, onAchiev
   if (state.cat.iframes <= 0) {
     for (const bug of state.bugs) {
       if (catHitsBug(state.cat, bug)) {
-        state.cat.hp      -= 1
-        state.cat.iframes  = CAT_IFRAMES
-        state.shake        = SHAKE_ON_HIT
+        state.cat.hp               -= 1
+        state.runStats.damageTaken += 1
+        state.cat.iframes           = CAT_IFRAMES
+        state.shake                 = SHAKE_ON_HIT
         state.particles.push(...spawnHitParticles(state.cat.x + CAT_W / 2, state.cat.y, C.red))
         break
       }
@@ -192,13 +219,15 @@ export function update(state: GameState, keys: Set<string>, dt: number, onAchiev
     state.bannerTimer -= dt
     if (state.bannerTimer <= 0) {
       if (state.wave === 1) {
-        state.wave         = 2
-        state.waveTimer    = WAVE_2_DURATION
-        state.waveSubState = 'active'
-        state.spawnTimer   = spawnInterval(2)
+        state.wave                 = 2
+        state.waveTimer            = WAVE_2_DURATION
+        state.waveSubState         = 'active'
+        state.spawnTimer           = spawnInterval(2)
+        state.runStats.waveReached = 'WAVE 2'
       } else {
-        state.mode    = 'powerup'
-        state.powerup = makePowerup()
+        state.mode                 = 'powerup'
+        state.powerup              = makePowerup()
+        state.runStats.waveReached = 'WAVE 3'
       }
     }
   }
@@ -206,6 +235,19 @@ export function update(state: GameState, keys: Set<string>, dt: number, onAchiev
   // Scroll + shake
   state.worldX += BG_SCROLL_SPEED * dt
   state.shake   = Math.max(0, state.shake - SHAKE_DECAY * dt)
+}
+
+// ─── Victory idle (particles + periodic green burst) ────────────────────────
+
+function updateVictoryIdle(state: GameState, dt: number): void {
+  state.victoryBurstTimer -= dt
+  if (state.victoryBurstTimer <= 0) {
+    state.victoryBurstTimer = 60
+    const x = CW * 0.25 + Math.random() * CW * 0.5
+    const y = CH * 0.2  + Math.random() * CH * 0.4
+    state.particles.push(...spawnBurstParticles(x, y, C.green, 8))
+  }
+  tickParticles(state, dt)
 }
 
 // ─── Powerup phase ──────────────────────────────────────────────────────────
@@ -244,9 +286,10 @@ function updatePowerupPhase(state: GameState, keys: Set<string>, dt: number): vo
     if (state.bossDelay > 0) {
       state.bossDelay -= dt
       if (state.bossDelay <= 0) {
-        state.bossDelay = -1
-        state.mode      = 'boss'
-        state.boss      = makeBoss()
+        state.bossDelay              = -1
+        state.mode                   = 'boss'
+        state.boss                   = makeBoss()
+        state.runStats.waveReached   = 'BOSS'
       }
     }
   }
@@ -337,14 +380,14 @@ function updateBossPhase(state: GameState, keys: Set<string>, dt: number, onAchi
       // Phase transition
       const ratio = boss.hp / boss.maxHp
       if (boss.phase === 1 && ratio <= BOSS_PHASE_2_THRESHOLD) {
-        boss.phase       = 2
-        boss.flashTimer  = BOSS_PHASE_FLASH_DURATION
-        boss.shootTimer  = BOSS_PHASE_2_COOLDOWN
+        boss.phase        = 2
+        boss.flashTimer   = BOSS_PHASE_FLASH_DURATION
+        boss.shootTimer   = BOSS_PHASE_2_COOLDOWN
         state.bossBullets = []
       } else if (boss.phase === 2 && ratio <= BOSS_PHASE_3_THRESHOLD) {
-        boss.phase       = 3
-        boss.flashTimer  = BOSS_PHASE_FLASH_DURATION
-        boss.shootTimer  = BOSS_PHASE_3_COOLDOWN
+        boss.phase        = 3
+        boss.flashTimer   = BOSS_PHASE_FLASH_DURATION
+        boss.shootTimer   = BOSS_PHASE_3_COOLDOWN
         state.bossBullets = []
       }
 
@@ -366,9 +409,10 @@ function updateBossPhase(state: GameState, keys: Set<string>, dt: number, onAchi
   if (state.cat.iframes <= 0) {
     for (let bi = state.bossBullets.length - 1; bi >= 0; bi--) {
       if (catHitsBossBullet(state.cat, state.bossBullets[bi])) {
-        state.cat.hp      -= 1
-        state.cat.iframes  = CAT_IFRAMES
-        state.shake        = BOSS_HIT_SHAKE
+        state.cat.hp               -= 1
+        state.runStats.damageTaken += 1
+        state.cat.iframes           = CAT_IFRAMES
+        state.shake                 = BOSS_HIT_SHAKE
         state.particles.push(...spawnHitParticles(state.cat.x + CAT_W / 2, state.cat.y, C.red))
         state.bossBullets.splice(bi, 1)
         break
@@ -383,7 +427,6 @@ function updateBossPhase(state: GameState, keys: Set<string>, dt: number, onAchi
 // ─── Shared helpers ──────────────────────────────────────────────────────────
 
 function tickCatCommon(state: GameState, keys: Set<string>, dt: number): void {
-  // Lane input
   const wantUp   = keys.has('ArrowUp')   || keys.has('w') || keys.has('W')
   const wantDown = keys.has('ArrowDown') || keys.has('s') || keys.has('S')
   if (wantUp   && state.cat.lane > 0) state.cat.lane -= 1
@@ -423,6 +466,13 @@ function isSafeLane(lane: number, bugs: GameState['bugs']): boolean {
 // ─── Draw ────────────────────────────────────────────────────────────────────
 
 export function draw(ctx: CanvasRenderingContext2D, state: GameState): void {
+  // Start screen: scrolling background + title overlay, no gameplay elements
+  if (state.mode === 'startScreen') {
+    drawBackground(ctx, state.worldX)
+    drawStartScreen(ctx, state)
+    return
+  }
+
   const { dx, dy } = getShakeOffset(state.shake)
   const shaking = dx !== 0 || dy !== 0
 
@@ -449,8 +499,8 @@ export function draw(ctx: CanvasRenderingContext2D, state: GameState): void {
 
   drawHUD(ctx, state)
 
-  if (state.mode === 'gameover') drawGameOver(ctx, state.score)
-  if (state.mode === 'victory')  drawVictory(ctx, state.score)
+  if (state.mode === 'gameover') drawGameOver(ctx, state)
+  if (state.mode === 'victory')  drawVictory(ctx, state)
 }
 
 // ─── HUD ─────────────────────────────────────────────────────────────────────
@@ -517,52 +567,146 @@ function drawWaveBanner(ctx: CanvasRenderingContext2D, wave: 1 | 2, bannerTimer:
   ctx.restore()
 }
 
-// ─── Overlay screens ─────────────────────────────────────────────────────────
+// ─── Start screen ────────────────────────────────────────────────────────────
 
-function drawGameOver(ctx: CanvasRenderingContext2D, score: number): void {
-  ctx.fillStyle = 'rgba(7,7,17,0.78)'
+function drawStartScreen(ctx: CanvasRenderingContext2D, state: GameState): void {
+  ctx.fillStyle = 'rgba(7,7,17,0.75)'
   ctx.fillRect(0, 0, CW, CH)
 
+  ctx.save()
+
+  // Title
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
+  ctx.fillStyle = C.cyan
+  ctx.font = 'bold 48px monospace'
+  ctx.fillText('BUG HUNTER', CW / 2, 95)
 
-  ctx.fillStyle = C.red
-  ctx.font = 'bold 36px monospace'
-  ctx.fillText('STACK OVERFLOW', CW / 2, CH / 2 - 30)
-
-  ctx.fillStyle = C.white
+  // Subtitle
+  ctx.globalAlpha = 0.75
+  ctx.fillStyle = C.amber
   ctx.font = '14px monospace'
-  ctx.fillText(`score: ${score}`, CW / 2, CH / 2 + 10)
+  ctx.fillText('a cat vs. segfault story', CW / 2, 128)
+  ctx.globalAlpha = 1
 
+  // Controls block (left-aligned, centered region)
+  const controlLines = [
+    '↑ ↓    switch lane',
+    'SPACE  shoot (when armed)',
+    'R      restart',
+    'ESC    exit',
+  ]
   ctx.fillStyle = C.cyanDim
-  ctx.font = '11px monospace'
-  ctx.fillText('PRESS R TO RESTART   /   ESC TO EXIT', CW / 2, CH / 2 + 40)
-
+  ctx.font = '12px monospace'
   ctx.textAlign = 'left'
-  ctx.textBaseline = 'alphabetic'
+  ctx.textBaseline = 'top'
+  const blockX = CW / 2 - 110
+  for (let i = 0; i < controlLines.length; i++) {
+    ctx.fillText(controlLines[i], blockX, 175 + i * 22)
+  }
+
+  // Blinking prompt
+  if (Math.floor(state.blinkTick / 30) % 2 === 0) {
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillStyle = C.white
+    ctx.font = '14px monospace'
+    ctx.fillText('PRESS SPACE TO START', CW / 2, 320)
+  }
+
+  ctx.restore()
 }
 
-function drawVictory(ctx: CanvasRenderingContext2D, score: number): void {
-  ctx.fillStyle = 'rgba(7,7,17,0.78)'
+// ─── End screen helpers ───────────────────────────────────────────────────────
+
+function drawStatLine(ctx: CanvasRenderingContext2D, label: string, value: string, y: number): void {
+  ctx.globalAlpha  = 0.85
+  ctx.font         = '12px monospace'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle    = C.white
+  ctx.textAlign    = 'right'
+  ctx.fillText(label, CW / 2 - 8, y)
+  ctx.textAlign    = 'left'
+  ctx.fillText(value, CW / 2 + 8, y)
+  ctx.globalAlpha  = 1
+}
+
+// ─── Victory screen ───────────────────────────────────────────────────────────
+
+function drawVictory(ctx: CanvasRenderingContext2D, state: GameState): void {
+  ctx.fillStyle = 'rgba(7,7,17,0.82)'
   ctx.fillRect(0, 0, CW, CH)
 
-  ctx.textAlign = 'center'
+  ctx.save()
+  ctx.textAlign    = 'center'
   ctx.textBaseline = 'middle'
 
   ctx.fillStyle = C.green
-  ctx.font = 'bold 36px monospace'
-  ctx.fillText('BUG FIXED', CW / 2, CH / 2 - 30)
+  ctx.font = 'bold 48px monospace'
+  ctx.fillText('BUG FIXED', CW / 2, 88)
 
-  ctx.fillStyle = C.white
-  ctx.font = '14px monospace'
-  ctx.fillText(`score: ${score}`, CW / 2, CH / 2 + 10)
+  ctx.globalAlpha = 0.8
+  ctx.fillStyle = C.amber
+  ctx.font = '13px monospace'
+  ctx.fillText('the segfault has been resolved', CW / 2, 120)
+  ctx.globalAlpha = 1
 
-  ctx.fillStyle = C.cyanDim
-  ctx.font = '11px monospace'
-  ctx.fillText('PRESS R TO PLAY AGAIN   /   ESC TO EXIT', CW / 2, CH / 2 + 40)
+  const { tokensCollected, projectilesCancelled, damageTaken } = state.runStats
+  const statsY = 153
+  const lineH  = 22
+  drawStatLine(ctx, 'final score:', String(state.score).padStart(6, '0'), statsY)
+  drawStatLine(ctx, 'tokens collected:', String(tokensCollected),         statsY + lineH)
+  drawStatLine(ctx, 'bullets cancelled:', String(projectilesCancelled),   statsY + lineH * 2)
+  drawStatLine(ctx, 'damage taken:', `${damageTaken} / 3`,                statsY + lineH * 3)
 
-  ctx.textAlign = 'left'
-  ctx.textBaseline = 'alphabetic'
+  if (Math.floor(state.blinkTick / 30) % 2 === 0) {
+    ctx.fillStyle    = C.cyanDim
+    ctx.font         = '11px monospace'
+    ctx.textAlign    = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('PRESS R TO PLAY AGAIN   /   ESC TO EXIT', CW / 2, 318)
+  }
+
+  ctx.restore()
+}
+
+// ─── Game over screen ─────────────────────────────────────────────────────────
+
+function drawGameOver(ctx: CanvasRenderingContext2D, state: GameState): void {
+  ctx.fillStyle = 'rgba(7,7,17,0.82)'
+  ctx.fillRect(0, 0, CW, CH)
+
+  ctx.save()
+  ctx.textAlign    = 'center'
+  ctx.textBaseline = 'middle'
+
+  ctx.fillStyle = C.red
+  ctx.font = 'bold 48px monospace'
+  ctx.fillText('STACK OVERFLOW', CW / 2, 93)
+
+  ctx.globalAlpha = 0.65
+  ctx.fillStyle = '#cc4455'
+  ctx.font = '13px monospace'
+  ctx.fillText('debug failed', CW / 2, 125)
+  ctx.globalAlpha = 1
+
+  const { tokensCollected, damageTaken, waveReached } = state.runStats
+  const statsY = 158
+  const lineH  = 22
+  drawStatLine(ctx, 'final score:', String(state.score).padStart(6, '0'), statsY)
+  drawStatLine(ctx, 'tokens:', String(tokensCollected),                   statsY + lineH)
+  drawStatLine(ctx, 'damage taken:', `${damageTaken} / 3`,               statsY + lineH * 2)
+  drawStatLine(ctx, 'wave reached:', waveReached,                         statsY + lineH * 3)
+
+  if (Math.floor(state.blinkTick / 30) % 2 === 0) {
+    ctx.fillStyle    = C.cyanDim
+    ctx.font         = '11px monospace'
+    ctx.textAlign    = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('PRESS R TO TRY AGAIN   /   ESC TO EXIT', CW / 2, 318)
+  }
+
+  ctx.restore()
 }
 
 // Re-export for external use

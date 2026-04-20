@@ -3,20 +3,21 @@
 import { useEffect, useRef } from 'react'
 import { CW, CH } from '@/components/bossFight/constants'
 import { GameState } from '@/components/bossFight/types'
-import { createInitialState, update, draw } from '@/lib/bossFight/gameLoop'
+import { createInitialState, createPlayingState, update, draw } from '@/lib/bossFight/gameLoop'
 import { loadCatSprite } from '@/lib/bossFight/catSprite'
 import { useAchievement } from '@/context/AchievementContext'
 
 export default function BossFightGame() {
-  const canvasRef      = useRef<HTMLCanvasElement>(null)
-  const stateRef       = useRef<GameState>(createInitialState())
-  const keysRef        = useRef<Set<string>>(new Set())
-  const rafRef         = useRef<number>(0)
-  const lastTimeRef    = useRef<number>(0)
-  const heldRef        = useRef<Set<string>>(new Set())
-  const { unlock }     = useAchievement()
-  const unlockRef      = useRef(unlock)
-  unlockRef.current    = unlock
+  const canvasRef    = useRef<HTMLCanvasElement>(null)
+  const stateRef     = useRef<GameState>(createInitialState())
+  const keysRef      = useRef<Set<string>>(new Set())
+  const rafRef       = useRef<number>(0)
+  const lastTimeRef  = useRef<number>(0)
+  const heldRef      = useRef<Set<string>>(new Set())
+  const pausedRef    = useRef<boolean>(false)
+  const { unlock }   = useAchievement()
+  const unlockRef    = useRef(unlock)
+  unlockRef.current  = unlock
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -33,9 +34,10 @@ export default function BossFightGame() {
       keysRef.current.add(k)
       heldRef.current.add(k)
 
-      // Restart on R when not actively playing
-      if ((k === 'r' || k === 'R') && stateRef.current.mode !== 'playing') {
-        stateRef.current = createInitialState()
+      // Restart on R only from end states — start screen uses SPACE
+      if ((k === 'r' || k === 'R') &&
+          (stateRef.current.mode === 'gameover' || stateRef.current.mode === 'victory')) {
+        stateRef.current = createPlayingState()
       }
 
       // Prevent arrow keys / space from scrolling the page while game is open
@@ -65,12 +67,27 @@ export default function BossFightGame() {
       rafRef.current = requestAnimationFrame(loop)
     }
 
+    // Pause loop when tab is hidden to prevent deltaTime explosion on return
+    function onVisibilityChange() {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current)
+        pausedRef.current = true
+      } else if (pausedRef.current) {
+        pausedRef.current       = false
+        lastTimeRef.current     = performance.now()
+        rafRef.current          = requestAnimationFrame(loop)
+      }
+    }
+
+    document.addEventListener('visibilitychange', onVisibilityChange)
+
     rafRef.current = requestAnimationFrame(loop)
 
     return () => {
       cancelAnimationFrame(rafRef.current)
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup',   onKeyUp)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
     }
   }, [])
 
@@ -84,6 +101,7 @@ export default function BossFightGame() {
         width:          CW + 'px',
         height:         CH + 'px',
         imageRendering: 'pixelated',
+        cursor:         'crosshair',
       }}
     />
   )
