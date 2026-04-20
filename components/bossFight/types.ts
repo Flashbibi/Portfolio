@@ -74,11 +74,15 @@ export interface Boss {
 }
 
 export type GameMode = 'playing' | 'powerup' | 'boss' | 'gameover' | 'victory'
+export type WaveSubState = 'active' | 'cooldown' | 'banner'
 
 export interface GameState {
   mode: GameMode
   wave: 1 | 2
   waveTimer: number
+  waveSubState: WaveSubState
+  cooldownTimer: number
+  bannerTimer: number
   score: number
   cat: Cat
   bugs: Bug[]

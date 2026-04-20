@@ -7,7 +7,7 @@ import {
   TOKEN_SPEED, TOKEN_SCORE, TOKEN_SAFE_START, TOKEN_SAFE_END,
   TOKEN_SPAWN_MIN, TOKEN_SPAWN_MAX,
   SPAWN_BASE, SPAWN_MIN, SPAWN_WAVE_DEC, FAST_BUG_CHANCE_W2,
-  WAVE_1_DURATION, WAVE_2_DURATION,
+  WAVE_1_DURATION, WAVE_2_DURATION, WAVE_COOLDOWN_DURATION, WAVE_BANNER_DURATION,
   BG_SCROLL_SPEED, CW, CH, C,
   CAT_X, CAT_HP,
   POWERUP_SPEED, POWERUP_HOMING_FACTOR, POWERUP_RETARGET_INTERVAL,
@@ -47,6 +47,9 @@ export function createInitialState(): GameState {
     mode:          'playing',
     wave:          1,
     waveTimer:     WAVE_1_DURATION,
+    waveSubState:  'active',
+    cooldownTimer: 0,
+    bannerTimer:   0,
     score:         0,
     cat:           makeCat(),
     bugs:          [],
@@ -138,24 +141,25 @@ export function update(state: GameState, keys: Set<string>, dt: number): void {
   state.bugs   = state.bugs.filter(b => b.x > -40)
   state.tokens = state.tokens.filter(t => t.x > -20)
 
-  // Bug spawning
-  state.spawnTimer -= dt
-  if (state.spawnTimer <= 0) {
-    for (const lane of pickPattern()) {
-      const isFast = state.wave === 2 && Math.random() < FAST_BUG_CHANCE_W2
-      state.bugs.push(makeBug(state.nextId++, lane, isFast ? 'fast' : 'normal', pickLabel()))
+  // Bug + token spawning (only during active sub-state)
+  if (state.waveSubState === 'active') {
+    state.spawnTimer -= dt
+    if (state.spawnTimer <= 0) {
+      for (const lane of pickPattern()) {
+        const isFast = state.wave === 2 && Math.random() < FAST_BUG_CHANCE_W2
+        state.bugs.push(makeBug(state.nextId++, lane, isFast ? 'fast' : 'normal', pickLabel()))
+      }
+      state.spawnTimer = spawnInterval(state.wave)
     }
-    state.spawnTimer = spawnInterval(state.wave)
-  }
 
-  // Token spawning
-  state.tokenTimer -= dt
-  if (state.tokenTimer <= 0) {
-    const safeLanes = ([0, 1, 2] as const).filter(l => isSafeLane(l, state.bugs))
-    if (safeLanes.length > 0) {
-      state.tokens.push(makeToken(state.nextId++, safeLanes[Math.floor(Math.random() * safeLanes.length)]))
+    state.tokenTimer -= dt
+    if (state.tokenTimer <= 0) {
+      const safeLanes = ([0, 1, 2] as const).filter(l => isSafeLane(l, state.bugs))
+      if (safeLanes.length > 0) {
+        state.tokens.push(makeToken(state.nextId++, safeLanes[Math.floor(Math.random() * safeLanes.length)]))
+      }
+      state.tokenTimer = randomTokenInterval()
     }
-    state.tokenTimer = randomTokenInterval()
   }
 
   // Particles
@@ -164,21 +168,31 @@ export function update(state: GameState, keys: Set<string>, dt: number): void {
   // Game over check
   if (state.cat.hp <= 0) { state.cat.hp = 0; state.mode = 'gameover'; return }
 
-  // Wave timer
-  state.waveTimer -= dt
-  if (state.waveTimer <= 0) {
-    if (state.wave === 1) {
-      state.wave       = 2
-      state.waveTimer  = WAVE_2_DURATION
-      state.bugs       = []
-      state.tokens     = []
-      state.spawnTimer = spawnInterval(2)
-    } else {
-      // Wave 2 done — spawn powerup
-      state.mode    = 'powerup'
-      state.powerup = makePowerup()
-      state.bugs    = []
-      state.tokens  = []
+  // Wave sub-state machine
+  if (state.waveSubState === 'active') {
+    state.waveTimer -= dt
+    if (state.waveTimer <= 0) {
+      state.waveSubState  = 'cooldown'
+      state.cooldownTimer = WAVE_COOLDOWN_DURATION
+    }
+  } else if (state.waveSubState === 'cooldown') {
+    state.cooldownTimer -= dt
+    if (state.cooldownTimer <= 0) {
+      state.waveSubState = 'banner'
+      state.bannerTimer  = WAVE_BANNER_DURATION
+    }
+  } else if (state.waveSubState === 'banner') {
+    state.bannerTimer -= dt
+    if (state.bannerTimer <= 0) {
+      if (state.wave === 1) {
+        state.wave         = 2
+        state.waveTimer    = WAVE_2_DURATION
+        state.waveSubState = 'active'
+        state.spawnTimer   = spawnInterval(2)
+      } else {
+        state.mode    = 'powerup'
+        state.powerup = makePowerup()
+      }
     }
   }
 
@@ -404,6 +418,9 @@ export function draw(ctx: CanvasRenderingContext2D, state: GameState): void {
   if (shaking) { ctx.save(); ctx.translate(dx, dy) }
 
   drawBackground(ctx, state.worldX)
+  if (state.mode === 'playing' && state.waveSubState === 'banner') {
+    drawWaveBanner(ctx, state.wave, state.bannerTimer)
+  }
   drawTokens(ctx, state.tokens)
   for (const bug of state.bugs) drawBug(ctx, bug)
 
@@ -460,6 +477,33 @@ function drawHUD(ctx: CanvasRenderingContext2D, state: GameState): void {
   ctx.fillText(String(state.score).padStart(6, '0'), CW - 10, 8)
   ctx.textAlign = 'left'
   ctx.textBaseline = 'alphabetic'
+}
+
+// ─── Wave banner ─────────────────────────────────────────────────────────────
+
+function drawWaveBanner(ctx: CanvasRenderingContext2D, wave: 1 | 2, bannerTimer: number): void {
+  const progress = 1 - bannerTimer / WAVE_BANNER_DURATION
+  const label = wave === 1 ? 'WAVE 2' : 'FINAL WAVE'
+  let x: number
+  if (progress < 0.4) {
+    const t = progress / 0.4
+    x = CW + 200 + (CW / 2 - CW - 200) * (t * t)
+  } else if (progress < 0.6) {
+    x = CW / 2
+  } else {
+    const t = (progress - 0.6) / 0.4
+    x = CW / 2 + (-CW / 2 - 200) * (t * (2 - t))
+  }
+  ctx.save()
+  ctx.globalAlpha = 0.6
+  ctx.font = 'bold 48px monospace'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = '#000000'
+  ctx.fillText(label, x + 3, CH / 2 + 3)
+  ctx.fillStyle = C.cyan
+  ctx.fillText(label, x, CH / 2)
+  ctx.restore()
 }
 
 // ─── Overlay screens ─────────────────────────────────────────────────────────

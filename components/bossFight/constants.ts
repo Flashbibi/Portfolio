@@ -32,9 +32,11 @@ export const TOKEN_SPAWN_MAX = 90
 export const TOKEN_SAFE_START = 380
 export const TOKEN_SAFE_END   = 690
 
-export const WAVE_1_DURATION = 300
-export const WAVE_2_DURATION = 360
-export const SPAWN_BASE      = 38
+export const WAVE_1_DURATION        = 900
+export const WAVE_2_DURATION        = 900
+export const WAVE_COOLDOWN_DURATION = 180
+export const WAVE_BANNER_DURATION   = 120
+export const SPAWN_BASE             = 38
 export const SPAWN_MIN       = 22
 export const SPAWN_WAVE_DEC  = 8
 export const FAST_BUG_CHANCE_W2 = 0.30
