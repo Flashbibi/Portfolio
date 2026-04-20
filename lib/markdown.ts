@@ -8,6 +8,7 @@ export interface ProjectPage {
   title: string
   order: number
   model?: string
+  type?: string
   html: string
 }
 
@@ -30,6 +31,7 @@ export function getProjectPages(projectId: string): ProjectPage[] {
       title: (data.title as string) ?? slug,
       order: (data.order as number) ?? 99,
       model: data.model as string | undefined,
+      type: data.type as string | undefined,
       html: marked(content) as string,
     }
   })

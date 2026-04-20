@@ -10,6 +10,7 @@ import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { useAchievement } from '@/context/AchievementContext'
 import { translations } from '@/data/translations'
+import AchievementsSection from '@/components/AchievementsSection'
 
 const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false })
 
@@ -117,10 +118,14 @@ export default function ProjectContent({ project, pages }: Props) {
             {currentPage.model && (
               <ModelViewer model={currentPage.model} />
             )}
-            <article
-              className={styles.markdown}
-              dangerouslySetInnerHTML={{ __html: currentPage.html }}
-            />
+            {currentPage.type === 'achievements' ? (
+              <AchievementsSection />
+            ) : (
+              <article
+                className={styles.markdown}
+                dangerouslySetInnerHTML={{ __html: currentPage.html }}
+              />
+            )}
           </>
         ) : (
           <p className={styles.description}>{t.detailsEmpty}</p>

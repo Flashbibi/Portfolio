@@ -1,0 +1,92 @@
+.section {
+  max-width: 72ch;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.label {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.count {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+}
+
+.locked {
+  opacity: 0.4;
+}
+
+.icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 2rem;
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.title {
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+}
+
+.desc {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.toggle {
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.toggle:hover {
+  color: var(--accent);
+}
