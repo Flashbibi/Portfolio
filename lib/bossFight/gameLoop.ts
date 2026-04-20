@@ -179,11 +179,13 @@ export function update(state: GameState, keys: Set<string>, dt: number, onAchiev
   if (state.waveSubState === 'active') {
     state.spawnTimer -= dt
     if (state.spawnTimer <= 0) {
+      let hadFast = false
       for (const lane of pickPattern()) {
         const isFast = state.wave === 2 && Math.random() < FAST_BUG_CHANCE_W2
+        if (isFast) hadFast = true
         state.bugs.push(makeBug(state.nextId++, lane, isFast ? 'fast' : 'normal', pickLabel()))
       }
-      state.spawnTimer = spawnInterval(state.wave)
+      state.spawnTimer = spawnInterval(state.wave) * (hadFast ? 1.4 : 1)
     }
 
     state.tokenTimer -= dt

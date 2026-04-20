@@ -21,7 +21,7 @@ export const BUG_H = 20
 export const BUG_WOBBLE_AMP = 3
 export const BUG_WOBBLE_SPEED = 0.12
 export const BUG_SPEED_NORMAL = 5.5
-export const BUG_SPEED_FAST   = 9.0
+export const BUG_SPEED_FAST   = 7.0
 
 export const TOKEN_W = 12
 export const TOKEN_H = 12
@@ -39,7 +39,7 @@ export const WAVE_BANNER_DURATION   = 120
 export const SPAWN_BASE             = 38
 export const SPAWN_MIN       = 22
 export const SPAWN_WAVE_DEC  = 8
-export const FAST_BUG_CHANCE_W2 = 0.30
+export const FAST_BUG_CHANCE_W2 = 0.25
 
 export const SHAKE_ON_HIT = 10
 export const SHAKE_DECAY  = 1
