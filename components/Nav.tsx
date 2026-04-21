@@ -51,6 +51,7 @@ export default function Nav({ onTerminalOpen }: NavProps) {
       <a href="#hero" className={styles.logo}>linus</a>
       <div className={styles.links}>
         <a href="#about"    className={active === 'about'    ? styles.active : ''}>{t.about}</a>
+        <a href="/me"       className={styles.meLink}>{t.me}</a>
         <a href="#projects" className={active === 'projects' ? styles.active : ''}>{t.projects}</a>
         <a href="#contact"  className={active === 'contact'  ? styles.active : ''}>{t.contact}</a>
         <button className={styles.termBtn} onClick={onTerminalOpen} title={t.openTerminal} aria-label={t.openTerminal}>

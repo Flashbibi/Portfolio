@@ -165,6 +165,7 @@ export const filesystem: FsNode = {
       type: 'dir',
       children: {
         'about.md':        { type: 'file' },
+        'me.md':           { type: 'file' },
         'achievements.md': { type: 'file' },
         'contact.md':      { type: 'file' },
         'guestbook.md':    { type: 'file' },

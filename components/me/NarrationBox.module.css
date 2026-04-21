@@ -1,0 +1,73 @@
+.box {
+  position: relative;
+  transform: rotate(var(--box-rot, 0deg));
+  isolation: isolate;
+}
+
+.inner {
+  position: relative;
+  background: var(--me-paper);
+  color: var(--me-ink);
+  padding: 0.9rem 1.1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  z-index: 2;
+}
+
+.svgBorder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  color: #000;
+  overflow: visible;
+}
+
+.label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--me-ink-soft);
+  text-transform: lowercase;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px dashed var(--me-ink-faint);
+  padding-bottom: 0.3rem;
+}
+
+.body { color: var(--me-ink); }
+.body :global(p) + :global(p) { margin-top: 0.6rem; }
+.body :global(strong) { color: var(--me-ink); font-weight: 700; }
+
+/* Flush variant — fills its grid cell, stays axis-aligned. Used when
+   the box docks inside the spread grid rather than floating. */
+.flush { height: 100%; }
+.flush .inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.4rem 1.6rem;
+}
+
+/* Ink reveal — same mechanic as panels */
+.inkCover {
+  position: absolute;
+  inset: -2px;
+  background: var(--me-ink);
+  z-index: 4;
+  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path 340ms cubic-bezier(0.8, 0.05, 0.2, 1);
+}
+.box:global(.ink-revealed) .inkCover {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box, .inkCover { transition-duration: 0.01ms !important; }
+}

@@ -150,6 +150,7 @@ export default function TerminalDrawer({ open, onClose, onBossFightOpen }: Props
       }
       case 'whoami':   dprint('visitor — curious developer', 'green'); break
       case 'who':      cmdWho(); return
+      case 'who-am-i': cmdWhoAmI(); return
       case 'sign':     cmdSign(cmd.slice(4).trim()); return
       case 'clear':    if (outRef.current) outRef.current.innerHTML = ''; break
       case 'tree':     cmdTree(); break
@@ -319,6 +320,7 @@ export default function TerminalDrawer({ open, onClose, onBossFightOpen }: Props
     // Dynamic files — only reachable here because getNode confirmed they exist
     if (target === '~/linus/achievements.md') { cmdAchievementsCat(); return }
     if (target === '~/linus/guestbook.md')    { cmdGuestbookCat();    return }
+    if (target === '~/linus/me.md')           { cmdMeCat();           return }
 
     // Static content
     let key = arg
@@ -379,6 +381,7 @@ export default function TerminalDrawer({ open, onClose, onBossFightOpen }: Props
     const lines: [string, string][] = [
       ['~/linus', 'amber'],
       ['├── about.md', 'white'],
+      ['├── me.md', 'white'],
       ['├── achievements.md', 'white'],
       ['├── contact.md', 'white'],
       ['├── guestbook.md', 'white'],
@@ -563,6 +566,36 @@ export default function TerminalDrawer({ open, onClose, onBossFightOpen }: Props
       dprint(t.signError, 'red')
     }
     dprint('')
+  }
+
+  function cmdWhoAmI() {
+    const l = langRef.current
+    dprint(l === 'de'
+      ? '  // die Version, die nicht in den Lebenslauf passt...'
+      : "  // the version that doesn't fit on a CV...",
+      'muted')
+    dprint(l === 'de' ? '  öffne /me' : '  opening /me', 'amber')
+    dprint('')
+    setTimeout(() => { window.location.href = '/me' }, 600)
+  }
+
+  function cmdMeCat() {
+    const l = langRef.current
+    dprint('# me.md', 'amber')
+    dprint('')
+    if (l === 'de') {
+      dprint('  das ist ein anderes kapitel.', 'white')
+      dprint('  es lebt nicht hier im terminal —', 'muted')
+      dprint('  es lebt unter /me.', 'muted')
+    } else {
+      dprint('  this is a different chapter.', 'white')
+      dprint('  it does not live in the terminal —', 'muted')
+      dprint('  it lives at /me.', 'muted')
+    }
+    dprint('')
+    dprint(l === 'de' ? '  [  OK  ] lade /me...' : '  [  OK  ] loading /me...', 'green')
+    dprint('')
+    setTimeout(() => { window.location.href = '/me' }, 900)
   }
 
   async function cmdWho() {

@@ -1,0 +1,519 @@
+/* ── Page-level paper, full-bleed ─────────────────────────────────── */
+.page {
+  --me-gutter-size: 3px;
+  --me-page-pad-x: 4rem;
+  position: relative;
+  min-height: 100vh;
+  background: var(--me-paper);
+  color: var(--me-ink);
+  padding: 2.5rem 0 5rem;
+  font-family: 'Space Mono', monospace;
+  overflow-x: hidden;
+
+  background-image:
+    radial-gradient(120% 80% at 10% 0%, rgba(0, 0, 0, 0) 0%, var(--me-paper) 60%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.012) 2px,
+      rgba(0, 0, 0, 0.012) 3px
+    );
+}
+
+:global([data-theme='light']) .page {
+  background-image:
+    radial-gradient(120% 80% at 10% 0%, rgba(22, 19, 16, 0.04) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(22, 19, 16, 0) 0,
+      rgba(22, 19, 16, 0) 2px,
+      rgba(22, 19, 16, 0.025) 2px,
+      rgba(22, 19, 16, 0.025) 3px
+    );
+}
+
+/* ── Top bar ──────────────────────────────────────────────────────── */
+.topBar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 var(--me-page-pad-x);
+}
+
+.backLink {
+  color: var(--me-ink-soft);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  padding: 0.4rem 0.7rem;
+  border: 1.5px solid var(--me-ink-faint);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.backLink:hover {
+  color: var(--me-ink);
+  border-color: var(--me-ink);
+  background: var(--me-paper2);
+}
+
+.langBtn {
+  background: none;
+  border: 1.5px solid var(--me-ink-faint);
+  color: var(--me-ink-soft);
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.7rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.langBtn:hover { color: var(--me-ink); border-color: var(--me-ink); }
+
+/* ── Intro ────────────────────────────────────────────────────────── */
+.intro {
+  position: relative;
+  margin-bottom: 3rem;
+  padding: 0 var(--me-page-pad-x) 2.5rem;
+  border-bottom: 3px solid var(--me-ink);
+}
+
+.introChapter {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--me-ink-soft);
+  margin-bottom: 1.2rem;
+  text-transform: lowercase;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+.introChapter:global(.ink-revealed) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.introGrid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 3rem;
+  align-items: end;
+}
+
+.introTitle { position: relative; }
+
+.name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--me-ink);
+  margin: 0;
+  opacity: 0;
+  transform: translate(-8px, 8px);
+  transition: opacity 500ms ease, transform 500ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+.name:global(.ink-revealed) {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.nameLine { display: block; }
+.nameLine2 {
+  display: block;
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 2.5px var(--me-ink);
+  text-shadow: 6px 6px 0 var(--me-ink-soft);
+  margin-left: 0.3em;
+}
+
+.tagline {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--me-ink-soft);
+  margin-top: 1.2rem;
+  max-width: 30ch;
+  opacity: 0;
+  transition: opacity 600ms ease 120ms;
+}
+.tagline:global(.ink-revealed) { opacity: 1; }
+
+/* ── Manga spread: full-bleed 12×7 grid, 13 panels + 1 narration ────
+   Pairs (p4/p5, p6/p7, p8/p9, p11/p12) share a grid-area and divide it
+   along a diagonal via complementary clip-paths in MangaPanel. */
+.spread {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 110px 200px 200px 200px 200px 200px 120px;
+  gap: 3px;
+  background: var(--me-ink);
+  border-top: 3px solid var(--me-ink);
+  border-bottom: 3px solid var(--me-ink);
+  margin-bottom: 5rem;
+  overflow: visible;
+}
+
+/* Slot → grid-area (row-start / col-start / row-end / col-end). Values
+   are grid line numbers; paired slots intentionally share coordinates. */
+.slotP1  { grid-area: 1 / 1 / 2 / 13; min-height: 100%; }  /* establishing strip */
+.slotP2  { grid-area: 2 / 1 / 5 / 6;  min-height: 100%; }  /* hero */
+.slotP3  { grid-area: 2 / 6 / 5 / 7;  min-height: 100%; }  /* narrow trapezoid */
+
+/* Pair 1 — shared cell: rows 2-3, cols 7-12 */
+.slotP4  { grid-area: 2 / 7 / 4 / 13; min-height: 100%; }
+.slotP5  { grid-area: 2 / 7 / 4 / 13; min-height: 100%; }
+
+/* Pair 2 — shared cell: row 4, cols 7-12 */
+.slotP6  { grid-area: 4 / 7 / 5 / 13; min-height: 100%; }
+.slotP7  { grid-area: 4 / 7 / 5 / 13; min-height: 100%; }
+
+/* Pair 3 — shared cell: rows 5-6, cols 1-6 */
+.slotP8  { grid-area: 5 / 1 / 7 / 7;  min-height: 100%; }
+.slotP9  { grid-area: 5 / 1 / 7 / 7;  min-height: 100%; }
+
+.slotP10 { grid-area: 5 / 7 / 7 / 8;  min-height: 100%; }  /* vertical strip */
+
+/* Pair 4 — shared cell: rows 5-6, cols 8-12 */
+.slotP11 { grid-area: 5 / 8 / 7 / 13; min-height: 100%; }
+.slotP12 { grid-area: 5 / 8 / 7 / 13; min-height: 100%; }
+
+.slotP13 { grid-area: 7 / 1 / 8 / 9;  min-height: 100%; }  /* closing strip */
+.slotN1  { grid-area: 7 / 9 / 8 / 13; align-self: stretch; }
+
+/* Bleeding permanent SFX — rides over the fold between spread rows 4/5,
+   straddling the horizontal split on the left block. */
+.spreadBleedSfx {
+  position: absolute;
+  top: calc(110px + 200px + 200px + 200px - 1.2rem);   /* ≈ end of row 4 */
+  left: 2%;
+  font-size: clamp(3rem, 7vw, 6.5rem) !important;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.bubbleTop {
+  position: absolute;
+  top: -14px;
+  right: 14%;
+  z-index: 8;
+}
+.bubbleB {
+  position: absolute;
+  bottom: -22px;
+  right: 10%;
+  z-index: 7;
+}
+.bubbleMid {
+  position: absolute;
+  top: 42%;
+  right: -22px;
+  z-index: 8;
+}
+
+/* Stickers pinned to panel corners — each anchored absolutely inside .spread
+   or .spread2 so they float above the grid. */
+.stickerShonen {
+  position: absolute;
+  top: calc(110px + 200px - 18px);
+  left: calc(50% - 2rem);
+  z-index: 8;
+}
+.stickerEsp {
+  position: absolute;
+  top: calc(110px + 200px + 200px + 200px + 100px);
+  left: calc(50% + 1.5rem);
+  z-index: 8;
+}
+.stickerCoffee {
+  position: absolute;
+  top: calc(110px + 200px + 4px);
+  right: 3%;
+  z-index: 8;
+}
+
+/* ── Interstitial — sits between spread 1 and spread 2, introducing the
+   second act. Keeps the page dense while signalling a chapter beat. ── */
+.interstitial {
+  position: relative;
+  padding: 2.5rem var(--me-page-pad-x) 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+  align-items: center;
+  border-bottom: 3px solid var(--me-ink);
+}
+.interstitialSfx {
+  font-size: clamp(3.5rem, 10vw, 7rem) !important;
+  justify-self: end;
+}
+
+/* ── Spread 2 — interests collage. 12 × 4 grid, roomier rows. ─────── */
+.spread2 {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 110px 220px 220px 200px;
+  gap: 3px;
+  background: var(--me-ink);
+  border-top: 3px solid var(--me-ink);
+  border-bottom: 3px solid var(--me-ink);
+  margin-bottom: 4rem;
+  overflow: visible;
+}
+
+.slot2P14 { grid-area: 1 / 1 / 2 / 13; min-height: 100%; }  /* establishing */
+.slot2P15 { grid-area: 2 / 1 / 4 / 6;  min-height: 100%; }  /* hero */
+.slot2P16 { grid-area: 2 / 6 / 3 / 10; min-height: 100%; }  /* wide top */
+.slot2P17 { grid-area: 2 / 10 / 4 / 13; min-height: 100%; } /* tall right */
+.slot2N2  { grid-area: 3 / 6 / 4 / 10; align-self: stretch; }
+.slot2P18 { grid-area: 4 / 1 / 5 / 5;  min-height: 100%; }
+
+/* Pair 5 — shared cell: row 4, cols 5-9 */
+.slot2P19 { grid-area: 4 / 5 / 5 / 10; min-height: 100%; }
+.slot2P20 { grid-area: 4 / 5 / 5 / 10; min-height: 100%; }
+
+.slot2P21 { grid-area: 4 / 10 / 5 / 13; min-height: 100%; }
+
+.spread2BleedSfx {
+  position: absolute;
+  top: calc(110px + 220px - 0.4rem);
+  left: 28%;
+  font-size: clamp(2.6rem, 6vw, 5rem) !important;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.stickerLinux {
+  position: absolute;
+  top: calc(110px + 220px + 220px - 6px);
+  left: calc(30% - 1rem);
+  z-index: 8;
+}
+.stickerTrails {
+  position: absolute;
+  top: calc(110px + 220px + 20px);
+  left: 4%;
+  z-index: 8;
+}
+.stickerSince {
+  position: absolute;
+  top: 20px;
+  right: 6%;
+  z-index: 8;
+}
+
+/* ── Now section ───────────────────────────────────────────────── */
+.nowSection {
+  position: relative;
+  margin: 3rem 0 5rem;
+  padding: 0 var(--me-page-pad-x);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nowBox {
+  position: relative;
+  background: var(--me-panel-bg);
+  border: 3px solid var(--me-ink);
+  padding: 2rem 2.5rem;
+  isolation: isolate;
+  grid-column: 2;
+}
+
+.nowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid var(--me-ink);
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+.nowLabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--me-ink-soft);
+}
+.nowHeading {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2rem;
+  color: var(--me-ink);
+  line-height: 1;
+  margin: 0;
+}
+
+.nowList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.nowRow {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--me-ink-faint);
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  align-items: baseline;
+}
+.nowRow:last-child { border-bottom: none; }
+
+.nowRow dt {
+  color: var(--me-ink-soft);
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+}
+.nowRow dd {
+  color: var(--me-ink);
+  margin: 0;
+}
+
+.nowInkCover {
+  position: absolute;
+  inset: -2px;
+  background: var(--me-ink);
+  z-index: 5;
+  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path 420ms cubic-bezier(0.8, 0.05, 0.2, 1);
+}
+.nowBox:global(.ink-revealed) .nowInkCover {
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+
+/* ── End of chapter — inverted panel. Black bleed, paper text.
+   Sits as the final beat after the now-section, visually cashing out
+   the whole collage. ─────────────────────────────────────────────── */
+.end {
+  position: relative;
+  margin-top: 4rem;
+  padding: 4rem var(--me-page-pad-x) 4rem;
+  background: var(--me-ink);
+  color: var(--me-paper);
+  border-top: 3px solid var(--me-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  text-align: center;
+}
+
+.endLabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--me-paper2);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+.endLabel:global(.ink-revealed) { opacity: 1; transform: translateY(0); }
+
+.endSfx {
+  font-size: clamp(3.5rem, 9vw, 7.5rem) !important;
+  color: var(--me-paper) !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: 4px 4px 0 var(--me-paper2) !important;
+}
+
+.endLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.endLink {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--me-paper2);
+  text-decoration: none;
+  padding: 0.35rem 0.4rem;
+  transition: color 200ms, transform 200ms;
+  opacity: 0;
+  transform: translateY(6px);
+}
+.endLink:global(.ink-revealed) { opacity: 1; transform: translateY(0); }
+.endLink:hover {
+  color: var(--me-paper);
+  transform: translateX(4px);
+}
+.endContact {
+  font-size: 12px;
+  color: var(--me-paper2);
+  letter-spacing: 0.02em;
+}
+.endContact code {
+  font-family: inherit;
+  color: var(--me-paper);
+  border-bottom: 1px dashed var(--me-paper2);
+  padding-bottom: 1px;
+}
+
+/* ── Mobile / tablet: stack vertically, drop diagonal cuts ─────── */
+@media (max-width: 900px) {
+  .page { --me-page-pad-x: 1.2rem; }
+
+  .introGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .name { font-size: clamp(3.2rem, 14vw, 5rem); }
+
+  .spread,
+  .spread2,
+  .nowSection,
+  .interstitial {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: none;
+    gap: 3px;
+  }
+
+  .spread,
+  .spread2 { margin-bottom: 3rem; }
+
+  .slotP1, .slotP2, .slotP3, .slotP4, .slotP5, .slotP6, .slotP7,
+  .slotP8, .slotP9, .slotP10, .slotP11, .slotP12, .slotP13,
+  .slotN1,
+  .slot2P14, .slot2P15, .slot2P16, .slot2P17, .slot2P18,
+  .slot2P19, .slot2P20, .slot2P21, .slot2N2 {
+    grid-area: auto;
+    min-height: 220px;
+  }
+
+  .slotP1, .slot2P14  { min-height: 140px; }  /* establishing strips */
+  .slotP2, .slot2P15  { min-height: 340px; }  /* hero panels */
+  .slotP13, .slot2P21 { min-height: 140px; }  /* closing strips */
+  .slotP3, .slotP10, .slot2P17 { min-height: 180px; }
+
+  .nowBox { padding: 1.4rem 1.4rem; grid-column: 1; }
+  .nowRow { grid-template-columns: 90px 1fr; gap: 0.7rem; }
+
+  .bubbleB, .bubbleTop, .bubbleMid { position: static; margin: 0.5rem 0; }
+
+  .spreadBleedSfx, .spread2BleedSfx,
+  .stickerShonen, .stickerEsp, .stickerCoffee,
+  .stickerLinux, .stickerTrails, .stickerSince {
+    position: static;
+    margin: 0.5rem 0;
+  }
+}

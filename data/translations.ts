@@ -3,6 +3,7 @@ import type { Lang } from '@/context/LanguageContext'
 interface Translations {
   nav: {
     about: string
+    me: string
     projects: string
     contact: string
     terminal: string
@@ -113,11 +114,108 @@ interface Translations {
       empty: string
     }
   }
+  me: {
+    metaTitle: string
+    metaDescription: string
+    back: string
+    intro: {
+      chapter: string
+      nameLine1: string
+      nameLine2: string
+      tagline: string
+      bio: string
+    }
+    panels: {
+      p1Caption: string
+      p13Caption: string
+      p14Caption: string
+      p21Caption: string
+      p1Hover: string
+      p2Hover: string
+      p3Hover: string
+      p4Hover: string
+      p5Hover: string
+      p6Hover: string
+      p7Hover: string
+      p8Hover: string
+      p9Hover: string
+      p10Hover: string
+      p11Hover: string
+      p12Hover: string
+      p13Hover: string
+      p14Hover: string
+      p15Hover: string
+      p16Hover: string
+      p17Hover: string
+      p18Hover: string
+      p19Hover: string
+      p20Hover: string
+      p21Hover: string
+    }
+    labels: {
+      chefin: string
+      setup: string
+      print: string
+      filament: string
+      gaming: string
+      coffee: string
+      homelab: string
+      network: string
+      esp: string
+      anime: string
+      manga: string
+      mountains: string
+      lofi: string
+      studio: string
+      trails: string
+      linux: string
+      tinker: string
+    }
+    narration: {
+      n1: string
+      interests: string
+    }
+    speech: {
+      s1: string
+      s2: string
+    }
+    stickers: {
+      shonen: string
+      esp32: string
+      linux: string
+      coffee: string
+      trails: string
+      since: string
+    }
+    permanentSfx: {
+      wham: string
+      krak: string
+      whoosh: string
+    }
+    now: {
+      label: string
+      heading: string
+      reading: string
+      playing: string
+      building: string
+      listening: string
+      learning: string
+    }
+    end: {
+      label: string
+      chapter: string
+      backToPortfolio: string
+      backToGuestbook: string
+      sayHi: string
+      contact: string
+    }
+  }
 }
 
 const en: Translations = {
   nav: {
     about: 'about me',
+    me: 'me',
     projects: 'projects',
     contact: 'contact',
     terminal: 'terminal',
@@ -246,11 +344,108 @@ const en: Translations = {
       empty:      'No achievements unlocked yet.',
     },
   },
+  me: {
+    metaTitle:       'Me — Linus Sommermeyer',
+    metaDescription: 'A more personal chapter — the person behind the code.',
+    back:            '← back to portfolio',
+    intro: {
+      chapter:   '// chapter.02 — off the clock',
+      nameLine1: 'Linus',
+      nameLine2: 'Sommermeyer',
+      tagline:   "— the parts that don't fit on a CV —",
+      bio:       '18, from Zürich. CS apprentice @ ETH. I build things — out of code, filament, and curiosity. Backend & APIs by day. Projects, anime, cats by night.',
+    },
+    panels: {
+      p1Caption:  '// chapter.02.01 — who',
+      p13Caption: '// chapter.02.02 — interlude',
+      p14Caption: '// chapter.02.03 — off-screen',
+      p21Caption: '// end of chapter',
+      p1Hover:   'ZOOM!',
+      p2Hover:   'WHAM!',
+      p3Hover:   'SNAP!',
+      p4Hover:   'KRAK!',
+      p5Hover:   'POW!',
+      p6Hover:   'BAM!',
+      p7Hover:   'ZAP!',
+      p8Hover:   'KAPOW!',
+      p9Hover:   'ZING!',
+      p10Hover:  'FLASH!',
+      p11Hover:  'SMASH!',
+      p12Hover:  'BANG!',
+      p13Hover:  'WHOOSH!',
+      p14Hover:  'CRACK!',
+      p15Hover:  'BOOM!',
+      p16Hover:  'CLANG!',
+      p17Hover:  'THWACK!',
+      p18Hover:  'WHACK!',
+      p19Hover:  'KABOOM!',
+      p20Hover:  'SPLASH!',
+      p21Hover:  'SWOOSH!',
+    },
+    labels: {
+      chefin:    'THE BOSS',
+      setup:     'SETUP',
+      print:     '3D-PRINT',
+      filament:  'FILAMENT',
+      gaming:    'GAMING',
+      coffee:    'COFFEE',
+      homelab:   'HOMELAB',
+      network:   'NETWORK',
+      esp:       'ESP32',
+      anime:     'ANIME',
+      manga:     'MANGA',
+      mountains: 'MOUNTAINS',
+      lofi:      'LOFI',
+      studio:    'STUDIO',
+      trails:    'TRAILS',
+      linux:     'LINUX',
+      tinker:    'TINKER',
+    },
+    narration: {
+      n1:        "a note, mid-chapter: most of this isn't on a résumé. that's kind of the point.",
+      interests: '3D printing, anime (shonen & seinen), homelab, hardware hacks, cats (obviously), lofi, mountains, coffee.',
+    },
+    speech: {
+      s1: "hi — this is the part that isn't on the CV.",
+      s2: 'hover everything — color + sound!',
+    },
+    stickers: {
+      shonen:  'shonen 4 life',
+      esp32:   'ESP32 gang',
+      linux:   'linux enjoyer',
+      coffee:  'coffee > tea',
+      trails:  'weekends = trails',
+      since:   'since ~2018',
+    },
+    permanentSfx: {
+      wham:   'WHAM!',
+      krak:   'KRAK!',
+      whoosh: 'WHOOSH!',
+    },
+    now: {
+      label:     '// now.txt',
+      heading:   'Currently',
+      reading:   'reading',
+      playing:   'playing',
+      building:  'building',
+      listening: 'listening',
+      learning:  'learning',
+    },
+    end: {
+      label:            '// END OF CHAPTER',
+      chapter:          'THE END?',
+      backToPortfolio:  '→ back to portfolio',
+      backToGuestbook:  '→ sign the guestbook',
+      sayHi:            '→ say hi:',
+      contact:          'linus.sommermeyer@lernender.ethz.ch',
+    },
+  },
 }
 
 const de: Translations = {
   nav: {
     about: 'über mich',
+    me: 'ich',
     projects: 'projekte',
     contact: 'kontakt',
     terminal: 'terminal',
@@ -377,6 +572,102 @@ const de: Translations = {
       showAll:    (n) => `[ alle ${n} anzeigen ]`,
       hideLocked: '[ gesperrte ausblenden ]',
       empty:      'Noch keine Errungenschaften freigeschaltet.',
+    },
+  },
+  me: {
+    metaTitle:       'Ich — Linus Sommermeyer',
+    metaDescription: 'Ein persönlicheres Kapitel — der Mensch hinter dem Code.',
+    back:            '← zurück zum Portfolio',
+    intro: {
+      chapter:   '// kapitel.02 — abseits der tastatur',
+      nameLine1: 'Linus',
+      nameLine2: 'Sommermeyer',
+      tagline:   '— die Teile, die nicht in einen Lebenslauf passen —',
+      bio:       '18, aus Zürich. Informatiker-Lehrling @ ETH. Ich baue Dinge — aus Code, Filament und Neugier. Tagsüber Backend & APIs. Nachts: Projekte, Anime, Katzen.',
+    },
+    panels: {
+      p1Caption:  '// kapitel.02.01 — wer',
+      p13Caption: '// kapitel.02.02 — zwischenspiel',
+      p14Caption: '// kapitel.02.03 — off-screen',
+      p21Caption: '// ende des kapitels',
+      p1Hover:   'ZOOM!',
+      p2Hover:   'WHAM!',
+      p3Hover:   'SNAP!',
+      p4Hover:   'KRAK!',
+      p5Hover:   'POW!',
+      p6Hover:   'BAM!',
+      p7Hover:   'ZAP!',
+      p8Hover:   'KAPOW!',
+      p9Hover:   'ZING!',
+      p10Hover:  'FLASH!',
+      p11Hover:  'SMASH!',
+      p12Hover:  'BANG!',
+      p13Hover:  'WHOOSH!',
+      p14Hover:  'CRACK!',
+      p15Hover:  'BOOM!',
+      p16Hover:  'CLANG!',
+      p17Hover:  'THWACK!',
+      p18Hover:  'WHACK!',
+      p19Hover:  'KABOOM!',
+      p20Hover:  'SPLASH!',
+      p21Hover:  'SWOOSH!',
+    },
+    labels: {
+      chefin:    'DIE CHEFIN',
+      setup:     'SETUP',
+      print:     '3D-DRUCK',
+      filament:  'FILAMENT',
+      gaming:    'GAMING',
+      coffee:    'KAFFEE',
+      homelab:   'HOMELAB',
+      network:   'NETZ',
+      esp:       'ESP32',
+      anime:     'ANIME',
+      manga:     'MANGA',
+      mountains: 'BERGE',
+      lofi:      'LOFI',
+      studio:    'STUDIO',
+      trails:    'TRAILS',
+      linux:     'LINUX',
+      tinker:    'BASTELN',
+    },
+    narration: {
+      n1:        'notiz, mittendrin: das meiste davon steht auf keinem CV. genau das ist der punkt.',
+      interests: '3D-Druck, Anime (Shonen & Seinen), Homelab, Hardware-Hacks, Katzen (natürlich), Lofi, Berge, Kaffee.',
+    },
+    speech: {
+      s1: 'hi — das hier ist der teil, der nicht im CV steht.',
+      s2: 'hover alles — farbe + sound!',
+    },
+    stickers: {
+      shonen:  'shonen 4 life',
+      esp32:   'ESP32 gang',
+      linux:   'linux enjoyer',
+      coffee:  'kaffee > tee',
+      trails:  'wochenenden = trails',
+      since:   'seit ~2018',
+    },
+    permanentSfx: {
+      wham:   'WHAM!',
+      krak:   'KRAK!',
+      whoosh: 'WHOOSH!',
+    },
+    now: {
+      label:     '// now.txt',
+      heading:   'Gerade',
+      reading:   'lese',
+      playing:   'spiele',
+      building:  'baue',
+      listening: 'höre',
+      learning:  'lerne',
+    },
+    end: {
+      label:            '// ENDE DES KAPITELS',
+      chapter:          'THE END?',
+      backToPortfolio:  '→ zurück zum portfolio',
+      backToGuestbook:  '→ ins guestbook eintragen',
+      sayHi:            '→ sag hi:',
+      contact:          'linus.sommermeyer@lernender.ethz.ch',
     },
   },
 }

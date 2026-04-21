@@ -24,6 +24,7 @@ export const achievements: Achievement[] = [
   { id: 'flawless-victory',icon: '✨', title: 'Flawless Victory', desc: 'Defeated the Segfault without taking damage.' },
   { id: 'token-collector', icon: '🪙', title: 'Token Collector',  desc: 'Collected 50 tokens in a single run.'    },
   { id: 'reflexes',        icon: '⚡', title: 'Reflexes',         desc: 'Cancelled 10 boss projectiles in a single run.' },
+  { id: 'chapter-read',    icon: '📖', title: 'Chapter Read',     desc: 'Read Chapter 02 from start to finish.'    },
 ]
 
 export const EXPLORER_PROJECTS         = ['glamos', 'fabricator', 'gletscher-player', 'turret', 'portfolio']
