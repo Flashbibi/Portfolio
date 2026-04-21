@@ -22,32 +22,22 @@ import { meNow } from '@/data/now'
 
 type MeTrans = (typeof translations)['en']['me']
 
-/**
- * Slot → CSS class. Spread 1 uses slotP*, spread 2 uses slot2P* — they live
- * on separate grid containers so the names don't collide.
- */
+/** Slot → CSS class. Single dense 12×11 grid, 41 panels + 2 narrations. */
 const SLOT_CLASS: Record<MePanelSlot, string> = {
-  p1: styles.slotP1,
-  p2: styles.slotP2,
-  p3: styles.slotP3,
-  p4: styles.slotP4,
-  p5: styles.slotP5,
-  p6: styles.slotP6,
-  p7: styles.slotP7,
-  p8: styles.slotP8,
-  p9: styles.slotP9,
-  p10: styles.slotP10,
-  p11: styles.slotP11,
-  p12: styles.slotP12,
-  p13: styles.slotP13,
-  p14: styles.slot2P14,
-  p15: styles.slot2P15,
-  p16: styles.slot2P16,
-  p17: styles.slot2P17,
-  p18: styles.slot2P18,
-  p19: styles.slot2P19,
-  p20: styles.slot2P20,
-  p21: styles.slot2P21,
+  p1:  styles.slotP1,  p2:  styles.slotP2,  p3:  styles.slotP3,
+  p4:  styles.slotP4,  p5:  styles.slotP5,  p6:  styles.slotP6,
+  p7:  styles.slotP7,  p8:  styles.slotP8,  p9:  styles.slotP9,
+  p10: styles.slotP10, p11: styles.slotP11, p12: styles.slotP12,
+  p13: styles.slotP13, p14: styles.slotP14, p15: styles.slotP15,
+  p16: styles.slotP16, p17: styles.slotP17, p18: styles.slotP18,
+  p19: styles.slotP19, p20: styles.slotP20, p21: styles.slotP21,
+  p22: styles.slotP22, p23: styles.slotP23, p24: styles.slotP24,
+  p25: styles.slotP25, p26: styles.slotP26, p27: styles.slotP27,
+  p28: styles.slotP28, p29: styles.slotP29, p30: styles.slotP30,
+  p31: styles.slotP31, p32: styles.slotP32, p33: styles.slotP33,
+  p34: styles.slotP34, p35: styles.slotP35, p36: styles.slotP36,
+  p37: styles.slotP37, p38: styles.slotP38, p39: styles.slotP39,
+  p40: styles.slotP40, p41: styles.slotP41,
 }
 
 function panelProps(cfg: MePanelConfig, t: MeTrans) {
@@ -63,6 +53,7 @@ function panelProps(cfg: MePanelConfig, t: MeTrans) {
     captionPos: cfg.captionPos,
     label: cfg.labelKey ? t.labels[cfg.labelKey] : undefined,
     labelPos: cfg.labelPos,
+    hideLabelUntilHover: cfg.hideLabelUntilHover,
     hoverSfx: cfg.hoverSfxKey ? t.panels[cfg.hoverSfxKey] : undefined,
     hoverSfxPos: cfg.hoverSfxPos,
     className: SLOT_CLASS[cfg.slot],
@@ -98,8 +89,7 @@ export default function MeContent() {
     return () => observer.disconnect()
   }, [unlock])
 
-  const spread  = getMePanelsBySection('spread')
-  const spread2 = getMePanelsBySection('spread2')
+  const spread = getMePanelsBySection('spread')
 
   return (
     <main className={styles.page}>
@@ -139,7 +129,7 @@ export default function MeContent() {
         </div>
       </section>
 
-      {/* ── Manga spread 1 — establishing shots ────────────────────── */}
+      {/* ── Manga spread — dense 41-panel double-page ──────────────── */}
       <section className={styles.spread}>
         {spread.map(cfg => (
           <MangaPanel key={cfg.id} {...panelProps(cfg, t)} />
@@ -148,75 +138,59 @@ export default function MeContent() {
         <NarrationBox
           label="// note.01"
           rotate={0}
-          order={13}
+          order={20}
           flush
           className={styles.slotN1}
         >
           {t.narration.n1}
         </NarrationBox>
 
-        {/* Permanent SFX — one big WHAM bleeding between rows */}
-        <Sfx size="xl" rotate={-7} variant="ink" order={14} className={styles.spreadBleedSfx}>
-          {t.permanentSfx.wham}
-        </Sfx>
-
-        {/* Speech bubbles — sparse, 2 on spread 1 */}
-        <SpeechBubble tail="br" rotate={-2} order={15} className={styles.bubbleTop}>
-          {t.speech.s1}
-        </SpeechBubble>
-        <SpeechBubble tail="bl" rotate={3} order={16} className={styles.bubbleMid}>
-          {t.speech.s2}
-        </SpeechBubble>
-
-        {/* Stickers — pinned to specific panel corners */}
-        <Sticker variant="paper" shape="burst" rotate={-8} order={17} className={styles.stickerShonen}>
-          {t.stickers.shonen}
-        </Sticker>
-        <Sticker variant="ink" shape="tag" rotate={4} order={18} className={styles.stickerEsp}>
-          {t.stickers.esp32}
-        </Sticker>
-        <Sticker variant="paper" shape="circle" rotate={-5} order={19} className={styles.stickerCoffee}>
-          {t.stickers.coffee}
-        </Sticker>
-      </section>
-
-      {/* ── Interstitial — interests.txt narration + KRAK bleed ───── */}
-      <section className={styles.interstitial}>
-        <NarrationBox label="// interests.txt" rotate={0} order={0} flush>
-          {t.narration.interests}
-        </NarrationBox>
-        <Sfx size="xl" rotate={6} variant="ink" order={1} className={styles.interstitialSfx}>
-          {t.permanentSfx.krak}
-        </Sfx>
-      </section>
-
-      {/* ── Manga spread 2 — off-screen interests ──────────────────── */}
-      <section className={styles.spread2}>
-        {spread2.map(cfg => (
-          <MangaPanel key={cfg.id} {...panelProps(cfg, t)} />
-        ))}
-
         <NarrationBox
-          label="// note.02"
+          label="// interests.txt"
           rotate={0}
-          order={8}
+          order={35}
           flush
-          className={styles.slot2N2}
+          className={styles.slotN2}
         >
           {t.narration.interests}
         </NarrationBox>
 
-        <Sfx size="lg" rotate={-5} variant="ink" order={9} className={styles.spread2BleedSfx}>
+        {/* Permanent SFX — bleeding over row folds for atmosphere */}
+        <Sfx size="xl" rotate={-7} variant="ink" order={42} className={styles.spreadBleedSfx}>
+          {t.permanentSfx.wham}
+        </Sfx>
+        <Sfx size="lg" rotate={6} variant="ink" order={43} className={styles.spreadBleedSfx2}>
+          {t.permanentSfx.krak}
+        </Sfx>
+        <Sfx size="lg" rotate={-5} variant="ink" order={44} className={styles.spreadBleedSfx3}>
           {t.permanentSfx.whoosh}
         </Sfx>
 
-        <Sticker variant="paper" shape="tag" rotate={-7} order={10} className={styles.stickerLinux}>
+        {/* Speech bubbles — sparse, 2 total */}
+        <SpeechBubble tail="br" rotate={-2} order={45} className={styles.bubbleTop}>
+          {t.speech.s1}
+        </SpeechBubble>
+        <SpeechBubble tail="bl" rotate={3} order={46} className={styles.bubbleMid}>
+          {t.speech.s2}
+        </SpeechBubble>
+
+        {/* Stickers — pinned to specific corners, floating over the grid */}
+        <Sticker variant="paper" shape="burst" rotate={-8} order={47} className={styles.stickerShonen}>
+          {t.stickers.shonen}
+        </Sticker>
+        <Sticker variant="ink" shape="tag" rotate={4} order={48} className={styles.stickerEsp}>
+          {t.stickers.esp32}
+        </Sticker>
+        <Sticker variant="paper" shape="circle" rotate={-5} order={49} className={styles.stickerCoffee}>
+          {t.stickers.coffee}
+        </Sticker>
+        <Sticker variant="paper" shape="tag" rotate={-7} order={50} className={styles.stickerLinux}>
           {t.stickers.linux}
         </Sticker>
-        <Sticker variant="ink" shape="burst" rotate={5} order={11} className={styles.stickerTrails}>
+        <Sticker variant="ink" shape="burst" rotate={5} order={51} className={styles.stickerTrails}>
           {t.stickers.trails}
         </Sticker>
-        <Sticker variant="paper" shape="star" rotate={9} order={12} className={styles.stickerSince}>
+        <Sticker variant="paper" shape="star" rotate={9} order={52} className={styles.stickerSince}>
           {t.stickers.since}
         </Sticker>
       </section>

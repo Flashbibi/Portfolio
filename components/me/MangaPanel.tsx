@@ -29,6 +29,8 @@ interface Props {
   /** Big categorial tag rendered as a library-style label on the frame. */
   label?: string
   labelPos?: SfxPos
+  /** On small panels the label hides until hover — appears with the hoverSfx. */
+  hideLabelUntilHover?: boolean
   caption?: string
   captionPos?: SfxPos
   sfx?: string
@@ -97,6 +99,7 @@ export default function MangaPanel({
   cut = 'none',
   label,
   labelPos = 'tl',
+  hideLabelUntilHover = false,
   caption,
   captionPos = 'tl',
   sfx,
@@ -122,7 +125,11 @@ export default function MangaPanel({
 
   return (
     <div
-      className={[styles.panel, className].filter(Boolean).join(' ')}
+      className={[
+        styles.panel,
+        hideLabelUntilHover && label ? styles.hideLabel : '',
+        className,
+      ].filter(Boolean).join(' ')}
       style={style}
       data-ink-reveal
       data-ink-order={order}

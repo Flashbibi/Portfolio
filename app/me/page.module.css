@@ -145,14 +145,16 @@
 }
 .tagline:global(.ink-revealed) { opacity: 1; }
 
-/* ── Manga spread: full-bleed 12×7 grid, 13 panels + 1 narration ────
-   Pairs (p4/p5, p6/p7, p8/p9, p11/p12) share a grid-area and divide it
-   along a diagonal via complementary clip-paths in MangaPanel. */
+/* ── Manga spread: dense 12×11 grid, 41 panels + 2 narrations.
+   Row heights mix splash rows (140-150px) with tight strip rows (80px)
+   to echo how a double-page breathes between SFX and dialogue.
+   Pairs (p6/p7, p13/p14, p19/p20, p22/p23, p28/p29, p36/p37) share a
+   grid-area and divide it along a diagonal via complementary clip-paths. */
 .spread {
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 110px 200px 200px 200px 200px 200px 120px;
+  grid-template-rows: 140px 140px 80px 150px 150px 80px 150px 150px 150px 150px 130px;
   gap: 3px;
   background: var(--me-ink);
   border-top: 3px solid var(--me-ink);
@@ -163,38 +165,101 @@
 
 /* Slot → grid-area (row-start / col-start / row-end / col-end). Values
    are grid line numbers; paired slots intentionally share coordinates. */
-.slotP1  { grid-area: 1 / 1 / 2 / 13; min-height: 100%; }  /* establishing strip */
-.slotP2  { grid-area: 2 / 1 / 5 / 6;  min-height: 100%; }  /* hero */
-.slotP3  { grid-area: 2 / 6 / 5 / 7;  min-height: 100%; }  /* narrow trapezoid */
 
-/* Pair 1 — shared cell: rows 2-3, cols 7-12 */
-.slotP4  { grid-area: 2 / 7 / 4 / 13; min-height: 100%; }
-.slotP5  { grid-area: 2 / 7 / 4 / 13; min-height: 100%; }
+/* Rows 1-2 — hero splash (cols 1-4) + top-row mediums + pair 1 */
+.slotP1  { grid-area: 1 / 1 / 3 / 5;  min-height: 100%; }   /* hero splash */
+.slotP2  { grid-area: 1 / 5 / 2 / 7;  min-height: 100%; }
+.slotP3  { grid-area: 1 / 7 / 2 / 9;  min-height: 100%; }
+.slotP4  { grid-area: 1 / 9 / 2 / 11; min-height: 100%; }
+.slotP5  { grid-area: 1 / 11 / 2 / 13; min-height: 100%; }
+/* Pair 1 — row 2 cols 5-7 */
+.slotP6  { grid-area: 2 / 5 / 3 / 8;  min-height: 100%; }
+.slotP7  { grid-area: 2 / 5 / 3 / 8;  min-height: 100%; }
+.slotP8  { grid-area: 2 / 8 / 3 / 10; min-height: 100%; }
+.slotP9  { grid-area: 2 / 10 / 3 / 13; min-height: 100%; }
 
-/* Pair 2 — shared cell: row 4, cols 7-12 */
-.slotP6  { grid-area: 4 / 7 / 5 / 13; min-height: 100%; }
-.slotP7  { grid-area: 4 / 7 / 5 / 13; min-height: 100%; }
+/* Row 3 — strip row */
+.slotP10 { grid-area: 3 / 1 / 4 / 6;  min-height: 100%; }
+.slotP11 { grid-area: 3 / 6 / 4 / 13; min-height: 100%; }  /* caption strip */
 
-/* Pair 3 — shared cell: rows 5-6, cols 1-6 */
-.slotP8  { grid-area: 5 / 1 / 7 / 7;  min-height: 100%; }
-.slotP9  { grid-area: 5 / 1 / 7 / 7;  min-height: 100%; }
+/* Row 4 — small panels + pair 2 */
+.slotP12 { grid-area: 4 / 1 / 5 / 3;  min-height: 100%; }
+/* Pair 2 — row 4 cols 3-5 */
+.slotP13 { grid-area: 4 / 3 / 5 / 6;  min-height: 100%; }
+.slotP14 { grid-area: 4 / 3 / 5 / 6;  min-height: 100%; }
+.slotP15 { grid-area: 4 / 6 / 5 / 8;  min-height: 100%; }
+.slotP16 { grid-area: 4 / 8 / 5 / 10; min-height: 100%; }
+.slotP17 { grid-area: 4 / 10 / 5 / 12; min-height: 100%; }
+.slotP18 { grid-area: 4 / 12 / 5 / 13; min-height: 100%; }  /* narrow */
 
-.slotP10 { grid-area: 5 / 7 / 7 / 8;  min-height: 100%; }  /* vertical strip */
+/* Row 5 — narration + pairs + mediums */
+.slotN1  { grid-area: 5 / 1 / 6 / 4;  align-self: stretch; }
+/* Pair 3 — row 5 cols 4-5 */
+.slotP19 { grid-area: 5 / 4 / 6 / 6;  min-height: 100%; }
+.slotP20 { grid-area: 5 / 4 / 6 / 6;  min-height: 100%; }
+.slotP21 { grid-area: 5 / 6 / 6 / 8;  min-height: 100%; }
+/* Pair 4 — row 5 cols 8-9 */
+.slotP22 { grid-area: 5 / 8 / 6 / 10; min-height: 100%; }
+.slotP23 { grid-area: 5 / 8 / 6 / 10; min-height: 100%; }
+.slotP24 { grid-area: 5 / 10 / 6 / 13; min-height: 100%; }
 
-/* Pair 4 — shared cell: rows 5-6, cols 8-12 */
-.slotP11 { grid-area: 5 / 8 / 7 / 13; min-height: 100%; }
-.slotP12 { grid-area: 5 / 8 / 7 / 13; min-height: 100%; }
+/* Row 6 — full-width interlude strip */
+.slotP25 { grid-area: 6 / 1 / 7 / 13; min-height: 100%; }
 
-.slotP13 { grid-area: 7 / 1 / 8 / 9;  min-height: 100%; }  /* closing strip */
-.slotN1  { grid-area: 7 / 9 / 8 / 13; align-self: stretch; }
+/* Rows 7-8 — second splash + surroundings + pair 5 */
+.slotP26 { grid-area: 7 / 1 / 9 / 4;  min-height: 100%; }   /* second splash */
+.slotP27 { grid-area: 7 / 4 / 8 / 6;  min-height: 100%; }
+/* Pair 5 — row 7 cols 6-7 */
+.slotP28 { grid-area: 7 / 6 / 8 / 8;  min-height: 100%; }
+.slotP29 { grid-area: 7 / 6 / 8 / 8;  min-height: 100%; }
+.slotP30 { grid-area: 7 / 8 / 8 / 10; min-height: 100%; }
+.slotP31 { grid-area: 7 / 10 / 8 / 13; min-height: 100%; }
 
-/* Bleeding permanent SFX — rides over the fold between spread rows 4/5,
-   straddling the horizontal split on the left block. */
+.slotP32 { grid-area: 8 / 4 / 9 / 6;  min-height: 100%; }
+.slotP33 { grid-area: 8 / 6 / 9 / 8;  min-height: 100%; }
+.slotP34 { grid-area: 8 / 8 / 9 / 10; min-height: 100%; }
+.slotP35 { grid-area: 8 / 10 / 9 / 13; min-height: 100%; }
+
+/* Row 9 — narration + pair 6 + mediums */
+.slotN2  { grid-area: 9 / 1 / 10 / 4; align-self: stretch; }
+/* Pair 6 — row 9 cols 4-5 */
+.slotP36 { grid-area: 9 / 4 / 10 / 6; min-height: 100%; }
+.slotP37 { grid-area: 9 / 4 / 10 / 6; min-height: 100%; }
+.slotP38 { grid-area: 9 / 6 / 10 / 9; min-height: 100%; }
+.slotP39 { grid-area: 9 / 9 / 10 / 13; min-height: 100%; }
+
+/* Row 10 — wide close-up */
+.slotP40 { grid-area: 10 / 1 / 11 / 13; min-height: 100%; }
+
+/* Row 11 — closing caption strip */
+.slotP41 { grid-area: 11 / 1 / 12 / 13; min-height: 100%; }
+
+/* Bleeding permanent SFX — WHAM across the row 3 fold (after hero splash) */
 .spreadBleedSfx {
   position: absolute;
-  top: calc(110px + 200px + 200px + 200px - 1.2rem);   /* ≈ end of row 4 */
+  top: calc(140px + 140px - 1.2rem);
   left: 2%;
   font-size: clamp(3rem, 7vw, 6.5rem) !important;
+  z-index: 8;
+  pointer-events: none;
+}
+
+/* KRAK mid-page, straddling row 6 strip */
+.spreadBleedSfx2 {
+  position: absolute;
+  top: calc(140px + 140px + 80px + 150px + 150px - 0.6rem);
+  left: 30%;
+  font-size: clamp(2.8rem, 6.5vw, 5.5rem) !important;
+  z-index: 8;
+  pointer-events: none;
+}
+
+/* WHOOSH riding the row 8-9 fold on the right side */
+.spreadBleedSfx3 {
+  position: absolute;
+  top: calc(140px + 140px + 80px + 150px + 150px + 80px + 150px + 150px - 1rem);
+  right: 4%;
+  font-size: clamp(2.6rem, 5.8vw, 4.8rem) !important;
   z-index: 8;
   pointer-events: none;
 }
@@ -205,108 +270,48 @@
   right: 14%;
   z-index: 8;
 }
-.bubbleB {
-  position: absolute;
-  bottom: -22px;
-  right: 10%;
-  z-index: 7;
-}
 .bubbleMid {
   position: absolute;
-  top: 42%;
+  top: calc(140px + 140px + 80px + 150px - 18px);
   right: -22px;
   z-index: 8;
 }
 
-/* Stickers pinned to panel corners — each anchored absolutely inside .spread
-   or .spread2 so they float above the grid. */
+/* Stickers — pinned to specific spots on the dense grid. */
 .stickerShonen {
   position: absolute;
-  top: calc(110px + 200px - 18px);
-  left: calc(50% - 2rem);
+  top: calc(140px + 140px - 18px);
+  left: calc(33% - 1rem);
   z-index: 8;
 }
 .stickerEsp {
   position: absolute;
-  top: calc(110px + 200px + 200px + 200px + 100px);
-  left: calc(50% + 1.5rem);
+  top: calc(140px + 140px + 80px + 150px + 150px + 80px + 150px - 18px);
+  left: calc(50% + 1rem);
   z-index: 8;
 }
 .stickerCoffee {
   position: absolute;
-  top: calc(110px + 200px + 4px);
+  top: calc(140px + 140px + 80px - 10px);
   right: 3%;
   z-index: 8;
 }
-
-/* ── Interstitial — sits between spread 1 and spread 2, introducing the
-   second act. Keeps the page dense while signalling a chapter beat. ── */
-.interstitial {
-  position: relative;
-  padding: 2.5rem var(--me-page-pad-x) 2.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 2rem;
-  align-items: center;
-  border-bottom: 3px solid var(--me-ink);
-}
-.interstitialSfx {
-  font-size: clamp(3.5rem, 10vw, 7rem) !important;
-  justify-self: end;
-}
-
-/* ── Spread 2 — interests collage. 12 × 4 grid, roomier rows. ─────── */
-.spread2 {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 110px 220px 220px 200px;
-  gap: 3px;
-  background: var(--me-ink);
-  border-top: 3px solid var(--me-ink);
-  border-bottom: 3px solid var(--me-ink);
-  margin-bottom: 4rem;
-  overflow: visible;
-}
-
-.slot2P14 { grid-area: 1 / 1 / 2 / 13; min-height: 100%; }  /* establishing */
-.slot2P15 { grid-area: 2 / 1 / 4 / 6;  min-height: 100%; }  /* hero */
-.slot2P16 { grid-area: 2 / 6 / 3 / 10; min-height: 100%; }  /* wide top */
-.slot2P17 { grid-area: 2 / 10 / 4 / 13; min-height: 100%; } /* tall right */
-.slot2N2  { grid-area: 3 / 6 / 4 / 10; align-self: stretch; }
-.slot2P18 { grid-area: 4 / 1 / 5 / 5;  min-height: 100%; }
-
-/* Pair 5 — shared cell: row 4, cols 5-9 */
-.slot2P19 { grid-area: 4 / 5 / 5 / 10; min-height: 100%; }
-.slot2P20 { grid-area: 4 / 5 / 5 / 10; min-height: 100%; }
-
-.slot2P21 { grid-area: 4 / 10 / 5 / 13; min-height: 100%; }
-
-.spread2BleedSfx {
-  position: absolute;
-  top: calc(110px + 220px - 0.4rem);
-  left: 28%;
-  font-size: clamp(2.6rem, 6vw, 5rem) !important;
-  z-index: 8;
-  pointer-events: none;
-}
-
 .stickerLinux {
   position: absolute;
-  top: calc(110px + 220px + 220px - 6px);
-  left: calc(30% - 1rem);
+  top: calc(140px + 140px + 80px + 150px + 150px + 80px + 150px + 150px + 150px - 14px);
+  left: calc(50% - 2rem);
   z-index: 8;
 }
 .stickerTrails {
   position: absolute;
-  top: calc(110px + 220px + 20px);
-  left: 4%;
+  top: calc(140px + 140px + 80px + 150px + 150px - 10px);
+  right: 6%;
   z-index: 8;
 }
 .stickerSince {
   position: absolute;
-  top: 20px;
-  right: 6%;
+  top: calc(140px + 140px + 80px + 150px + 150px + 80px - 16px);
+  left: 5%;
   z-index: 8;
 }
 
@@ -479,38 +484,36 @@
   .name { font-size: clamp(3.2rem, 14vw, 5rem); }
 
   .spread,
-  .spread2,
-  .nowSection,
-  .interstitial {
+  .nowSection {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas: none;
     gap: 3px;
   }
 
-  .spread,
-  .spread2 { margin-bottom: 3rem; }
+  .spread { margin-bottom: 3rem; }
 
   .slotP1, .slotP2, .slotP3, .slotP4, .slotP5, .slotP6, .slotP7,
   .slotP8, .slotP9, .slotP10, .slotP11, .slotP12, .slotP13,
-  .slotN1,
-  .slot2P14, .slot2P15, .slot2P16, .slot2P17, .slot2P18,
-  .slot2P19, .slot2P20, .slot2P21, .slot2N2 {
+  .slotP14, .slotP15, .slotP16, .slotP17, .slotP18, .slotP19,
+  .slotP20, .slotP21, .slotP22, .slotP23, .slotP24, .slotP25,
+  .slotP26, .slotP27, .slotP28, .slotP29, .slotP30, .slotP31,
+  .slotP32, .slotP33, .slotP34, .slotP35, .slotP36, .slotP37,
+  .slotP38, .slotP39, .slotP40, .slotP41,
+  .slotN1, .slotN2 {
     grid-area: auto;
-    min-height: 220px;
+    min-height: 200px;
   }
 
-  .slotP1, .slot2P14  { min-height: 140px; }  /* establishing strips */
-  .slotP2, .slot2P15  { min-height: 340px; }  /* hero panels */
-  .slotP13, .slot2P21 { min-height: 140px; }  /* closing strips */
-  .slotP3, .slotP10, .slot2P17 { min-height: 180px; }
+  .slotP1, .slotP26 { min-height: 320px; }  /* splash panels */
+  .slotP10, .slotP11, .slotP25, .slotP40, .slotP41 { min-height: 140px; }
 
   .nowBox { padding: 1.4rem 1.4rem; grid-column: 1; }
   .nowRow { grid-template-columns: 90px 1fr; gap: 0.7rem; }
 
-  .bubbleB, .bubbleTop, .bubbleMid { position: static; margin: 0.5rem 0; }
+  .bubbleTop, .bubbleMid { position: static; margin: 0.5rem 0; }
 
-  .spreadBleedSfx, .spread2BleedSfx,
+  .spreadBleedSfx, .spreadBleedSfx2, .spreadBleedSfx3,
   .stickerShonen, .stickerEsp, .stickerCoffee,
   .stickerLinux, .stickerTrails, .stickerSince {
     position: static;

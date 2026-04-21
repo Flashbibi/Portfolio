@@ -150,6 +150,18 @@
   pointer-events: none;
 }
 
+/* On small panels the label only surfaces on hover, mirroring the hoverSfx
+   fade-in. Keeps tight grids legible without shouting 15+ tags at once. */
+.panel.hideLabel .label {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 240ms ease, transform 240ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+.panel.hideLabel:has(.frame:hover) .label {
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* ── SFX — mono, cream fill, black stroke + ink drop shadow ──────────── */
 .sfx,
 .hoverSfx {

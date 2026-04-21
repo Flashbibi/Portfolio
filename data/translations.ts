@@ -126,10 +126,9 @@ interface Translations {
       bio: string
     }
     panels: {
-      p1Caption: string
-      p13Caption: string
-      p14Caption: string
-      p21Caption: string
+      p11Caption: string
+      p25Caption: string
+      p41Caption: string
       p1Hover: string
       p2Hover: string
       p3Hover: string
@@ -151,6 +150,26 @@ interface Translations {
       p19Hover: string
       p20Hover: string
       p21Hover: string
+      p22Hover: string
+      p23Hover: string
+      p24Hover: string
+      p25Hover: string
+      p26Hover: string
+      p27Hover: string
+      p28Hover: string
+      p29Hover: string
+      p30Hover: string
+      p31Hover: string
+      p32Hover: string
+      p33Hover: string
+      p34Hover: string
+      p35Hover: string
+      p36Hover: string
+      p37Hover: string
+      p38Hover: string
+      p39Hover: string
+      p40Hover: string
+      p41Hover: string
     }
     labels: {
       chefin: string
@@ -356,31 +375,50 @@ const en: Translations = {
       bio:       '18, from Zürich. CS apprentice @ ETH. I build things — out of code, filament, and curiosity. Backend & APIs by day. Projects, anime, cats by night.',
     },
     panels: {
-      p1Caption:  '// chapter.02.01 — who',
-      p13Caption: '// chapter.02.02 — interlude',
-      p14Caption: '// chapter.02.03 — off-screen',
-      p21Caption: '// end of chapter',
-      p1Hover:   'ZOOM!',
-      p2Hover:   'WHAM!',
-      p3Hover:   'SNAP!',
-      p4Hover:   'KRAK!',
-      p5Hover:   'POW!',
-      p6Hover:   'BAM!',
-      p7Hover:   'ZAP!',
-      p8Hover:   'KAPOW!',
-      p9Hover:   'ZING!',
-      p10Hover:  'FLASH!',
-      p11Hover:  'SMASH!',
-      p12Hover:  'BANG!',
-      p13Hover:  'WHOOSH!',
-      p14Hover:  'CRACK!',
-      p15Hover:  'BOOM!',
-      p16Hover:  'CLANG!',
-      p17Hover:  'THWACK!',
-      p18Hover:  'WHACK!',
+      p11Caption: '// chapter.02.01 — who',
+      p25Caption: '// interlude',
+      p41Caption: '// end of chapter',
+      p1Hover:   'WHAM!',
+      p2Hover:   'SNAP!',
+      p3Hover:   'POW!',
+      p4Hover:   'ZAP!',
+      p5Hover:   'FLASH!',
+      p6Hover:   'KRAK!',
+      p7Hover:   'BAM!',
+      p8Hover:   'ZING!',
+      p9Hover:   'CLANG!',
+      p10Hover:  'WHOOSH!',
+      p11Hover:  'ZOOM!',
+      p12Hover:  'SMASH!',
+      p13Hover:  'BOOM!',
+      p14Hover:  'BANG!',
+      p15Hover:  'CRACK!',
+      p16Hover:  'THWACK!',
+      p17Hover:  'WHACK!',
+      p18Hover:  'KAPOW!',
       p19Hover:  'KABOOM!',
       p20Hover:  'SPLASH!',
       p21Hover:  'SWOOSH!',
+      p22Hover:  'THUD!',
+      p23Hover:  'SHING!',
+      p24Hover:  'POOF!',
+      p25Hover:  'BLAM!',
+      p26Hover:  'SMASH!',
+      p27Hover:  'DOINK!',
+      p28Hover:  'TWANG!',
+      p29Hover:  'FWOOM!',
+      p30Hover:  'VROOM!',
+      p31Hover:  'SLAM!',
+      p32Hover:  'KRUNCH!',
+      p33Hover:  'WHOMP!',
+      p34Hover:  'THWIP!',
+      p35Hover:  'BOING!',
+      p36Hover:  'KLANG!',
+      p37Hover:  'FWAP!',
+      p38Hover:  'RAKA!',
+      p39Hover:  'CRASH!',
+      p40Hover:  'SNAP!',
+      p41Hover:  'SWOOSH!',
     },
     labels: {
       chefin:    'THE BOSS',
@@ -586,31 +624,50 @@ const de: Translations = {
       bio:       '18, aus Zürich. Informatiker-Lehrling @ ETH. Ich baue Dinge — aus Code, Filament und Neugier. Tagsüber Backend & APIs. Nachts: Projekte, Anime, Katzen.',
     },
     panels: {
-      p1Caption:  '// kapitel.02.01 — wer',
-      p13Caption: '// kapitel.02.02 — zwischenspiel',
-      p14Caption: '// kapitel.02.03 — off-screen',
-      p21Caption: '// ende des kapitels',
-      p1Hover:   'ZOOM!',
-      p2Hover:   'WHAM!',
-      p3Hover:   'SNAP!',
-      p4Hover:   'KRAK!',
-      p5Hover:   'POW!',
-      p6Hover:   'BAM!',
-      p7Hover:   'ZAP!',
-      p8Hover:   'KAPOW!',
-      p9Hover:   'ZING!',
-      p10Hover:  'FLASH!',
-      p11Hover:  'SMASH!',
-      p12Hover:  'BANG!',
-      p13Hover:  'WHOOSH!',
-      p14Hover:  'CRACK!',
-      p15Hover:  'BOOM!',
-      p16Hover:  'CLANG!',
-      p17Hover:  'THWACK!',
-      p18Hover:  'WHACK!',
+      p11Caption: '// kapitel.02.01 — wer',
+      p25Caption: '// zwischenspiel',
+      p41Caption: '// ende des kapitels',
+      p1Hover:   'WHAM!',
+      p2Hover:   'SNAP!',
+      p3Hover:   'POW!',
+      p4Hover:   'ZAP!',
+      p5Hover:   'FLASH!',
+      p6Hover:   'KRAK!',
+      p7Hover:   'BAM!',
+      p8Hover:   'ZING!',
+      p9Hover:   'CLANG!',
+      p10Hover:  'WHOOSH!',
+      p11Hover:  'ZOOM!',
+      p12Hover:  'SMASH!',
+      p13Hover:  'BOOM!',
+      p14Hover:  'BANG!',
+      p15Hover:  'CRACK!',
+      p16Hover:  'THWACK!',
+      p17Hover:  'WHACK!',
+      p18Hover:  'KAPOW!',
       p19Hover:  'KABOOM!',
       p20Hover:  'SPLASH!',
       p21Hover:  'SWOOSH!',
+      p22Hover:  'THUD!',
+      p23Hover:  'SHING!',
+      p24Hover:  'POOF!',
+      p25Hover:  'BLAM!',
+      p26Hover:  'SMASH!',
+      p27Hover:  'DOINK!',
+      p28Hover:  'TWANG!',
+      p29Hover:  'FWOOM!',
+      p30Hover:  'VROOM!',
+      p31Hover:  'SLAM!',
+      p32Hover:  'KRUNCH!',
+      p33Hover:  'WHOMP!',
+      p34Hover:  'THWIP!',
+      p35Hover:  'BOING!',
+      p36Hover:  'KLANG!',
+      p37Hover:  'FWAP!',
+      p38Hover:  'RAKA!',
+      p39Hover:  'CRASH!',
+      p40Hover:  'SNAP!',
+      p41Hover:  'SWOOSH!',
     },
     labels: {
       chefin:    'DIE CHEFIN',
