@@ -48,6 +48,7 @@ function panelProps(cfg: MePanelConfig, t: MeTrans) {
     halftone: cfg.halftone,
     image: cfg.image,
     imageAlt: cfg.imageAlt ?? '',
+    imageObjectPosition: cfg.imageObjectPosition,
     imagePriority: cfg.priority ?? false,
     caption: cfg.captionKey ? t.panels[cfg.captionKey] : undefined,
     captionPos: cfg.captionPos,

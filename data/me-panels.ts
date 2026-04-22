@@ -47,6 +47,7 @@ export interface MePanelConfig {
 
   image?: string
   imageAlt?: string
+  imageObjectPosition?: string
   placeholder?: Placeholder
   priority?: boolean
 
@@ -69,109 +70,119 @@ export interface MePanelConfig {
 }
 
 const SUKI = (name: string) => `/me/suki/${name}`
+const ME   = (name: string) => `/me/${name}`
 
 export const mePanels: MePanelConfig[] = [
   /* ────────────────────────────────────────────────────────────────
-     ROW 1-2 (140 + 140) — Hero splash + top row
+     ROW 1-2 — gemischt: du → hund → katze → du → hund/katze ...
      ──────────────────────────────────────────────────────────────── */
   {
     id: 'p1', section: 'spread', slot: 'p1', order: 0,
-    image: SUKI('20230320_130507.jpg'), priority: true,
+    image: ME('P1010081.JPG'), priority: true,
+    imageObjectPosition: 'center 45%',
     cut: 'tl-br', bleed: true,
     labelKey: 'chefin', labelPos: 'tr',
     hoverSfxKey: 'p1Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p2', section: 'spread', slot: 'p2', order: 1,
-    image: SUKI('20220424_104354.jpg'),
+    image: ME('P1010103.JPG'),
+    imageObjectPosition: 'center 30%',
     labelKey: 'setup', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p2Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p3', section: 'spread', slot: 'p3', order: 2,
-    image: SUKI('20220506_192323.jpg'),
+    image: ME('Snapchat-49393205.jpg'),
     labelKey: 'coffee', labelPos: 'tl',
     hoverSfxKey: 'p3Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p4', section: 'spread', slot: 'p4', order: 3,
-    image: SUKI('20220506_192304.jpg'),
+    image: ME('IMG_20250308_133835552.jpg'),
     labelKey: 'gaming', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p4Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p5', section: 'spread', slot: 'p5', order: 4,
-    image: SUKI('20220415_142445.jpg'),
+    image: ME('P3040170.JPG'),
+    imageObjectPosition: 'left center',
     cut: 'blade-r',
     labelKey: 'filament', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p5Hover', hoverSfxPos: 'br',
   },
 
-  /* Pair 1 — row 2, cols 5-7, cross-diagonal */
+  /* Pair 1 — diag: extreme close-ups, fill the frame */
   {
     id: 'p6', section: 'spread', slot: 'p6', order: 5,
-    image: SUKI('20220415_142338.jpg'),
+    image: ME('IMG_20240901_132713893.jpg'),
+    imageObjectPosition: 'left top',
     cut: 'diag-ul',
     labelKey: 'print', labelPos: 'tl',
     hoverSfxKey: 'p6Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p7', section: 'spread', slot: 'p7', order: 6,
-    image: SUKI('20220507_180256.jpg'),
+    image: ME('IMG_20240901_132713893.jpg'),
     cut: 'diag-lr',
     labelKey: 'homelab', labelPos: 'br',
     hoverSfxKey: 'p7Hover', hoverSfxPos: 'tr',
   },
   {
     id: 'p8', section: 'spread', slot: 'p8', order: 7,
-    image: SUKI('20220511_215118.jpg'),
+    image: ME('IMG_20250118_030910574.jpg'),
+    imageObjectPosition: 'center 30%',
     labelKey: 'esp', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p8Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p9', section: 'spread', slot: 'p9', order: 8,
-    image: SUKI('20220507_181950.jpg'),
+    image: ME('IMG_20250309_154715265.jpg'),
+    imageObjectPosition: 'center 22%',
     labelKey: 'network', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p9Hover', hoverSfxPos: 'br',
   },
 
   /* ────────────────────────────────────────────────────────────────
-     ROW 3 (80) — strip row
+     ROW 3 (80) — Streifen: Querformat oder starker Horizont
      ──────────────────────────────────────────────────────────────── */
   {
     id: 'p10', section: 'spread', slot: 'p10', order: 9,
-    image: SUKI('20220210_174553.jpg'),
+    image: ME('P1010092.JPG'),
+    imageObjectPosition: 'center 58%',
     hoverSfxKey: 'p10Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p11', section: 'spread', slot: 'p11', order: 10,
-    image: SUKI('20230512_154034.jpg'),
+    image: ME('20230702_093951.jpg'),
+    imageObjectPosition: 'center top',
     cut: 'slash-top', frameless: true,
     captionKey: 'p11Caption', captionPos: 'bl',
     hoverSfxKey: 'p11Hover', hoverSfxPos: 'tr',
   },
 
   /* ────────────────────────────────────────────────────────────────
-     ROW 4 (150) — small + pair + 2-row medium
+     ROW 4-5 — gemischt
      ──────────────────────────────────────────────────────────────── */
   {
     id: 'p12', section: 'spread', slot: 'p12', order: 11,
-    image: SUKI('20220522_152049.jpg'),
+    image: ME('IMG_20240502_152958681.jpg'),
+    imageObjectPosition: 'center 35%',
     labelKey: 'anime', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p12Hover', hoverSfxPos: 'br',
   },
 
-  /* Pair 2 — row 4, cols 3-5, mirrored vertical split */
+  /* Pair 2 — diag-split: Gesichter die den Frame füllen */
   {
     id: 'p13', section: 'spread', slot: 'p13', order: 12,
-    image: SUKI('20220811_162341.jpg'),
+    image: ME('P1010083.JPG'),
     cut: 'diag-split-l',
     labelKey: 'lofi', labelPos: 'tl',
     hoverSfxKey: 'p13Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p14', section: 'spread', slot: 'p14', order: 13,
-    image: SUKI('20240128_151252.jpg'),
+    image: ME('P1010083.JPG'),
     cut: 'diag-split-r',
     labelKey: 'studio', labelPos: 'tr',
     hoverSfxKey: 'p14Hover', hoverSfxPos: 'br',
@@ -179,44 +190,44 @@ export const mePanels: MePanelConfig[] = [
 
   {
     id: 'p15', section: 'spread', slot: 'p15', order: 14,
-    image: SUKI('20220314_190348.jpg'),
+    image: ME('IMG_20250316_160724297.jpg'),
+    imageObjectPosition: 'center 35%',
     labelKey: 'manga', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p15Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p16', section: 'spread', slot: 'p16', order: 15,
-    image: SUKI('20240114_192705.jpg'),
+    image: ME('IMG_20241124_133101182.jpg'),
+    imageObjectPosition: 'center 70%',
     cut: 'blade-l',
     labelKey: 'mountains', labelPos: 'tr',
     hoverSfxKey: 'p16Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p17', section: 'spread', slot: 'p17', order: 16,
-    image: SUKI('20220409_172847.jpg'),
+    image: ME('IMG_20250619_205146799.jpg'),
+    imageObjectPosition: 'center 40%',
     labelKey: 'trails', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p17Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p18', section: 'spread', slot: 'p18', order: 17,
-    image: SUKI('20220506_192309.jpg'),
+    image: ME('IMG_20241113_232710878.jpg'),
+    imageObjectPosition: 'center 68%',
     hoverSfxKey: 'p18Hover', hoverSfxPos: 'br',
   },
 
-  /* ────────────────────────────────────────────────────────────────
-     ROW 5 (150) — narration + pairs + tiny
-     ──────────────────────────────────────────────────────────────── */
-
-  /* Pair 3 — row 5, cols 4-5 */
+  /* Pair 3 — diag: close-ups */
   {
     id: 'p19', section: 'spread', slot: 'p19', order: 18,
-    image: SUKI('20240114_192750.jpg'),
+    image: ME('P1010062.JPG'),
     cut: 'diag-ul',
     labelKey: 'tinker', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p19Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p20', section: 'spread', slot: 'p20', order: 19,
-    image: SUKI('20230702_093947.jpg'),
+    image: ME('P1010062.JPG'),
     cut: 'diag-lr',
     labelKey: 'manga', labelPos: 'br', hideLabelUntilHover: true,
     hoverSfxKey: 'p20Hover', hoverSfxPos: 'tr',
@@ -224,22 +235,25 @@ export const mePanels: MePanelConfig[] = [
 
   {
     id: 'p21', section: 'spread', slot: 'p21', order: 20,
-    image: SUKI('20220507_180254.jpg'),
+    image: ME('IMG_20251211_182336245.jpg'),
+    imageObjectPosition: 'center 42%',
     labelKey: 'linux', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p21Hover', hoverSfxPos: 'br',
   },
 
-  /* Pair 4 — row 5, cols 10-11 */
+  /* Pair 4 — diag-split: frame-filling close-ups */
   {
     id: 'p22', section: 'spread', slot: 'p22', order: 21,
-    image: SUKI('20220415_142339.jpg'),
+    image: ME('IMG_20250831_195851011.jpg'),
+    imageObjectPosition: 'center 32%',
     cut: 'diag-split-l',
     labelKey: 'lofi', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p22Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p23', section: 'spread', slot: 'p23', order: 22,
-    image: SUKI('20220522_152049.jpg'),
+    image: ME('IMG_20250831_195851011.jpg'),
+    imageObjectPosition: 'center 32%',
     cut: 'diag-split-r',
     labelKey: 'coffee', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p23Hover', hoverSfxPos: 'br',
@@ -247,49 +261,54 @@ export const mePanels: MePanelConfig[] = [
 
   {
     id: 'p24', section: 'spread', slot: 'p24', order: 23,
-    image: SUKI('20230320_130507.jpg'),
+    image: ME('IMG_20250618_200137118.jpg'),
+    imageObjectPosition: 'center 38%',
     hoverSfxKey: 'p24Hover', hoverSfxPos: 'br',
   },
 
   /* ────────────────────────────────────────────────────────────────
-     ROW 6 (80) — full-width interlude strip
+     ROW 6 (80) — Landschaft als voller Trennstreifen
      ──────────────────────────────────────────────────────────────── */
   {
     id: 'p25', section: 'spread', slot: 'p25', order: 24,
-    image: SUKI('20231224_110714.jpg'),
+    image: ME('20220602_121150.jpg'),
     cut: 'slash-bottom', frameless: true, halftone: false,
     captionKey: 'p25Caption', captionPos: 'tl',
     hoverSfxKey: 'p25Hover', hoverSfxPos: 'br',
   },
 
   /* ────────────────────────────────────────────────────────────────
-     ROW 7-8 (150 + 150) — second splash + surroundings
+     ROW 7-8 — gemischt: Katzen-Hero + Hund/Katze abwechselnd
      ──────────────────────────────────────────────────────────────── */
   {
     id: 'p26', section: 'spread', slot: 'p26', order: 25,
-    image: SUKI('IMG_20240321_103229148.jpg'),
+    image: ME('IMG_20260130_171427803.jpg'),
+    imageObjectPosition: 'center 30%',
     cut: 'tl-br', bleed: true,
     labelKey: 'manga', labelPos: 'tr',
     hoverSfxKey: 'p26Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p27', section: 'spread', slot: 'p27', order: 26,
-    image: SUKI('20220506_192255.jpg'),
+    image: ME('20240114_192750.jpg'),
+    imageObjectPosition: 'center 62%',
     labelKey: 'homelab', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p27Hover', hoverSfxPos: 'br',
   },
 
-  /* Pair 5 — row 7, cols 6-7, vertical trapezoid */
+  /* Pair 5 — trap: horizontale Motive bevorzugt */
   {
     id: 'p28', section: 'spread', slot: 'p28', order: 27,
-    image: SUKI('20220507_181937.jpg'),
+    image: ME('IMG_20260420_195451889.jpg'),
+    imageObjectPosition: 'center 65%',
     cut: 'trap-narrow-b',
     labelKey: 'anime', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p28Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p29', section: 'spread', slot: 'p29', order: 28,
-    image: SUKI('20220415_142341.jpg'),
+    image: ME('IMG_20250914_131327600.jpg'),
+    imageObjectPosition: 'left center',
     cut: 'trap-wide-b',
     labelKey: 'gaming', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p29Hover', hoverSfxPos: 'bl',
@@ -297,13 +316,14 @@ export const mePanels: MePanelConfig[] = [
 
   {
     id: 'p30', section: 'spread', slot: 'p30', order: 29,
-    image: SUKI('20220415_142337.jpg'),
+    image: ME('IMG_20251230_220953113.jpg'),
+    imageObjectPosition: 'center 28%',
     labelKey: 'print', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p30Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p31', section: 'spread', slot: 'p31', order: 30,
-    image: SUKI('IMG_20240530_142028651.jpg'),
+    image: ME('IMG_20250130_092543198.jpg'),
     cut: 'wedge-l',
     labelKey: 'trails', labelPos: 'tr',
     hoverSfxKey: 'p31Hover', hoverSfxPos: 'bl',
@@ -312,45 +332,50 @@ export const mePanels: MePanelConfig[] = [
   /* Row 8 continued */
   {
     id: 'p32', section: 'spread', slot: 'p32', order: 31,
-    image: SUKI('20220522_152309.jpg'),
+    image: ME('IMG_20250406_111632210.jpg'),
     labelKey: 'studio', labelPos: 'tl',
     hoverSfxKey: 'p32Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p33', section: 'spread', slot: 'p33', order: 32,
-    image: SUKI('20220511_215118.jpg'),
+    image: ME('IMG_20240901_132716927.jpg'),
+    imageObjectPosition: 'left 20%',
     labelKey: 'filament', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p33Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p34', section: 'spread', slot: 'p34', order: 33,
-    image: SUKI('20220507_180307.jpg'),
+    image: ME('IMG_20251229_184207494.jpg'),
+    imageObjectPosition: 'center 35%',
     labelKey: 'coffee', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p34Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p35', section: 'spread', slot: 'p35', order: 34,
-    image: SUKI('20240114_192705.jpg'),
+    image: ME('IMG_20250330_185650160.jpg'),
+    imageObjectPosition: 'left center',
     cut: 'blade-r',
     labelKey: 'mountains', labelPos: 'tl',
     hoverSfxKey: 'p35Hover', hoverSfxPos: 'br',
   },
 
   /* ────────────────────────────────────────────────────────────────
-     ROW 9 (150) — narration + pair + mediums
+     ROW 9 (150) — narration + pair + mediums  [leer — noch offen]
      ──────────────────────────────────────────────────────────────── */
 
-  /* Pair 6 — row 9, cols 4-5 */
+  /* Pair 6 — row 9, cols 4-5: kitten huge eyes split */
   {
     id: 'p36', section: 'spread', slot: 'p36', order: 35,
-    image: SUKI('20230702_093951.jpg'),
+    image: ME('IMG_20250406_111635317.jpg'),
+    imageObjectPosition: 'center 40%',
     cut: 'diag-split-l',
     labelKey: 'network', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p36Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p37', section: 'spread', slot: 'p37', order: 36,
-    image: SUKI('20240114_192750.jpg'),
+    image: ME('IMG_20250406_111635317.jpg'),
+    imageObjectPosition: 'center 40%',
     cut: 'diag-split-r',
     labelKey: 'linux', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p37Hover', hoverSfxPos: 'br',
@@ -358,13 +383,14 @@ export const mePanels: MePanelConfig[] = [
 
   {
     id: 'p38', section: 'spread', slot: 'p38', order: 37,
-    image: SUKI('20220522_152344.jpg'),
+    image: ME('IMG_20250914_131322317.jpg'),
+    imageObjectPosition: 'center 28%',
     labelKey: 'anime', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p38Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p39', section: 'spread', slot: 'p39', order: 38,
-    image: SUKI('20230322_140508.jpg'),
+    image: ME('IMG_20250503_163210101.jpg'),
     labelKey: 'coffee', labelPos: 'tl',
     hoverSfxKey: 'p39Hover', hoverSfxPos: 'br',
   },
@@ -374,13 +400,13 @@ export const mePanels: MePanelConfig[] = [
      ──────────────────────────────────────────────────────────────── */
   {
     id: 'p40', section: 'spread', slot: 'p40', order: 39,
-    image: SUKI('20230225_183222.jpg'),
+    image: ME('20230512_154033.jpg'),
+    imageObjectPosition: 'center 38%',
     bleed: true,
     hoverSfxKey: 'p40Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p41', section: 'spread', slot: 'p41', order: 40,
-    image: SUKI('20230629_181500.jpg'),
     cut: 'slash-top',
     captionKey: 'p41Caption', captionPos: 'bl',
     hoverSfxKey: 'p41Hover', hoverSfxPos: 'tr',

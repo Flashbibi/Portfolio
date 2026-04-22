@@ -43,6 +43,8 @@ interface Props {
   imagePriority?: boolean
   /** Rough sizes hint — panels span roughly one third of viewport on desktop. */
   imageSizes?: string
+  /** CSS object-position value, e.g. "center 80%" or "top center". Defaults to "center". */
+  imageObjectPosition?: string
   /** Bleeds 4% past grid boundaries — hero/splash panels only. */
   bleed?: boolean
   /** Hides the SVG ink border — for full-bleed strip panels. */
@@ -118,6 +120,7 @@ export default function MangaPanel({
   imageAlt = '',
   imagePriority = false,
   imageSizes = '(max-width: 900px) 100vw, 40vw',
+  imageObjectPosition = 'center',
   bleed = false,
   frameless = false,
 }: Props) {
@@ -126,7 +129,7 @@ export default function MangaPanel({
 
   const mediaContent = children
     ?? (image
-      ? <Image src={image} alt={imageAlt} fill sizes={imageSizes} priority={imagePriority} />
+      ? <Image src={image} alt={imageAlt} fill sizes={imageSizes} priority={imagePriority} style={{ objectPosition: imageObjectPosition }} />
       : (placeholder && <div className={`${styles.placeholder} ${styles[`ph-${placeholder}`]}`} />)
     )
 
