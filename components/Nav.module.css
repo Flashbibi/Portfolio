@@ -72,17 +72,6 @@
   opacity: 1;
 }
 
-/* /me link — subtle differentiator: italic serif, hints at a different chapter */
-.meLink {
-  font-family: 'Cormorant Garamond', serif !important;
-  font-style: italic;
-  font-size: 13px !important;
-  letter-spacing: 0.05em !important;
-  text-transform: lowercase !important;
-  color: var(--text) !important;
-}
-.meLink:hover { color: var(--accent) !important; }
-
 .termBtn {
   background: none;
   border: 1px solid var(--border2);

@@ -52,6 +52,7 @@ export default function About() {
             <p><GlitchText id="home-about-bio1" active={null}>{t.bio1}</GlitchText></p>
             <p><GlitchText id="home-about-bio2" active={null}>{t.bio2}</GlitchText></p>
           </div>
+          <a href="/me" className={styles.meLink}>{t.meLink}</a>
         </div>
         <div>
           <ul className={styles.skills} ref={skillsRef}>

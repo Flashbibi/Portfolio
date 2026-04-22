@@ -49,6 +49,22 @@
 }
 .body p + p { margin-top: 1.5rem; }
 
+.meLink {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--text3);
+  text-decoration: none;
+  transition: color 0.2s, transform 0.2s;
+}
+.meLink:hover {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
 .skills {
   margin-top: 3rem;
   list-style: none;

@@ -3,7 +3,6 @@ import type { Lang } from '@/context/LanguageContext'
 interface Translations {
   nav: {
     about: string
-    me: string
     projects: string
     contact: string
     terminal: string
@@ -22,6 +21,7 @@ interface Translations {
     heading3: string
     bio1: string
     bio2: string
+    meLink: string
     skills: {
       strong: string
       good: string
@@ -234,7 +234,6 @@ interface Translations {
 const en: Translations = {
   nav: {
     about: 'about me',
-    me: 'me',
     projects: 'projects',
     contact: 'contact',
     terminal: 'terminal',
@@ -257,6 +256,7 @@ const en: Translations = {
     heading3: 'Tinkerer.',
     bio1: "I'm Linus, a computer science apprentice (application development) at ETH Zürich. I love projects where I can quickly go from an idea to a working prototype.",
     bio2: 'I mostly work on software projects around backend, APIs, databases, and modern web apps. In my spare time I also build small hardware and 3D-printed projects.',
+    meLink: '→ the illustrated version',
     skills: {
       strong: 'Strong',
       good: 'Good',
@@ -483,7 +483,6 @@ const en: Translations = {
 const de: Translations = {
   nav: {
     about: 'über mich',
-    me: 'ich',
     projects: 'projekte',
     contact: 'kontakt',
     terminal: 'terminal',
@@ -506,6 +505,7 @@ const de: Translations = {
     heading3: 'Bastler.',
     bio1: 'Ich bin Linus, Informatiker Fachrichtung Applikationsentwicklung in Ausbildung an der ETH Zürich. Ich mag Projekte, bei denen ich schnell von einer Idee zu einem funktionierenden Prototyp komme.',
     bio2: 'Ich arbeite am liebsten an Softwareprojekten rund um Backend, APIs, Datenbanken und moderne Web-Apps. In meiner Freizeit baue ich zusätzlich kleine Hardware- und 3D-Projekte.',
+    meLink: '→ die illustrierte Fassung',
     skills: {
       strong: 'Stark',
       good: 'Gut',
