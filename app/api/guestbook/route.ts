@@ -5,20 +5,17 @@ import { NextRequest } from 'next/server'
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 async function isAppropriate(msg: string): Promise<boolean> {
-  try {
-    const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 5,
-      messages: [{
-        role: 'user',
-        content: `A visitor wants to leave a short message in a developer's portfolio guestbook. Reply "no" only if the message contains profanity, slurs, explicit sexual content, or hate speech. Reply "yes" for anything else — greetings, compliments, random thoughts, jokes, or normal sentences are all fine. Reply only "yes" or "no".\n\nMessage to evaluate:\n---\n${msg}\n---`,
-      }],
-    })
-    const text = (response.content[0] as { text: string }).text.toLowerCase().trim()
-    return text.startsWith('yes')
-  } catch {
-    return true // fail open — don't block if API is down
-  }
+  const response = await anthropic.messages.create({
+    model: 'claude-haiku-4-5',
+    max_tokens: 5,
+    messages: [{
+      role: 'user',
+      content: `A visitor wants to leave a short message in a developer's portfolio guestbook. Reply "no" only if the message contains profanity, slurs, explicit sexual content, or hate speech. Reply "yes" for anything else — greetings, compliments, random thoughts, jokes, or normal sentences are all fine. Reply only "yes" or "no".\n\nMessage to evaluate:\n---\n${msg}\n---`,
+    }],
+  })
+  const block = response.content.find(b => b.type === 'text')
+  const text = block && 'text' in block ? block.text.toLowerCase().trim() : ''
+  return text.startsWith('yes')
 }
 
 const redis = new Redis({
@@ -79,7 +76,13 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: 'empty_message' }, { status: 400 })
   }
 
-  if (!await isAppropriate(clean)) {
+  let appropriate: boolean
+  try {
+    appropriate = await isAppropriate(clean)
+  } catch {
+    return Response.json({ error: 'moderation_unavailable' }, { status: 503 })
+  }
+  if (!appropriate) {
     return Response.json({ error: 'inappropriate' }, { status: 422 })
   }
 
