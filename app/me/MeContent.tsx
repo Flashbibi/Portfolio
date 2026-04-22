@@ -56,6 +56,8 @@ function panelProps(cfg: MePanelConfig, t: MeTrans) {
     hideLabelUntilHover: cfg.hideLabelUntilHover,
     hoverSfx: cfg.hoverSfxKey ? t.panels[cfg.hoverSfxKey] : undefined,
     hoverSfxPos: cfg.hoverSfxPos,
+    bleed: cfg.bleed,
+    frameless: cfg.frameless,
     className: SLOT_CLASS[cfg.slot],
   }
 }

@@ -14,6 +14,10 @@
    the wrapper from its frame's :hover state. */
 .panel:has(.frame:hover) { transform: scale(1.04); z-index: 5; }
 
+/* Bleed panels scale past their grid cell by ~4%, overlapping gutters. */
+.bleed { transform: scale(1.04); z-index: 2; }
+.bleed:has(.frame:hover) { transform: scale(1.065); z-index: 5; }
+
 /* ── Frame: the clipped rectangle that holds the content.
    clip-path here means pointer events only fire on the visible shape. ─ */
 .frame {

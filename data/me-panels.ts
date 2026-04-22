@@ -63,6 +63,9 @@ export interface MePanelConfig {
 
   hoverSfxKey?: MePanelTextKey
   hoverSfxPos?: SfxPos
+
+  bleed?: boolean
+  frameless?: boolean
 }
 
 const SUKI = (name: string) => `/me/suki/${name}`
@@ -74,7 +77,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p1', section: 'spread', slot: 'p1', order: 0,
     image: SUKI('20230320_130507.jpg'), priority: true,
-    cut: 'tl-br',
+    cut: 'tl-br', bleed: true,
     labelKey: 'chefin', labelPos: 'tr',
     hoverSfxKey: 'p1Hover', hoverSfxPos: 'bl',
   },
@@ -99,7 +102,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p5', section: 'spread', slot: 'p5', order: 4,
     image: SUKI('20220415_142445.jpg'),
-    cut: 'trap-tall',
+    cut: 'blade-r',
     labelKey: 'filament', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p5Hover', hoverSfxPos: 'br',
   },
@@ -143,7 +146,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p11', section: 'spread', slot: 'p11', order: 10,
     image: SUKI('20230512_154034.jpg'),
-    cut: 'slash-top',
+    cut: 'slash-top', frameless: true,
     captionKey: 'p11Caption', captionPos: 'bl',
     hoverSfxKey: 'p11Hover', hoverSfxPos: 'tr',
   },
@@ -183,7 +186,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p16', section: 'spread', slot: 'p16', order: 15,
     image: SUKI('20240114_192705.jpg'),
-    cut: 'wedge-l',
+    cut: 'blade-l',
     labelKey: 'mountains', labelPos: 'tr',
     hoverSfxKey: 'p16Hover', hoverSfxPos: 'bl',
   },
@@ -254,7 +257,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p25', section: 'spread', slot: 'p25', order: 24,
     image: SUKI('20231224_110714.jpg'),
-    cut: 'slash-bottom',
+    cut: 'slash-bottom', frameless: true, halftone: false,
     captionKey: 'p25Caption', captionPos: 'tl',
     hoverSfxKey: 'p25Hover', hoverSfxPos: 'br',
   },
@@ -265,7 +268,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p26', section: 'spread', slot: 'p26', order: 25,
     image: SUKI('IMG_20240321_103229148.jpg'),
-    cut: 'tl-br',
+    cut: 'tl-br', bleed: true,
     labelKey: 'manga', labelPos: 'tr',
     hoverSfxKey: 'p26Hover', hoverSfxPos: 'bl',
   },
@@ -328,7 +331,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p35', section: 'spread', slot: 'p35', order: 34,
     image: SUKI('20240114_192705.jpg'),
-    cut: 'trap-tall',
+    cut: 'blade-r',
     labelKey: 'mountains', labelPos: 'tl',
     hoverSfxKey: 'p35Hover', hoverSfxPos: 'br',
   },
@@ -372,6 +375,7 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p40', section: 'spread', slot: 'p40', order: 39,
     image: SUKI('20230225_183222.jpg'),
+    bleed: true,
     hoverSfxKey: 'p40Hover', hoverSfxPos: 'br',
   },
   {

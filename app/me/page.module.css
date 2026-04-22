@@ -6,7 +6,7 @@
   min-height: 100vh;
   background: var(--me-paper);
   color: var(--me-ink);
-  padding: 2.5rem 0 5rem;
+  padding: 2.5rem 0 0;
   font-family: 'Space Mono', monospace;
   overflow-x: hidden;
 
@@ -154,7 +154,7 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 140px 140px 80px 150px 150px 80px 150px 150px 150px 150px 130px;
+  grid-template-rows: 185px 165px 55px 200px 130px 55px 195px 160px 160px 130px 85px;
   gap: 3px;
   background: var(--me-ink);
   border-top: 3px solid var(--me-ink);
@@ -234,83 +234,85 @@
 /* Row 11 — closing caption strip */
 .slotP41 { grid-area: 11 / 1 / 12 / 13; min-height: 100%; }
 
-/* Bleeding permanent SFX — WHAM across the row 3 fold (after hero splash) */
+/* Bleeding permanent SFX — WHAM across the row 2/3 fold */
 .spreadBleedSfx {
   position: absolute;
-  top: calc(140px + 140px - 1.2rem);
+  top: calc(185px + 165px - 1.2rem);
   left: 2%;
   font-size: clamp(3rem, 7vw, 6.5rem) !important;
   z-index: 8;
   pointer-events: none;
 }
 
-/* KRAK mid-page, straddling row 6 strip */
+/* KRAK mid-page, straddling row 5/6 strip */
 .spreadBleedSfx2 {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px + 150px - 0.6rem);
+  top: calc(185px + 165px + 55px + 200px + 130px - 0.6rem);
   left: 30%;
   font-size: clamp(2.8rem, 6.5vw, 5.5rem) !important;
   z-index: 8;
   pointer-events: none;
 }
 
-/* WHOOSH riding the row 8-9 fold on the right side */
+/* WHOOSH riding the row 8/9 fold on the right side */
 .spreadBleedSfx3 {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px + 150px + 80px + 150px + 150px - 1rem);
+  top: calc(185px + 165px + 55px + 200px + 130px + 55px + 195px + 160px - 1rem);
   right: 4%;
   font-size: clamp(2.6rem, 5.8vw, 4.8rem) !important;
   z-index: 8;
   pointer-events: none;
 }
 
+/* Bricht durch die Row-2/3-Grenze — Manga-Effekt */
 .bubbleTop {
   position: absolute;
-  top: -14px;
-  right: 14%;
+  top: calc(185px + 165px - 55px);
+  right: 22%;
   z-index: 8;
 }
+/* Bricht durch die Row-4/5-Grenze, rechte Seite */
 .bubbleMid {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px - 18px);
-  right: -22px;
+  top: calc(185px + 165px + 55px + 200px - 50px);
+  right: 1.5%;
   z-index: 8;
 }
 
 /* Stickers — pinned to specific spots on the dense grid. */
 .stickerShonen {
   position: absolute;
-  top: calc(140px + 140px - 18px);
+  top: calc(185px + 165px - 18px);
   left: calc(33% - 1rem);
   z-index: 8;
 }
 .stickerEsp {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px + 150px + 80px + 150px - 18px);
+  top: calc(185px + 165px + 55px + 200px + 130px + 55px + 195px - 18px);
   left: calc(50% + 1rem);
   z-index: 8;
 }
 .stickerCoffee {
   position: absolute;
-  top: calc(140px + 140px + 80px - 10px);
+  top: calc(185px + 165px + 55px - 10px);
   right: 3%;
   z-index: 8;
 }
 .stickerLinux {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px + 150px + 80px + 150px + 150px + 150px - 14px);
+  top: calc(185px + 165px + 55px + 200px + 130px + 55px + 195px + 160px + 160px - 14px);
   left: calc(50% - 2rem);
   z-index: 8;
 }
 .stickerTrails {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px + 150px - 10px);
+  top: calc(185px + 165px + 55px + 200px + 130px - 10px);
   right: 6%;
   z-index: 8;
 }
 .stickerSince {
   position: absolute;
-  top: calc(140px + 140px + 80px + 150px + 150px + 80px - 16px);
+  top: calc(185px + 165px + 55px + 200px + 130px + 55px - 16px);
   left: 5%;
   z-index: 8;
 }
@@ -320,10 +322,6 @@
   position: relative;
   margin: 3rem 0 5rem;
   padding: 0 var(--me-page-pad-x);
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 2rem;
-  align-items: center;
 }
 
 .nowBox {
@@ -332,7 +330,8 @@
   border: 3px solid var(--me-ink);
   padding: 2rem 2.5rem;
   isolation: isolate;
-  grid-column: 2;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .nowHeader {

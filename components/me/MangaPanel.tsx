@@ -7,16 +7,13 @@ import styles from './MangaPanel.module.css'
 export type PanelCut =
   | 'none' | 'tl-br' | 'tr-bl' | 'notch-tl' | 'notch-br'
   | 'slash-top' | 'slash-bottom' | 'wedge-r' | 'wedge-l'
-  /* Asymmetric trapezoid — narrower top, wider bottom */
   | 'trap-tall'
-  /* Diagonal pair — cross-diagonal cutting from upper-right to lower-left */
   | 'diag-ul' | 'diag-lr'
-  /* Diagonal pair — vertical diagonal, left panel narrows at bottom */
   | 'trap-narrow-b' | 'trap-wide-b'
-  /* Diagonal pair — horizontal diagonal split */
   | 'split-top' | 'split-bottom'
-  /* Diagonal pair — vertical diagonal (mirror), top narrower */
   | 'diag-split-l' | 'diag-split-r'
+  /* Blade cuts — one side shears hard toward the opposite corner */
+  | 'blade-r' | 'blade-l'
 export type SfxPos   = 'tl' | 'tr' | 'bl' | 'br' | 'center'
 export type Placeholder = 'a' | 'b' | 'c' | 'd' | 'e'
 
@@ -46,6 +43,10 @@ interface Props {
   imagePriority?: boolean
   /** Rough sizes hint — panels span roughly one third of viewport on desktop. */
   imageSizes?: string
+  /** Bleeds 4% past grid boundaries — hero/splash panels only. */
+  bleed?: boolean
+  /** Hides the SVG ink border — for full-bleed strip panels. */
+  frameless?: boolean
 }
 
 /* clip-path polygon strings (CSS). Share geometry with SVG points below. */
@@ -53,42 +54,46 @@ const CLIPS: Record<PanelCut, string> = {
   'none':           '',
   'tl-br':          'polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%)',
   'tr-bl':          'polygon(0 0, 90% 0, 100% 10%, 100% 100%, 10% 100%, 0 90%)',
-  'notch-tl':       'polygon(22% 0, 100% 0, 100% 100%, 0 100%, 0 18%)',
-  'notch-br':       'polygon(0 0, 100% 0, 100% 82%, 78% 100%, 0 100%)',
-  'slash-top':      'polygon(0 8%, 100% 0, 100% 100%, 0 100%)',
-  'slash-bottom':   'polygon(0 0, 100% 0, 100% 92%, 0 100%)',
-  'wedge-r':        'polygon(0 0, 100% 10%, 100% 90%, 0 100%)',
-  'wedge-l':        'polygon(0 10%, 100% 0, 100% 100%, 0 90%)',
-  'trap-tall':      'polygon(20% 0, 80% 0, 100% 100%, 0 100%)',
-  'diag-ul':        'polygon(0 0, 100% 0, 100% 20%, 20% 100%, 0 100%)',
-  'diag-lr':        'polygon(100% 20%, 100% 100%, 20% 100%)',
-  'trap-narrow-b':  'polygon(0 0, 80% 0, 20% 100%, 0 100%)',
-  'trap-wide-b':    'polygon(80% 0, 100% 0, 100% 100%, 20% 100%)',
+  'notch-tl':       'polygon(34% 0, 100% 0, 100% 100%, 0 100%, 0 28%)',
+  'notch-br':       'polygon(0 0, 100% 0, 100% 72%, 66% 100%, 0 100%)',
+  'slash-top':      'polygon(0 16%, 100% 0, 100% 100%, 0 100%)',
+  'slash-bottom':   'polygon(0 0, 100% 0, 100% 84%, 0 100%)',
+  'wedge-r':        'polygon(0 0, 100% 20%, 100% 80%, 0 100%)',
+  'wedge-l':        'polygon(0 20%, 100% 0, 100% 100%, 0 80%)',
+  'trap-tall':      'polygon(25% 0, 75% 0, 100% 100%, 0 100%)',
+  'diag-ul':        'polygon(0 0, 100% 0, 100% 15%, 15% 100%, 0 100%)',
+  'diag-lr':        'polygon(100% 15%, 100% 100%, 15% 100%)',
+  'trap-narrow-b':  'polygon(0 0, 82% 0, 18% 100%, 0 100%)',
+  'trap-wide-b':    'polygon(82% 0, 100% 0, 100% 100%, 18% 100%)',
   'split-top':      'polygon(0 0, 100% 0, 100% 70%, 0 30%)',
   'split-bottom':   'polygon(0 30%, 100% 70%, 100% 100%, 0 100%)',
   'diag-split-l':   'polygon(0 0, 20% 0, 80% 100%, 0 100%)',
   'diag-split-r':   'polygon(20% 0, 100% 0, 100% 100%, 80% 100%)',
+  'blade-r':        'polygon(0 0, 100% 0, 82% 100%, 0 100%)',
+  'blade-l':        'polygon(0 0, 100% 0, 100% 100%, 18% 100%)',
 }
 
 const SVG_POINTS: Record<PanelCut, string> = {
   'none':           '0,0 100,0 100,100 0,100',
   'tl-br':          '10,0 100,0 100,90 90,100 0,100 0,10',
   'tr-bl':          '0,0 90,0 100,10 100,100 10,100 0,90',
-  'notch-tl':       '22,0 100,0 100,100 0,100 0,18',
-  'notch-br':       '0,0 100,0 100,82 78,100 0,100',
-  'slash-top':      '0,8 100,0 100,100 0,100',
-  'slash-bottom':   '0,0 100,0 100,92 0,100',
-  'wedge-r':        '0,0 100,10 100,90 0,100',
-  'wedge-l':        '0,10 100,0 100,100 0,90',
-  'trap-tall':      '20,0 80,0 100,100 0,100',
-  'diag-ul':        '0,0 100,0 100,20 20,100 0,100',
-  'diag-lr':        '100,20 100,100 20,100',
-  'trap-narrow-b':  '0,0 80,0 20,100 0,100',
-  'trap-wide-b':    '80,0 100,0 100,100 20,100',
+  'notch-tl':       '34,0 100,0 100,100 0,100 0,28',
+  'notch-br':       '0,0 100,0 100,72 66,100 0,100',
+  'slash-top':      '0,16 100,0 100,100 0,100',
+  'slash-bottom':   '0,0 100,0 100,84 0,100',
+  'wedge-r':        '0,0 100,20 100,80 0,100',
+  'wedge-l':        '0,20 100,0 100,100 0,80',
+  'trap-tall':      '25,0 75,0 100,100 0,100',
+  'diag-ul':        '0,0 100,0 100,15 15,100 0,100',
+  'diag-lr':        '100,15 100,100 15,100',
+  'trap-narrow-b':  '0,0 82,0 18,100 0,100',
+  'trap-wide-b':    '82,0 100,0 100,100 18,100',
   'split-top':      '0,0 100,0 100,70 0,30',
   'split-bottom':   '0,30 100,70 100,100 0,100',
   'diag-split-l':   '0,0 20,0 80,100 0,100',
   'diag-split-r':   '20,0 100,0 100,100 80,100',
+  'blade-r':        '0,0 100,0 82,100 0,100',
+  'blade-l':        '0,0 100,0 100,100 18,100',
 }
 
 export default function MangaPanel({
@@ -113,6 +118,8 @@ export default function MangaPanel({
   imageAlt = '',
   imagePriority = false,
   imageSizes = '(max-width: 900px) 100vw, 40vw',
+  bleed = false,
+  frameless = false,
 }: Props) {
   const isCut = cut !== 'none'
   const clipStyle: CSSProperties = isCut ? { clipPath: CLIPS[cut] } : {}
@@ -128,6 +135,7 @@ export default function MangaPanel({
       className={[
         styles.panel,
         hideLabelUntilHover && label ? styles.hideLabel : '',
+        bleed ? styles.bleed : '',
         className,
       ].filter(Boolean).join(' ')}
       style={style}
@@ -140,7 +148,7 @@ export default function MangaPanel({
         <div className={styles.inkCover} aria-hidden />
       </div>
 
-      <svg
+      {!frameless && <svg
         className={styles.svgBorder}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
@@ -166,7 +174,7 @@ export default function MangaPanel({
           filter="url(#me-rough-soft)"
           opacity={0.75}
         />
-      </svg>
+      </svg>}
 
       {caption && (
         <span className={`${styles.caption} ${styles[`pos-${captionPos}`]}`}>{caption}</span>

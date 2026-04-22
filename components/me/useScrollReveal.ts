@@ -36,7 +36,7 @@ export function useScrollReveal(selector: string = '[data-ink-reveal]') {
           observer.unobserve(target)
         })
       },
-      { threshold: 0.18, rootMargin: '0px 0px -6% 0px' }
+      { threshold: 0.01, rootMargin: '0px 0px 80px 0px' }
     )
 
     els.forEach(el => observer.observe(el))

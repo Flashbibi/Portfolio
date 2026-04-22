@@ -1,5 +1,4 @@
 .bubble {
-  position: relative;
   display: inline-block;
   transform: rotate(var(--bubble-rot, 0deg));
   opacity: 0;
