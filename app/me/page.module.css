@@ -154,7 +154,7 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 185px 165px 110px 200px 175px 100px 195px 160px 160px 180px;
+  grid-template-rows: 185px 165px 200px 200px 175px 100px 195px 160px 160px 180px;
   gap: 3px;
   background: var(--me-ink);
   border-top: 3px solid var(--me-ink);

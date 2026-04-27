@@ -33,9 +33,12 @@ export type MePanelTextKey =
   | 'p36Hover' | 'p37Hover' | 'p38Hover' | 'p39Hover'
 
 export type MeLabelKey =
-  | 'chefin' | 'setup' | 'print' | 'filament' | 'gaming' | 'coffee'
-  | 'homelab' | 'network' | 'esp' | 'anime' | 'manga'
-  | 'mountains' | 'lofi' | 'studio' | 'trails' | 'linux' | 'tinker'
+  | 'squad' | 'cooking' | 'joyride' | 'fasnacht' | 'flash' | 'clubLife'
+  | 'upside' | 'chill' | 'dinner'
+  | 'princess' | 'snout' | 'outside' | 'cuddle' | 'lazy'
+  | 'snore' | 'snuggle' | 'spoiled' | 'goodGirl' | 'sisters' | 'walkies'
+  | 'chonkers' | 'kitten' | 'dozing' | 'chefin' | 'stare' | 'diva'
+  | 'mischief' | 'floof' | 'dreams' | 'eyes' | 'tired' | 'sleepy' | 'twins'
 
 export interface MePanelConfig {
   id: string
@@ -79,26 +82,26 @@ export const mePanels: MePanelConfig[] = [
     image: ME('P1010081.JPG'), priority: true,
     imageObjectPosition: 'center 45%',
     cut: 'tl-br', bleed: true,
-    labelKey: 'chefin', labelPos: 'tr',
+    labelKey: 'squad', labelPos: 'tr',
     hoverSfxKey: 'p1Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p2', section: 'spread', slot: 'p2', order: 1,
     image: ME('P1010103.JPG'),
     imageObjectPosition: 'center 30%',
-    labelKey: 'setup', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'cooking', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p2Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p3', section: 'spread', slot: 'p3', order: 2,
     image: ME('Snapchat-49393205.jpg'),
-    labelKey: 'coffee', labelPos: 'tl',
+    labelKey: 'princess', labelPos: 'tl',
     hoverSfxKey: 'p3Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p4', section: 'spread', slot: 'p4', order: 3,
     image: ME('IMG_20250308_133835552.jpg'),
-    labelKey: 'gaming', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'chonkers', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p4Hover', hoverSfxPos: 'br',
   },
   {
@@ -106,38 +109,39 @@ export const mePanels: MePanelConfig[] = [
     image: ME('P3040170.JPG'),
     imageObjectPosition: 'left center',
     cut: 'blade-r',
-    labelKey: 'filament', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'joyride', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p5Hover', hoverSfxPos: 'br',
   },
 
-  /* Pair 1 — diag: extreme close-ups, fill the frame */
+  /* Pair 1 — diag-split: extreme close-ups, fill the frame */
   {
     id: 'p6', section: 'spread', slot: 'p6', order: 5,
     image: ME('IMG_20240901_132713893.jpg'),
-    imageObjectPosition: 'left top',
-    cut: 'diag-ul',
-    labelKey: 'print', labelPos: 'tl',
+    imageObjectPosition: 'center 35%',
+    cut: 'diag-split-l',
+    labelKey: 'snout', labelPos: 'tl',
     hoverSfxKey: 'p6Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p7', section: 'spread', slot: 'p7', order: 6,
     image: ME('IMG_20240901_132713893.jpg'),
-    cut: 'diag-lr',
-    labelKey: 'homelab', labelPos: 'br',
-    hoverSfxKey: 'p7Hover', hoverSfxPos: 'tr',
+    imageObjectPosition: 'center 35%',
+    cut: 'diag-split-r',
+    labelKey: 'snout', labelPos: 'tr',
+    hoverSfxKey: 'p7Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p8', section: 'spread', slot: 'p8', order: 7,
     image: ME('IMG_20250118_030910574.jpg'),
     imageObjectPosition: 'center 30%',
-    labelKey: 'esp', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'fasnacht', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p8Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p9', section: 'spread', slot: 'p9', order: 8,
     image: ME('IMG_20250309_154715265.jpg'),
-    imageObjectPosition: 'center 22%',
-    labelKey: 'network', labelPos: 'tl', hideLabelUntilHover: true,
+    imageObjectPosition: 'center 30%',
+    labelKey: 'twins', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p9Hover', hoverSfxPos: 'br',
   },
 
@@ -147,7 +151,8 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p10', section: 'spread', slot: 'p10', order: 9,
     image: ME('P1010092.JPG'),
-    imageObjectPosition: 'center 58%',
+    imageObjectPosition: 'center 75%',
+    labelKey: 'flash', labelPos: 'tl', hideLabelUntilHover: true,
   },
   {
     id: 'p11', section: 'spread', slot: 'p11', order: 10,
@@ -164,7 +169,7 @@ export const mePanels: MePanelConfig[] = [
     id: 'p12', section: 'spread', slot: 'p12', order: 11,
     image: ME('IMG_20240502_152958681.jpg'),
     imageObjectPosition: 'center 35%',
-    labelKey: 'anime', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'chill', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p12Hover', hoverSfxPos: 'br',
   },
 
@@ -173,14 +178,14 @@ export const mePanels: MePanelConfig[] = [
     id: 'p13', section: 'spread', slot: 'p13', order: 12,
     image: ME('P1010083.JPG'),
     cut: 'diag-split-l',
-    labelKey: 'lofi', labelPos: 'tl',
+    labelKey: 'clubLife', labelPos: 'tl',
     hoverSfxKey: 'p13Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p14', section: 'spread', slot: 'p14', order: 13,
     image: ME('P1010083.JPG'),
     cut: 'diag-split-r',
-    labelKey: 'studio', labelPos: 'tr',
+    labelKey: 'clubLife', labelPos: 'tr',
     hoverSfxKey: 'p14Hover', hoverSfxPos: 'br',
   },
 
@@ -188,7 +193,7 @@ export const mePanels: MePanelConfig[] = [
     id: 'p15', section: 'spread', slot: 'p15', order: 14,
     image: ME('IMG_20250316_160724297.jpg'),
     imageObjectPosition: 'center 35%',
-    labelKey: 'manga', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'kitten', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p15Hover', hoverSfxPos: 'br',
   },
   {
@@ -196,20 +201,21 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20241124_133101182.jpg'),
     imageObjectPosition: 'center 70%',
     cut: 'blade-l',
-    labelKey: 'mountains', labelPos: 'tr',
+    labelKey: 'outside', labelPos: 'tr',
     hoverSfxKey: 'p16Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p17', section: 'spread', slot: 'p17', order: 16,
     image: ME('IMG_20250619_205146799.jpg'),
     imageObjectPosition: 'center 40%',
-    labelKey: 'trails', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'dozing', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p17Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p18', section: 'spread', slot: 'p18', order: 17,
     image: ME('IMG_20241113_232710878.jpg'),
     imageObjectPosition: 'center 68%',
+    labelKey: 'cuddle', labelPos: 'tl', hideLabelUntilHover: true,
   },
 
   /* Pair 3 — diag: close-ups */
@@ -217,14 +223,14 @@ export const mePanels: MePanelConfig[] = [
     id: 'p19', section: 'spread', slot: 'p19', order: 18,
     image: ME('P1010062.JPG'),
     cut: 'diag-ul',
-    labelKey: 'tinker', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'upside', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p19Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p20', section: 'spread', slot: 'p20', order: 19,
     image: ME('P1010062.JPG'),
     cut: 'diag-lr',
-    labelKey: 'manga', labelPos: 'br', hideLabelUntilHover: true,
+    labelKey: 'upside', labelPos: 'br', hideLabelUntilHover: true,
     hoverSfxKey: 'p20Hover', hoverSfxPos: 'tr',
   },
 
@@ -232,7 +238,7 @@ export const mePanels: MePanelConfig[] = [
     id: 'p21', section: 'spread', slot: 'p21', order: 20,
     image: ME('IMG_20251211_182336245.jpg'),
     imageObjectPosition: 'center 42%',
-    labelKey: 'linux', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'chefin', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p21Hover', hoverSfxPos: 'br',
   },
 
@@ -242,7 +248,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20250831_195851011.jpg'),
     imageObjectPosition: 'center 32%',
     cut: 'diag-split-l',
-    labelKey: 'lofi', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'stare', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p22Hover', hoverSfxPos: 'bl',
   },
   {
@@ -250,14 +256,15 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20250831_195851011.jpg'),
     imageObjectPosition: 'center 32%',
     cut: 'diag-split-r',
-    labelKey: 'coffee', labelPos: 'tr', hideLabelUntilHover: true,
+    labelKey: 'stare', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p23Hover', hoverSfxPos: 'br',
   },
 
   {
     id: 'p24', section: 'spread', slot: 'p24', order: 23,
     image: ME('IMG_20250618_200137118.jpg'),
-    imageObjectPosition: 'center 38%',
+    imageObjectPosition: 'center 20%',
+    labelKey: 'lazy', labelPos: 'tl', hideLabelUntilHover: true,
   },
 
   /* ────────────────────────────────────────────────────────────────
@@ -278,14 +285,14 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20260130_171427803.jpg'),
     imageObjectPosition: 'center 30%',
     cut: 'tl-br', bleed: true,
-    labelKey: 'manga', labelPos: 'tr',
+    labelKey: 'diva', labelPos: 'tr',
     hoverSfxKey: 'p26Hover', hoverSfxPos: 'bl',
   },
   {
     id: 'p27', section: 'spread', slot: 'p27', order: 26,
     image: ME('20240114_192750.jpg'),
     imageObjectPosition: 'center 62%',
-    labelKey: 'homelab', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'snore', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p27Hover', hoverSfxPos: 'br',
   },
 
@@ -295,7 +302,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20260420_195451889.jpg'),
     imageObjectPosition: 'center 65%',
     cut: 'trap-narrow-b',
-    labelKey: 'anime', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'floof', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p28Hover', hoverSfxPos: 'br',
   },
   {
@@ -303,7 +310,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20250914_131327600.jpg'),
     imageObjectPosition: 'left center',
     cut: 'trap-wide-b',
-    labelKey: 'gaming', labelPos: 'tr', hideLabelUntilHover: true,
+    labelKey: 'sisters', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p29Hover', hoverSfxPos: 'bl',
   },
 
@@ -311,14 +318,14 @@ export const mePanels: MePanelConfig[] = [
     id: 'p30', section: 'spread', slot: 'p30', order: 29,
     image: ME('IMG_20251230_220953113.jpg'),
     imageObjectPosition: 'center 28%',
-    labelKey: 'print', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'mischief', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p30Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p31', section: 'spread', slot: 'p31', order: 30,
     image: ME('IMG_20250130_092543198.jpg'),
     cut: 'wedge-l',
-    labelKey: 'trails', labelPos: 'tr',
+    labelKey: 'spoiled', labelPos: 'tr',
     hoverSfxKey: 'p31Hover', hoverSfxPos: 'bl',
   },
 
@@ -326,21 +333,21 @@ export const mePanels: MePanelConfig[] = [
   {
     id: 'p32', section: 'spread', slot: 'p32', order: 31,
     image: ME('IMG_20250406_111632210.jpg'),
-    labelKey: 'studio', labelPos: 'tl',
+    labelKey: 'dreams', labelPos: 'tl',
     hoverSfxKey: 'p32Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p33', section: 'spread', slot: 'p33', order: 32,
     image: ME('IMG_20240901_132716927.jpg'),
     imageObjectPosition: 'left 20%',
-    labelKey: 'filament', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'snuggle', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p33Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p34', section: 'spread', slot: 'p34', order: 33,
     image: ME('IMG_20251229_184207494.jpg'),
     imageObjectPosition: 'center 35%',
-    labelKey: 'coffee', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'dinner', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p34Hover', hoverSfxPos: 'br',
   },
   {
@@ -348,7 +355,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20250330_185650160.jpg'),
     imageObjectPosition: 'left center',
     cut: 'blade-r',
-    labelKey: 'mountains', labelPos: 'tl',
+    labelKey: 'tired', labelPos: 'tl',
     hoverSfxKey: 'p35Hover', hoverSfxPos: 'br',
   },
 
@@ -362,7 +369,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20250406_111635317.jpg'),
     imageObjectPosition: 'center 40%',
     cut: 'diag-split-l',
-    labelKey: 'network', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'eyes', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p36Hover', hoverSfxPos: 'bl',
   },
   {
@@ -370,7 +377,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('IMG_20250406_111635317.jpg'),
     imageObjectPosition: 'center 40%',
     cut: 'diag-split-r',
-    labelKey: 'linux', labelPos: 'tr', hideLabelUntilHover: true,
+    labelKey: 'eyes', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p37Hover', hoverSfxPos: 'br',
   },
 
@@ -378,13 +385,13 @@ export const mePanels: MePanelConfig[] = [
     id: 'p38', section: 'spread', slot: 'p38', order: 37,
     image: ME('IMG_20250914_131322317.jpg'),
     imageObjectPosition: 'center 28%',
-    labelKey: 'anime', labelPos: 'tl', hideLabelUntilHover: true,
+    labelKey: 'sleepy', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p38Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p39', section: 'spread', slot: 'p39', order: 38,
     image: ME('IMG_20250503_163210101.jpg'),
-    labelKey: 'coffee', labelPos: 'tl',
+    labelKey: 'goodGirl', labelPos: 'tl',
     hoverSfxKey: 'p39Hover', hoverSfxPos: 'br',
   },
 
@@ -396,6 +403,7 @@ export const mePanels: MePanelConfig[] = [
     image: ME('20230512_154033.jpg'),
     imageObjectPosition: 'center 38%',
     bleed: true,
+    labelKey: 'walkies', labelPos: 'tl', hideLabelUntilHover: true,
   },
 ]
 

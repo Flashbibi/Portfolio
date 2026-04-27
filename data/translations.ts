@@ -164,23 +164,39 @@ interface Translations {
       p39Hover: string
     }
     labels: {
+      squad: string
+      cooking: string
+      joyride: string
+      fasnacht: string
+      flash: string
+      clubLife: string
+      upside: string
+      chill: string
+      dinner: string
+      princess: string
+      snout: string
+      outside: string
+      cuddle: string
+      lazy: string
+      snore: string
+      snuggle: string
+      spoiled: string
+      goodGirl: string
+      sisters: string
+      walkies: string
+      chonkers: string
+      kitten: string
+      dozing: string
       chefin: string
-      setup: string
-      print: string
-      filament: string
-      gaming: string
-      coffee: string
-      homelab: string
-      network: string
-      esp: string
-      anime: string
-      manga: string
-      mountains: string
-      lofi: string
-      studio: string
-      trails: string
-      linux: string
-      tinker: string
+      stare: string
+      diva: string
+      mischief: string
+      floof: string
+      dreams: string
+      eyes: string
+      tired: string
+      sleepy: string
+      twins: string
     }
     narration: {
       n1: string
@@ -352,59 +368,75 @@ const en: Translations = {
     panels: {
       p11Caption: '// chapter.02.01 — who',
       p25Caption: '// interlude',
-      p1Hover:   'MEOW!',     // chefin (cat)
-      p2Hover:   'CLICK!',    // setup
-      p3Hover:   'SLURP!',    // coffee
-      p4Hover:   'TAP TAP!',  // gaming
-      p5Hover:   'WHRR~',     // filament
-      p6Hover:   'WHRR~',     // print
-      p7Hover:   'BLINK',     // homelab
-      p8Hover:   'BZZT!',     // esp
-      p9Hover:   'PING!',     // network
-      p12Hover:  'SHWING!',   // anime
-      p13Hover:  '♫',         // lofi
-      p14Hover:  'TAP!',      // studio
-      p15Hover:  'FWIP!',     // manga
-      p16Hover:  'WIND~',     // mountains
-      p17Hover:  'CRUNCH!',   // trails
-      p19Hover:  'TINK!',     // tinker
-      p20Hover:  'FWIP!',     // manga
-      p21Hover:  'TAP TAP',   // linux
-      p22Hover:  '♫',         // lofi
-      p23Hover:  'SLURP!',    // coffee
-      p26Hover:  'FWIP!',     // manga
-      p27Hover:  'BLINK',     // homelab
-      p28Hover:  'SHWING!',   // anime
-      p29Hover:  'TAP TAP!',  // gaming
-      p30Hover:  'WHRR~',     // print
-      p31Hover:  'CRUNCH!',   // trails
-      p32Hover:  'TAP!',      // studio
-      p33Hover:  'WHRR~',     // filament
-      p34Hover:  'SLURP!',    // coffee
-      p35Hover:  'WIND~',     // mountains
-      p36Hover:  'PING!',     // network
-      p37Hover:  'TAP TAP',   // linux
-      p38Hover:  'SHWING!',   // anime
-      p39Hover:  'SLURP!',    // coffee
+      p1Hover:   'CHEERS!',    // squad — group selfie
+      p2Hover:   'CHOP CHOP!', // cooking
+      p3Hover:   'WOOF!',      // princess
+      p4Hover:   'ZZZ',        // chonkers
+      p5Hover:   'VROOM!',     // joyride
+      p6Hover:   'SNIFF!',     // snout
+      p7Hover:   'SNORT!',     // snout
+      p8Hover:   'POOF!',      // fasnacht
+      p9Hover:   'PURR~',      // twins — two cats
+      p12Hover:  'WOOF?',      // chill — dog flop
+      p13Hover:  'BOOM!',      // club
+      p14Hover:  'BASS!',      // club
+      p15Hover:  'MEW!',       // kitten
+      p16Hover:  'BORK!',      // outside
+      p17Hover:  'PURR~',      // dozing
+      p19Hover:  'BLEH!',      // silly
+      p20Hover:  'AHHH!',      // silly
+      p21Hover:  'STARE...',   // chefin
+      p22Hover:  'PURR~',      // stare
+      p23Hover:  'MROW',       // stare
+      p26Hover:  'MEOW!',      // diva
+      p27Hover:  'SNORE~',     // snore
+      p28Hover:  'PURRR~',     // floof
+      p29Hover:  'AWW',        // sisters
+      p30Hover:  'BLINK',      // mischief
+      p31Hover:  'AWW',        // spoiled
+      p32Hover:  'MROW~',      // dreams
+      p33Hover:  'SNUG',       // snuggle
+      p34Hover:  'SNAP!',      // dinner
+      p35Hover:  'ZZZ',        // tired
+      p36Hover:  'BLINK!',     // eyes
+      p37Hover:  'STARE!',     // eyes
+      p38Hover:  'ZZZ',        // sleepy
+      p39Hover:  'AWW',        // good girl
     },
     labels: {
-      chefin:    'THE BOSS',
-      setup:     'SETUP',
-      print:     '3D-PRINT',
-      filament:  'FILAMENT',
-      gaming:    'GAMING',
-      coffee:    'COFFEE',
-      homelab:   'HOMELAB',
-      network:   'NETWORK',
-      esp:       'ESP32',
-      anime:     'ANIME',
-      manga:     'MANGA',
-      mountains: 'MOUNTAINS',
-      lofi:      'LOFI',
-      studio:    'STUDIO',
-      trails:    'TRAILS',
-      linux:     'LINUX',
-      tinker:    'TINKER',
+      squad:    'SQUAD',
+      cooking:  'KITCHEN',
+      joyride:  'JOYRIDE',
+      fasnacht: 'FASNACHT',
+      flash:    'FLASH!',
+      clubLife: 'CLUB',
+      upside:   'UPSIDE-DOWN',
+      chill:    'CHILL',
+      dinner:   'DINNER',
+      princess: 'PRINCESS',
+      snout:    'SNOUT',
+      outside:  'OUTDOORS',
+      cuddle:   'CUDDLE',
+      lazy:     'LAZY',
+      snore:    'SNORE',
+      snuggle:  'SNUGGLE',
+      spoiled:  'SPOILED',
+      goodGirl: 'GOOD GIRL',
+      sisters:  'SISTERS',
+      walkies:  'WALKIES',
+      chonkers: 'CHONKERS',
+      kitten:   'KITTEN',
+      dozing:   'DOZING',
+      chefin:   'THE BOSS',
+      stare:    'STARE',
+      diva:     'DIVA',
+      mischief: 'MISCHIEF',
+      floof:    'FLOOF',
+      dreams:   'DREAMS',
+      eyes:     'BIG EYES',
+      tired:    'TIRED',
+      sleepy:   'SLEEPY',
+      twins:    'TWINS',
     },
     narration: {
       n1:        "a note, mid-chapter: most of this isn't on a résumé. that's kind of the point.",
@@ -576,59 +608,75 @@ const de: Translations = {
     panels: {
       p11Caption: '// kapitel.02.01 — wer',
       p25Caption: '// zwischenspiel',
-      p1Hover:   'MEOW!',     // chefin (Katze)
-      p2Hover:   'CLICK!',    // setup
-      p3Hover:   'SLURP!',    // kaffee
-      p4Hover:   'TAP TAP!',  // gaming
-      p5Hover:   'WHRR~',     // filament
-      p6Hover:   'WHRR~',     // print
-      p7Hover:   'BLINK',     // homelab
-      p8Hover:   'BZZT!',     // esp
-      p9Hover:   'PING!',     // network
-      p12Hover:  'SHWING!',   // anime
-      p13Hover:  '♫',         // lofi
-      p14Hover:  'TAP!',      // studio
-      p15Hover:  'FWIP!',     // manga
-      p16Hover:  'WIND~',     // berge
-      p17Hover:  'CRUNCH!',   // trails
-      p19Hover:  'TINK!',     // basteln
-      p20Hover:  'FWIP!',     // manga
-      p21Hover:  'TAP TAP',   // linux
-      p22Hover:  '♫',         // lofi
-      p23Hover:  'SLURP!',    // kaffee
-      p26Hover:  'FWIP!',     // manga
-      p27Hover:  'BLINK',     // homelab
-      p28Hover:  'SHWING!',   // anime
-      p29Hover:  'TAP TAP!',  // gaming
-      p30Hover:  'WHRR~',     // print
-      p31Hover:  'CRUNCH!',   // trails
-      p32Hover:  'TAP!',      // studio
-      p33Hover:  'WHRR~',     // filament
-      p34Hover:  'SLURP!',    // kaffee
-      p35Hover:  'WIND~',     // berge
-      p36Hover:  'PING!',     // netz
-      p37Hover:  'TAP TAP',   // linux
-      p38Hover:  'SHWING!',   // anime
-      p39Hover:  'SLURP!',    // kaffee
+      p1Hover:   'PROST!',      // crew
+      p2Hover:   'HACK HACK!',  // küche
+      p3Hover:   'WUFF!',       // prinzessin
+      p4Hover:   'ZZZ',         // chonkers
+      p5Hover:   'BRUMM!',      // ausflug
+      p6Hover:   'SCHNÜFF!',    // schnauze
+      p7Hover:   'SCHNAUF!',    // schnauze
+      p8Hover:   'WUMM!',       // fasnacht
+      p9Hover:   'SCHNURR~',    // zwillinge
+      p12Hover:  'WUFF?',       // chill — hund
+      p13Hover:  'WUMM!',       // klub
+      p14Hover:  'BASS!',       // klub
+      p15Hover:  'MIAU!',       // kätzchen
+      p16Hover:  'WUFF!',       // draussen
+      p17Hover:  'SCHNURR~',    // dösen
+      p19Hover:  'BLÄH!',       // albern
+      p20Hover:  'AAAH!',       // albern
+      p21Hover:  'STARR...',    // chefin
+      p22Hover:  'SCHNURR~',    // starrt
+      p23Hover:  'MAU',         // starrt
+      p26Hover:  'MIAU!',       // diva
+      p27Hover:  'SCHNARCH~',   // schnarcht
+      p28Hover:  'SCHNURR~',    // flausch
+      p29Hover:  'AWW',         // schwestern
+      p30Hover:  'BLINZEL',     // frech
+      p31Hover:  'AWW',         // verwöhnt
+      p32Hover:  'MIAU~',       // träume
+      p33Hover:  'KUSCHEL',     // schmusen
+      p34Hover:  'KLICK!',      // abendessen
+      p35Hover:  'ZZZ',         // müde
+      p36Hover:  'BLINZEL!',    // grosse augen
+      p37Hover:  'STARR!',      // grosse augen
+      p38Hover:  'ZZZ',         // schläfrig
+      p39Hover:  'AWW',         // braves mädel
     },
     labels: {
-      chefin:    'DIE CHEFIN',
-      setup:     'SETUP',
-      print:     '3D-DRUCK',
-      filament:  'FILAMENT',
-      gaming:    'GAMING',
-      coffee:    'KAFFEE',
-      homelab:   'HOMELAB',
-      network:   'NETZ',
-      esp:       'ESP32',
-      anime:     'ANIME',
-      manga:     'MANGA',
-      mountains: 'BERGE',
-      lofi:      'LOFI',
-      studio:    'STUDIO',
-      trails:    'TRAILS',
-      linux:     'LINUX',
-      tinker:    'BASTELN',
+      squad:    'CREW',
+      cooking:  'KÜCHE',
+      joyride:  'AUSFLUG',
+      fasnacht: 'FASNACHT',
+      flash:    'BLITZ!',
+      clubLife: 'KLUB',
+      upside:   'KOPFÜBER',
+      chill:    'CHILLEN',
+      dinner:   'ABENDESSEN',
+      princess: 'PRINZESSIN',
+      snout:    'SCHNAUZE',
+      outside:  'DRAUSSEN',
+      cuddle:   'KUSCHEL',
+      lazy:     'FAUL',
+      snore:    'SCHNARCH',
+      snuggle:  'SCHMUSEN',
+      spoiled:  'VERWÖHNT',
+      goodGirl: 'BRAVES MÄDEL',
+      sisters:  'SCHWESTERN',
+      walkies:  'GASSI',
+      chonkers: 'CHONKER',
+      kitten:   'KÄTZCHEN',
+      dozing:   'DÖST',
+      chefin:   'DIE CHEFIN',
+      stare:    'STARRT',
+      diva:     'DIVA',
+      mischief: 'FRECH',
+      floof:    'FLAUSCH',
+      dreams:   'TRÄUME',
+      eyes:     'GROSSE AUGEN',
+      tired:    'MÜDE',
+      sleepy:   'SCHLÄFRIG',
+      twins:    'ZWILLINGE',
     },
     narration: {
       n1:        'notiz, mittendrin: das meiste davon steht auf keinem CV. genau das ist der punkt.',
