@@ -166,44 +166,48 @@
   transform: scale(1);
 }
 
-/* ── SFX — mono, cream fill, black stroke + ink drop shadow ──────────── */
+/* ── SFX — brush-style shonen shout, breaks the frame ────────────────── */
 .sfx,
 .hoverSfx {
   position: absolute;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: clamp(1.4rem, 2.8vw, 3rem);
-  line-height: 0.85;
+  font-family: 'Bangers', 'Impact', 'Anton', sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+  line-height: 0.82;
   color: var(--me-paper);
-  -webkit-text-stroke: 2.5px var(--me-ink);
-  text-shadow: 3px 3px 0 var(--me-ink);
-  letter-spacing: -0.02em;
+  -webkit-text-stroke: 3.5px var(--me-ink);
+  /* Layered ink shadow: hard offset + outline-of-shadow for depth */
+  text-shadow:
+    4px 4px 0 var(--me-ink),
+    8px 8px 0 var(--me-paper),
+    9px 9px 0 var(--me-ink);
+  letter-spacing: 0.04em;
   z-index: 7;
   pointer-events: none;
   user-select: none;
-  transform: rotate(var(--sfx-rot, -6deg));
+  transform: rotate(var(--sfx-rot, -8deg)) skewX(-4deg);
   white-space: nowrap;
   text-transform: uppercase;
 }
 
-.sfx-tl { top: -0.9rem; left: -0.6rem; }
-.sfx-tr { top: -0.9rem; right: -0.6rem; transform: rotate(calc(var(--sfx-rot, 6deg) * -1)); }
-.sfx-bl { bottom: -0.6rem; left: -0.6rem; }
-.sfx-br { bottom: -0.6rem; right: -0.6rem; transform: rotate(calc(var(--sfx-rot, -6deg))); }
+.sfx-tl { top: -1.6rem;    left: -1.2rem;  }
+.sfx-tr { top: -1.6rem;    right: -1.2rem; transform: rotate(calc(var(--sfx-rot, 8deg) * -1)) skewX(-4deg); }
+.sfx-bl { bottom: -1.2rem; left: -1.2rem;  }
+.sfx-br { bottom: -1.2rem; right: -1.2rem; transform: rotate(calc(var(--sfx-rot, -8deg))) skewX(-4deg); }
 .sfx-center {
   top: 50%; left: 50%;
-  transform: translate(-50%, -50%) rotate(var(--sfx-rot, -4deg));
+  transform: translate(-50%, -50%) rotate(var(--sfx-rot, -4deg)) skewX(-4deg);
 }
 
-/* Hover SFX: calm fade+scale, no bounce */
+/* Hover SFX: punchy pop-in with bounce, mimics shonen shout */
 .hoverSfx {
   opacity: 0;
-  transform: scale(0.82) rotate(-6deg);
-  transition: opacity 260ms ease, transform 260ms cubic-bezier(0.2, 0, 0.2, 1);
+  transform: scale(0.6) rotate(-12deg) skewX(-4deg);
+  transition: opacity 220ms ease, transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .panel:has(.frame:hover) .hoverSfx {
   opacity: 1;
-  transform: scale(1) rotate(-6deg);
+  transform: scale(1) rotate(-8deg) skewX(-4deg);
 }
 
 /* ── Mobile: drop cuts, soften SFX sizing, remove panel scale ─────────── */
@@ -212,7 +216,12 @@
     clip-path: none !important;
   }
   .sfx, .hoverSfx {
-    font-size: clamp(1.2rem, 5.5vw, 2rem);
+    font-size: clamp(2rem, 9vw, 3.4rem);
+    -webkit-text-stroke: 2.5px var(--me-ink);
+    text-shadow:
+      3px 3px 0 var(--me-ink),
+      6px 6px 0 var(--me-paper),
+      7px 7px 0 var(--me-ink);
   }
   .panel:has(.frame:hover) { transform: none; }
   .frame:hover .content { filter: grayscale(0) contrast(1); }

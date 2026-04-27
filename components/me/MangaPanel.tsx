@@ -115,7 +115,7 @@ export default function MangaPanel({
   hoverSfx,
   hoverSfxPos = 'tr',
   placeholder,
-  halftone = true,
+  halftone = false,
   image,
   imageAlt = '',
   imagePriority = false,

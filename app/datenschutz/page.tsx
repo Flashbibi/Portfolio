@@ -151,10 +151,10 @@ export default function Datenschutz() {
         <section className={styles.section}>
           <h2 className={styles.sub}>9. Schriftarten (Web Fonts)</h2>
           <p>
-            Diese Website verwendet die Schriftarten <em>Space Mono</em> und{' '}
-            <em>Cormorant Garamond</em>. Die Schriftdateien werden beim Build-Prozess
-            heruntergeladen und direkt von diesem Server ausgeliefert (<code>next/font</code>).
-            Es findet keine Verbindung zu Google-Servern statt.
+            Diese Website verwendet die Schriftarten <em>Space Mono</em>,{' '}
+            <em>Cormorant Garamond</em> und <em>Bangers</em>. Die Schriftdateien werden
+            beim Build-Prozess heruntergeladen und direkt von diesem Server ausgeliefert
+            (<code>next/font</code>). Es findet keine Verbindung zu Google-Servern statt.
           </p>
         </section>
 
