@@ -3,9 +3,8 @@ import type { PanelCut, Placeholder, SfxPos } from '@/components/me/MangaPanel'
 export type MePanelSection = 'spread'
 
 /**
- * 41 named slots on a single 12-col × 11-row grid. Row heights vary
- * (140 140 80 150 150 80 150 150 150 150 130 px) to mix splash rows
- * with narrow strip rows — closer to how a manga double-page breathes.
+ * 40 named slots on a single 12-col × 10-row grid. Row heights mix
+ * splash rows with strip rows for a manga double-page rhythm.
  *
  * Slots p6/p7, p13/p14, p19/p20, p22/p23, p28/p29, p36/p37 share a
  * grid-area: diagonal pairs stacked with complementary clip-paths.
@@ -20,19 +19,18 @@ export type MePanelSlot =
   | 'p26' | 'p27' | 'p28' | 'p29' | 'p30' | 'p31'
   | 'p32' | 'p33' | 'p34' | 'p35'
   | 'p36' | 'p37' | 'p38' | 'p39'
-  | 'p40' | 'p41'
+  | 'p40'
 
 export type MePanelTextKey =
-  | 'p11Caption' | 'p25Caption' | 'p41Caption'
+  | 'p11Caption' | 'p25Caption'
   | 'p1Hover' | 'p2Hover' | 'p3Hover' | 'p4Hover' | 'p5Hover'
-  | 'p6Hover' | 'p7Hover' | 'p8Hover' | 'p9Hover' | 'p10Hover'
-  | 'p11Hover' | 'p12Hover' | 'p13Hover' | 'p14Hover' | 'p15Hover'
-  | 'p16Hover' | 'p17Hover' | 'p18Hover' | 'p19Hover' | 'p20Hover'
-  | 'p21Hover' | 'p22Hover' | 'p23Hover' | 'p24Hover' | 'p25Hover'
+  | 'p6Hover' | 'p7Hover' | 'p8Hover' | 'p9Hover'
+  | 'p12Hover' | 'p13Hover' | 'p14Hover' | 'p15Hover'
+  | 'p16Hover' | 'p17Hover' | 'p19Hover' | 'p20Hover'
+  | 'p21Hover' | 'p22Hover' | 'p23Hover'
   | 'p26Hover' | 'p27Hover' | 'p28Hover' | 'p29Hover' | 'p30Hover'
   | 'p31Hover' | 'p32Hover' | 'p33Hover' | 'p34Hover' | 'p35Hover'
   | 'p36Hover' | 'p37Hover' | 'p38Hover' | 'p39Hover'
-  | 'p40Hover' | 'p41Hover'
 
 export type MeLabelKey =
   | 'chefin' | 'setup' | 'print' | 'filament' | 'gaming' | 'coffee'
@@ -150,7 +148,6 @@ export const mePanels: MePanelConfig[] = [
     id: 'p10', section: 'spread', slot: 'p10', order: 9,
     image: ME('P1010092.JPG'),
     imageObjectPosition: 'center 58%',
-    hoverSfxKey: 'p10Hover', hoverSfxPos: 'br',
   },
   {
     id: 'p11', section: 'spread', slot: 'p11', order: 10,
@@ -158,7 +155,6 @@ export const mePanels: MePanelConfig[] = [
     imageObjectPosition: 'center top',
     cut: 'slash-top', frameless: true,
     captionKey: 'p11Caption', captionPos: 'bl',
-    hoverSfxKey: 'p11Hover', hoverSfxPos: 'tr',
   },
 
   /* ────────────────────────────────────────────────────────────────
@@ -214,7 +210,6 @@ export const mePanels: MePanelConfig[] = [
     id: 'p18', section: 'spread', slot: 'p18', order: 17,
     image: ME('IMG_20241113_232710878.jpg'),
     imageObjectPosition: 'center 68%',
-    hoverSfxKey: 'p18Hover', hoverSfxPos: 'br',
   },
 
   /* Pair 3 — diag: close-ups */
@@ -263,7 +258,6 @@ export const mePanels: MePanelConfig[] = [
     id: 'p24', section: 'spread', slot: 'p24', order: 23,
     image: ME('IMG_20250618_200137118.jpg'),
     imageObjectPosition: 'center 38%',
-    hoverSfxKey: 'p24Hover', hoverSfxPos: 'br',
   },
 
   /* ────────────────────────────────────────────────────────────────
@@ -274,7 +268,6 @@ export const mePanels: MePanelConfig[] = [
     image: ME('20220602_121150.jpg'),
     cut: 'slash-bottom', frameless: true, halftone: false,
     captionKey: 'p25Caption', captionPos: 'tl',
-    hoverSfxKey: 'p25Hover', hoverSfxPos: 'br',
   },
 
   /* ────────────────────────────────────────────────────────────────
@@ -403,13 +396,6 @@ export const mePanels: MePanelConfig[] = [
     image: ME('20230512_154033.jpg'),
     imageObjectPosition: 'center 38%',
     bleed: true,
-    hoverSfxKey: 'p40Hover', hoverSfxPos: 'br',
-  },
-  {
-    id: 'p41', section: 'spread', slot: 'p41', order: 40,
-    cut: 'slash-top',
-    captionKey: 'p41Caption', captionPos: 'bl',
-    hoverSfxKey: 'p41Hover', hoverSfxPos: 'tr',
   },
 ]
 

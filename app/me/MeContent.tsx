@@ -9,8 +9,6 @@ import { useAchievement } from '@/context/AchievementContext'
 import { useScrollReveal } from '@/components/me/useScrollReveal'
 import MangaPanel from '@/components/me/MangaPanel'
 import NarrationBox from '@/components/me/NarrationBox'
-import SpeechBubble from '@/components/me/SpeechBubble'
-import Sticker from '@/components/me/Sticker'
 import Sfx from '@/components/me/Sfx'
 import RoughDefs from '@/components/me/RoughDefs'
 import {
@@ -22,7 +20,7 @@ import { meNow } from '@/data/now'
 
 type MeTrans = (typeof translations)['en']['me']
 
-/** Slot → CSS class. Single dense 12×11 grid, 41 panels + 2 narrations. */
+/** Slot → CSS class. Single dense 12×10 grid, 40 panels + 2 narrations. */
 const SLOT_CLASS: Record<MePanelSlot, string> = {
   p1:  styles.slotP1,  p2:  styles.slotP2,  p3:  styles.slotP3,
   p4:  styles.slotP4,  p5:  styles.slotP5,  p6:  styles.slotP6,
@@ -37,7 +35,7 @@ const SLOT_CLASS: Record<MePanelSlot, string> = {
   p31: styles.slotP31, p32: styles.slotP32, p33: styles.slotP33,
   p34: styles.slotP34, p35: styles.slotP35, p36: styles.slotP36,
   p37: styles.slotP37, p38: styles.slotP38, p39: styles.slotP39,
-  p40: styles.slotP40, p41: styles.slotP41,
+  p40: styles.slotP40,
 }
 
 function panelProps(cfg: MePanelConfig, t: MeTrans) {
@@ -132,7 +130,7 @@ export default function MeContent() {
         </div>
       </section>
 
-      {/* ── Manga spread — dense 41-panel double-page ──────────────── */}
+      {/* ── Manga spread — dense 40-panel double-page ──────────────── */}
       <section className={styles.spread}>
         {spread.map(cfg => (
           <MangaPanel key={cfg.id} {...panelProps(cfg, t)} />
@@ -157,45 +155,6 @@ export default function MeContent() {
         >
           {t.narration.interests}
         </NarrationBox>
-
-        {/* Permanent SFX — bleeding over row folds for atmosphere */}
-        <Sfx size="xl" rotate={-7} variant="ink" order={42} className={styles.spreadBleedSfx}>
-          {t.permanentSfx.wham}
-        </Sfx>
-        <Sfx size="lg" rotate={6} variant="ink" order={43} className={styles.spreadBleedSfx2}>
-          {t.permanentSfx.krak}
-        </Sfx>
-        <Sfx size="lg" rotate={-5} variant="ink" order={44} className={styles.spreadBleedSfx3}>
-          {t.permanentSfx.whoosh}
-        </Sfx>
-
-        {/* Speech bubbles — sparse, 2 total */}
-        <SpeechBubble tail="br" rotate={-2} order={45} className={styles.bubbleTop}>
-          {t.speech.s1}
-        </SpeechBubble>
-        <SpeechBubble tail="bl" rotate={3} order={46} className={styles.bubbleMid}>
-          {t.speech.s2}
-        </SpeechBubble>
-
-        {/* Stickers — pinned to specific corners, floating over the grid */}
-        <Sticker variant="paper" shape="burst" rotate={-8} order={47} className={styles.stickerShonen}>
-          {t.stickers.shonen}
-        </Sticker>
-        <Sticker variant="ink" shape="tag" rotate={4} order={48} className={styles.stickerEsp}>
-          {t.stickers.esp32}
-        </Sticker>
-        <Sticker variant="paper" shape="circle" rotate={-5} order={49} className={styles.stickerCoffee}>
-          {t.stickers.coffee}
-        </Sticker>
-        <Sticker variant="paper" shape="tag" rotate={-7} order={50} className={styles.stickerLinux}>
-          {t.stickers.linux}
-        </Sticker>
-        <Sticker variant="ink" shape="burst" rotate={5} order={51} className={styles.stickerTrails}>
-          {t.stickers.trails}
-        </Sticker>
-        <Sticker variant="paper" shape="star" rotate={9} order={52} className={styles.stickerSince}>
-          {t.stickers.since}
-        </Sticker>
       </section>
 
       {/* ── Now section ───────────────────────────────────────────── */}

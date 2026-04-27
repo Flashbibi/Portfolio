@@ -128,7 +128,6 @@ interface Translations {
     panels: {
       p11Caption: string
       p25Caption: string
-      p41Caption: string
       p1Hover: string
       p2Hover: string
       p3Hover: string
@@ -138,22 +137,17 @@ interface Translations {
       p7Hover: string
       p8Hover: string
       p9Hover: string
-      p10Hover: string
-      p11Hover: string
       p12Hover: string
       p13Hover: string
       p14Hover: string
       p15Hover: string
       p16Hover: string
       p17Hover: string
-      p18Hover: string
       p19Hover: string
       p20Hover: string
       p21Hover: string
       p22Hover: string
       p23Hover: string
-      p24Hover: string
-      p25Hover: string
       p26Hover: string
       p27Hover: string
       p28Hover: string
@@ -168,8 +162,6 @@ interface Translations {
       p37Hover: string
       p38Hover: string
       p39Hover: string
-      p40Hover: string
-      p41Hover: string
     }
     labels: {
       chefin: string
@@ -193,23 +185,6 @@ interface Translations {
     narration: {
       n1: string
       interests: string
-    }
-    speech: {
-      s1: string
-      s2: string
-    }
-    stickers: {
-      shonen: string
-      esp32: string
-      linux: string
-      coffee: string
-      trails: string
-      since: string
-    }
-    permanentSfx: {
-      wham: string
-      krak: string
-      whoosh: string
     }
     now: {
       label: string
@@ -377,48 +352,40 @@ const en: Translations = {
     panels: {
       p11Caption: '// chapter.02.01 — who',
       p25Caption: '// interlude',
-      p41Caption: '// end of chapter',
-      p1Hover:   'WHAM!',
-      p2Hover:   'SNAP!',
-      p3Hover:   'POW!',
-      p4Hover:   'ZAP!',
-      p5Hover:   'FLASH!',
-      p6Hover:   'KRAK!',
-      p7Hover:   'BAM!',
-      p8Hover:   'ZING!',
-      p9Hover:   'CLANG!',
-      p10Hover:  'WHOOSH!',
-      p11Hover:  'ZOOM!',
-      p12Hover:  'SMASH!',
-      p13Hover:  'BOOM!',
-      p14Hover:  'BANG!',
-      p15Hover:  'CRACK!',
-      p16Hover:  'THWACK!',
-      p17Hover:  'WHACK!',
-      p18Hover:  'KAPOW!',
-      p19Hover:  'KABOOM!',
-      p20Hover:  'SPLASH!',
-      p21Hover:  'SWOOSH!',
-      p22Hover:  'THUD!',
-      p23Hover:  'SHING!',
-      p24Hover:  'POOF!',
-      p25Hover:  'BLAM!',
-      p26Hover:  'SMASH!',
-      p27Hover:  'DOINK!',
-      p28Hover:  'TWANG!',
-      p29Hover:  'FWOOM!',
-      p30Hover:  'VROOM!',
-      p31Hover:  'SLAM!',
-      p32Hover:  'KRUNCH!',
-      p33Hover:  'WHOMP!',
-      p34Hover:  'THWIP!',
-      p35Hover:  'BOING!',
-      p36Hover:  'KLANG!',
-      p37Hover:  'FWAP!',
-      p38Hover:  'RAKA!',
-      p39Hover:  'CRASH!',
-      p40Hover:  'SNAP!',
-      p41Hover:  'SWOOSH!',
+      p1Hover:   'MEOW!',     // chefin (cat)
+      p2Hover:   'CLICK!',    // setup
+      p3Hover:   'SLURP!',    // coffee
+      p4Hover:   'TAP TAP!',  // gaming
+      p5Hover:   'WHRR~',     // filament
+      p6Hover:   'WHRR~',     // print
+      p7Hover:   'BLINK',     // homelab
+      p8Hover:   'BZZT!',     // esp
+      p9Hover:   'PING!',     // network
+      p12Hover:  'SHWING!',   // anime
+      p13Hover:  '♫',         // lofi
+      p14Hover:  'TAP!',      // studio
+      p15Hover:  'FWIP!',     // manga
+      p16Hover:  'WIND~',     // mountains
+      p17Hover:  'CRUNCH!',   // trails
+      p19Hover:  'TINK!',     // tinker
+      p20Hover:  'FWIP!',     // manga
+      p21Hover:  'TAP TAP',   // linux
+      p22Hover:  '♫',         // lofi
+      p23Hover:  'SLURP!',    // coffee
+      p26Hover:  'FWIP!',     // manga
+      p27Hover:  'BLINK',     // homelab
+      p28Hover:  'SHWING!',   // anime
+      p29Hover:  'TAP TAP!',  // gaming
+      p30Hover:  'WHRR~',     // print
+      p31Hover:  'CRUNCH!',   // trails
+      p32Hover:  'TAP!',      // studio
+      p33Hover:  'WHRR~',     // filament
+      p34Hover:  'SLURP!',    // coffee
+      p35Hover:  'WIND~',     // mountains
+      p36Hover:  'PING!',     // network
+      p37Hover:  'TAP TAP',   // linux
+      p38Hover:  'SHWING!',   // anime
+      p39Hover:  'SLURP!',    // coffee
     },
     labels: {
       chefin:    'THE BOSS',
@@ -442,23 +409,6 @@ const en: Translations = {
     narration: {
       n1:        "a note, mid-chapter: most of this isn't on a résumé. that's kind of the point.",
       interests: '3D printing, anime (shonen & seinen), homelab, hardware hacks, cats (obviously), lofi, mountains, coffee.',
-    },
-    speech: {
-      s1: "hi — this is the part that isn't on the CV.",
-      s2: 'hover everything — color + sound!',
-    },
-    stickers: {
-      shonen:  'shonen 4 life',
-      esp32:   'ESP32 gang',
-      linux:   'linux enjoyer',
-      coffee:  'coffee > tea',
-      trails:  'weekends = trails',
-      since:   'since ~2018',
-    },
-    permanentSfx: {
-      wham:   'WHAM!',
-      krak:   'KRAK!',
-      whoosh: 'WHOOSH!',
     },
     now: {
       label:     '// now.txt',
@@ -626,48 +576,40 @@ const de: Translations = {
     panels: {
       p11Caption: '// kapitel.02.01 — wer',
       p25Caption: '// zwischenspiel',
-      p41Caption: '// ende des kapitels',
-      p1Hover:   'WHAM!',
-      p2Hover:   'SNAP!',
-      p3Hover:   'POW!',
-      p4Hover:   'ZAP!',
-      p5Hover:   'FLASH!',
-      p6Hover:   'KRAK!',
-      p7Hover:   'BAM!',
-      p8Hover:   'ZING!',
-      p9Hover:   'CLANG!',
-      p10Hover:  'WHOOSH!',
-      p11Hover:  'ZOOM!',
-      p12Hover:  'SMASH!',
-      p13Hover:  'BOOM!',
-      p14Hover:  'BANG!',
-      p15Hover:  'CRACK!',
-      p16Hover:  'THWACK!',
-      p17Hover:  'WHACK!',
-      p18Hover:  'KAPOW!',
-      p19Hover:  'KABOOM!',
-      p20Hover:  'SPLASH!',
-      p21Hover:  'SWOOSH!',
-      p22Hover:  'THUD!',
-      p23Hover:  'SHING!',
-      p24Hover:  'POOF!',
-      p25Hover:  'BLAM!',
-      p26Hover:  'SMASH!',
-      p27Hover:  'DOINK!',
-      p28Hover:  'TWANG!',
-      p29Hover:  'FWOOM!',
-      p30Hover:  'VROOM!',
-      p31Hover:  'SLAM!',
-      p32Hover:  'KRUNCH!',
-      p33Hover:  'WHOMP!',
-      p34Hover:  'THWIP!',
-      p35Hover:  'BOING!',
-      p36Hover:  'KLANG!',
-      p37Hover:  'FWAP!',
-      p38Hover:  'RAKA!',
-      p39Hover:  'CRASH!',
-      p40Hover:  'SNAP!',
-      p41Hover:  'SWOOSH!',
+      p1Hover:   'MEOW!',     // chefin (Katze)
+      p2Hover:   'CLICK!',    // setup
+      p3Hover:   'SLURP!',    // kaffee
+      p4Hover:   'TAP TAP!',  // gaming
+      p5Hover:   'WHRR~',     // filament
+      p6Hover:   'WHRR~',     // print
+      p7Hover:   'BLINK',     // homelab
+      p8Hover:   'BZZT!',     // esp
+      p9Hover:   'PING!',     // network
+      p12Hover:  'SHWING!',   // anime
+      p13Hover:  '♫',         // lofi
+      p14Hover:  'TAP!',      // studio
+      p15Hover:  'FWIP!',     // manga
+      p16Hover:  'WIND~',     // berge
+      p17Hover:  'CRUNCH!',   // trails
+      p19Hover:  'TINK!',     // basteln
+      p20Hover:  'FWIP!',     // manga
+      p21Hover:  'TAP TAP',   // linux
+      p22Hover:  '♫',         // lofi
+      p23Hover:  'SLURP!',    // kaffee
+      p26Hover:  'FWIP!',     // manga
+      p27Hover:  'BLINK',     // homelab
+      p28Hover:  'SHWING!',   // anime
+      p29Hover:  'TAP TAP!',  // gaming
+      p30Hover:  'WHRR~',     // print
+      p31Hover:  'CRUNCH!',   // trails
+      p32Hover:  'TAP!',      // studio
+      p33Hover:  'WHRR~',     // filament
+      p34Hover:  'SLURP!',    // kaffee
+      p35Hover:  'WIND~',     // berge
+      p36Hover:  'PING!',     // netz
+      p37Hover:  'TAP TAP',   // linux
+      p38Hover:  'SHWING!',   // anime
+      p39Hover:  'SLURP!',    // kaffee
     },
     labels: {
       chefin:    'DIE CHEFIN',
@@ -691,23 +633,6 @@ const de: Translations = {
     narration: {
       n1:        'notiz, mittendrin: das meiste davon steht auf keinem CV. genau das ist der punkt.',
       interests: '3D-Druck, Anime (Shonen & Seinen), Homelab, Hardware-Hacks, Katzen (natürlich), Lofi, Berge, Kaffee.',
-    },
-    speech: {
-      s1: 'hi — das hier ist der teil, der nicht im CV steht.',
-      s2: 'hover alles — farbe + sound!',
-    },
-    stickers: {
-      shonen:  'shonen 4 life',
-      esp32:   'ESP32 gang',
-      linux:   'linux enjoyer',
-      coffee:  'kaffee > tee',
-      trails:  'wochenenden = trails',
-      since:   'seit ~2018',
-    },
-    permanentSfx: {
-      wham:   'WHAM!',
-      krak:   'KRAK!',
-      whoosh: 'WHOOSH!',
     },
     now: {
       label:     '// now.txt',
