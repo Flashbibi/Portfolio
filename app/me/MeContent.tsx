@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './page.module.css'
 import { useLang } from '@/context/LanguageContext'
 import { translations } from '@/data/translations'
@@ -11,10 +11,12 @@ import MangaPanel from '@/components/me/MangaPanel'
 import NarrationBox from '@/components/me/NarrationBox'
 import Sfx from '@/components/me/Sfx'
 import RoughDefs from '@/components/me/RoughDefs'
+import CharacterIntro from '@/components/me/CharacterIntro'
 import {
   getMePanelsBySection,
   type MePanelConfig,
   type MePanelSlot,
+  type MeSubject,
 } from '@/data/me-panels'
 import { meNow } from '@/data/now'
 
@@ -38,7 +40,11 @@ const SLOT_CLASS: Record<MePanelSlot, string> = {
   p40: styles.slotP40,
 }
 
-function panelProps(cfg: MePanelConfig, t: MeTrans) {
+function panelProps(
+  cfg: MePanelConfig,
+  t: MeTrans,
+  onSubjectClick: (cfg: MePanelConfig) => void,
+) {
   return {
     order: cfg.order,
     placeholder: cfg.placeholder,
@@ -58,7 +64,15 @@ function panelProps(cfg: MePanelConfig, t: MeTrans) {
     bleed: cfg.bleed,
     frameless: cfg.frameless,
     className: SLOT_CLASS[cfg.slot],
+    onClick: cfg.subject ? () => onSubjectClick(cfg) : undefined,
+    clickLabel: cfg.subject ? `meet ${cfg.subject}` : undefined,
   }
+}
+
+interface ActiveIntro {
+  subject: MeSubject
+  fallbackImage?: string
+  fallbackObjectPosition?: string
 }
 
 export default function MeContent() {
@@ -66,6 +80,17 @@ export default function MeContent() {
   const t = translations[lang].me
   const { unlock } = useAchievement()
   const endRef = useRef<HTMLElement | null>(null)
+  const [activeIntro, setActiveIntro] = useState<ActiveIntro | null>(null)
+
+  const openIntro = (cfg: MePanelConfig) => {
+    if (!cfg.subject) return
+    setActiveIntro({
+      subject: cfg.subject,
+      fallbackImage: cfg.image,
+      fallbackObjectPosition: cfg.imageObjectPosition,
+    })
+  }
+  const closeIntro = () => setActiveIntro(null)
 
   useScrollReveal()
 
@@ -133,7 +158,7 @@ export default function MeContent() {
       {/* ── Manga spread — dense 40-panel double-page ──────────────── */}
       <section className={styles.spread}>
         {spread.map(cfg => (
-          <MangaPanel key={cfg.id} {...panelProps(cfg, t)} />
+          <MangaPanel key={cfg.id} {...panelProps(cfg, t, openIntro)} />
         ))}
 
         <NarrationBox
@@ -217,6 +242,13 @@ export default function MeContent() {
           </a>
         </div>
       </section>
+
+      <CharacterIntro
+        subject={activeIntro?.subject ?? null}
+        fallbackImage={activeIntro?.fallbackImage}
+        fallbackObjectPosition={activeIntro?.fallbackObjectPosition}
+        onClose={closeIntro}
+      />
     </main>
   )
 }

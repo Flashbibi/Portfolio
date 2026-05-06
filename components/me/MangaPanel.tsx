@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import type { CSSProperties, ReactNode } from 'react'
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react'
 import styles from './MangaPanel.module.css'
 
 export type PanelCut =
@@ -22,6 +22,10 @@ interface Props {
   order?: number
   className?: string
   style?: CSSProperties
+  /** When provided, the frame becomes a button that fires this on click. */
+  onClick?: () => void
+  /** Accessible label for the click action — read by AT instead of "panel". */
+  clickLabel?: string
   cut?: PanelCut
   /** Big categorial tag rendered as a library-style label on the frame. */
   label?: string
@@ -103,6 +107,8 @@ export default function MangaPanel({
   order = 0,
   className = '',
   style,
+  onClick,
+  clickLabel,
   cut = 'none',
   label,
   labelPos = 'tl',
@@ -139,13 +145,31 @@ export default function MangaPanel({
         styles.panel,
         hideLabelUntilHover && label ? styles.hideLabel : '',
         bleed ? styles.bleed : '',
+        onClick ? styles.clickable : '',
         className,
       ].filter(Boolean).join(' ')}
       style={style}
       data-ink-reveal
       data-ink-order={order}
     >
-      <div className={styles.frame} style={clipStyle}>
+      <div
+        className={styles.frame}
+        style={clipStyle}
+        {...(onClick
+          ? {
+              role: 'button',
+              tabIndex: 0,
+              'aria-label': clickLabel ?? 'open',
+              onClick,
+              onKeyDown: (e: ReactKeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onClick()
+                }
+              },
+            }
+          : {})}
+      >
         <div className={styles.content}>{mediaContent}</div>
         {halftone && <div className={styles.halftone} aria-hidden />}
         <div className={styles.inkCover} aria-hidden />

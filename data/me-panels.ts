@@ -40,6 +40,10 @@ export type MeLabelKey =
   | 'chonkers' | 'kitten' | 'dozing' | 'chefin' | 'stare' | 'diva'
   | 'mischief' | 'floof' | 'dreams' | 'eyes' | 'tired' | 'sleepy' | 'twins'
 
+/** Subject identifier — clicking a panel with a subject triggers the
+ *  character-intro splash overlay for that subject. */
+export type MeSubject = 'nala'
+
 export interface MePanelConfig {
   id: string
   section: MePanelSection
@@ -68,6 +72,9 @@ export interface MePanelConfig {
 
   bleed?: boolean
   frameless?: boolean
+
+  /** Triggers a Smash-style character-intro overlay on click. */
+  subject?: MeSubject
 }
 
 const SUKI = (name: string) => `/me/suki/${name}`
@@ -240,6 +247,7 @@ export const mePanels: MePanelConfig[] = [
     imageObjectPosition: 'center 42%',
     labelKey: 'chefin', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p21Hover', hoverSfxPos: 'br',
+    subject: 'nala',
   },
 
   /* Pair 4 — diag-split: frame-filling close-ups */
@@ -250,6 +258,7 @@ export const mePanels: MePanelConfig[] = [
     cut: 'diag-split-l',
     labelKey: 'stare', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p22Hover', hoverSfxPos: 'bl',
+    subject: 'nala',
   },
   {
     id: 'p23', section: 'spread', slot: 'p23', order: 22,
@@ -258,6 +267,7 @@ export const mePanels: MePanelConfig[] = [
     cut: 'diag-split-r',
     labelKey: 'stare', labelPos: 'tr', hideLabelUntilHover: true,
     hoverSfxKey: 'p23Hover', hoverSfxPos: 'br',
+    subject: 'nala',
   },
 
   {
@@ -287,6 +297,7 @@ export const mePanels: MePanelConfig[] = [
     cut: 'tl-br', bleed: true,
     labelKey: 'diva', labelPos: 'tr',
     hoverSfxKey: 'p26Hover', hoverSfxPos: 'bl',
+    subject: 'nala',
   },
   {
     id: 'p27', section: 'spread', slot: 'p27', order: 26,
@@ -320,6 +331,7 @@ export const mePanels: MePanelConfig[] = [
     imageObjectPosition: 'center 28%',
     labelKey: 'mischief', labelPos: 'tl', hideLabelUntilHover: true,
     hoverSfxKey: 'p30Hover', hoverSfxPos: 'br',
+    subject: 'nala',
   },
   {
     id: 'p31', section: 'spread', slot: 'p31', order: 30,

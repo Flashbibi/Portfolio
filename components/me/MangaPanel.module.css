@@ -18,6 +18,15 @@
 .bleed { transform: scale(1.04); z-index: 2; }
 .bleed:has(.frame:hover) { transform: scale(1.065); z-index: 5; }
 
+/* Clickable panels — hint with cursor and a sharper hover lift, plus
+   focus-visible outline for keyboard users. */
+.clickable .frame { cursor: pointer; }
+.clickable:has(.frame:hover) { transform: scale(1.07); z-index: 6; }
+.clickable .frame:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 4px;
+}
+
 /* ── Frame: the clipped rectangle that holds the content.
    clip-path here means pointer events only fire on the visible shape. ─ */
 .frame {

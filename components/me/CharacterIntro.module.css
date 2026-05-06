@@ -1,0 +1,236 @@
+/* Battle scene built on top of /public/scene/Pokemon_Blank_Template.jpg.
+   Template ships the HP boxes, platforms, and dialog box pre-drawn — we
+   layer Sky+Grass behind the letterbox, the photos on the platforms,
+   names and levels into the HP boxes, and the dialog text into the
+   teal callout. Coordinates below are %s of the template's natural
+   aspect ratio (556×371). */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+}
+
+/* Sky + grass behind the letterboxed template */
+.behindTemplate {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      #f8c898 0%,
+      #f8a880 30%,
+      #f8d0a0 50%,
+      #88c878 52%,
+      #58a060 75%,
+      #387048 100%);
+}
+.behindTemplate::after {
+  /* CRT scanlines over the whole screen */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.06) 0,
+    rgba(0, 0, 0, 0.06) 1px,
+    transparent 1px,
+    transparent 3px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Scene = template-aspect container, centered, scales to fit.
+   Use explicit width + height (calc) instead of aspect-ratio so absolutely
+   positioned descendants resolve their %s against a real height. */
+.scene {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100vw, calc(100vh * 556 / 371));
+  height: min(100vh, calc(100vw * 371 / 556));
+}
+
+/* Template image — pixelated, full-bleed of scene */
+.template {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+}
+
+/* ── Hero photos ────────────────────────────────────────────────────── */
+/* Wild Pokémon: stands on the small upper-right platform (~73%, 38%) */
+.wildHero {
+  position: absolute;
+  left: 64%;
+  top: 14%;
+  width: 18%;
+  aspect-ratio: 1;
+  background: #000;
+  overflow: hidden;
+  /* Compact pixel border that doesn't dominate the small wild photo */
+  box-shadow:
+    0 0 0 2px #000,
+    0 0 0 4px #f8f0d8,
+    0 0 0 6px #000,
+    0 8px 12px rgba(0, 0, 0, 0.35);
+  z-index: 3;
+  pointer-events: none;
+}
+.wildHero :global(img) {
+  animation: pkmBob 1.4s ease-in-out infinite;
+}
+
+/* Player Pokémon: stands on the larger lower-left platform (~28%, 73%) */
+.playerHero {
+  position: absolute;
+  left: 14%;
+  top: 44%;
+  width: 26%;
+  aspect-ratio: 1;
+  background: #000;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 3px #000,
+    0 0 0 6px #f8f0d8,
+    0 0 0 9px #000,
+    0 12px 16px rgba(0, 0, 0, 0.35);
+  z-index: 3;
+  pointer-events: none;
+}
+.playerHero :global(img) {
+  /* slight phase offset so the two pets don't bob in sync */
+  animation: pkmBob 1.6s ease-in-out infinite -0.4s;
+}
+
+@keyframes pkmBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3%); }
+}
+
+/* ── HP-box text overlays — printed onto the cream HP-box rectangles ── */
+.hpText {
+  position: absolute;
+  font-family: 'Press Start 2P', monospace;
+  color: #303030;
+  text-shadow: 1.5px 1.5px 0 #b0a878;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  z-index: 4;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.wildName  { left: 9%;  top: 12.5%; font-size: clamp(0.55rem, 1.1vw, 0.95rem); }
+.wildLevel { left: 35%; top: 12.5%; font-size: clamp(0.55rem, 1.1vw, 0.95rem); }
+.playerName  { left: 56%; top: 51%;   font-size: clamp(0.55rem, 1.1vw, 0.95rem); }
+.playerLevel { left: 87%; top: 51%;   font-size: clamp(0.55rem, 1.1vw, 0.95rem); }
+
+/* ── Dialog text — sits inside the teal dialog area at the bottom.
+   Anchored with top + right so size/wrapping doesn't push it out of
+   the dialog box at unusual viewport ratios. ─────────────────────────── */
+.dialogText {
+  position: absolute;
+  top: 86%;
+  left: 5%;
+  right: 5%;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.65rem, 1.4vw, 1.1rem);
+  line-height: 1.6;
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+  letter-spacing: 0.04em;
+  z-index: 5;
+  pointer-events: none;
+  white-space: pre-wrap;
+}
+.cursorCaret {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.85em;
+  background: #fff;
+  margin-left: 0.18em;
+  vertical-align: text-bottom;
+  animation: pkmBlink 0.55s steps(2) infinite;
+}
+.dialogArrow {
+  margin-left: 0.5em;
+  color: #fff;
+  animation: pkmBlink 0.55s steps(2) infinite;
+}
+@keyframes pkmBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* ── Sparkle burst on photo land ───────────────────────────────────── */
+.sparkles {
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  z-index: 4;
+}
+.sparkle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background:
+    linear-gradient(0deg, transparent 47%, #fff 47% 53%, transparent 53%),
+    linear-gradient(90deg, transparent 47%, #fff 47% 53%, transparent 53%);
+  filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px #f8c898);
+}
+
+/* ── Entry transition: white flash + diamond burst ──────────────────── */
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  z-index: 20;
+  pointer-events: none;
+}
+.diamonds {
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  pointer-events: none;
+  background-color: #000;
+  background-image:
+    linear-gradient(45deg, transparent 46%, #fff 46% 54%, transparent 54%),
+    linear-gradient(-45deg, transparent 46%, #fff 46% 54%, transparent 54%);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(circle at center, transparent 0%, transparent 35%, #000 60%);
+  -webkit-mask-image: radial-gradient(circle at center, transparent 0%, transparent 35%, #000 60%);
+}
+
+/* ── Dismiss hint ─────────────────────────────────────────────────── */
+.dismiss {
+  position: absolute;
+  bottom: 0.45rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.95);
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 22;
+  text-shadow: 1.5px 1.5px 0 #000;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .flash, .diamonds, .sparkles { display: none; }
+  .wildHero :global(img), .playerHero :global(img) { animation: none; }
+  .cursorCaret, .dialogArrow { animation: none; }
+}
